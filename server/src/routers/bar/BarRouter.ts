@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import BarController from '../../controllers/BarController';
 
 class BarRouter {
@@ -18,8 +18,13 @@ class BarRouter {
    * Connect routes to their matching controller endpoints.
    */
   private _configure() {
-    this._router.get('/', (req: Request, res: Response) => {
-      res.status(200).json(this._controller.defaultMethod());
+    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const result = this._controller.defaultMethod();
+        res.status(200).json(result);
+      } catch (error) {
+        next(error);
+      }
     });
   }
 }
