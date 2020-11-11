@@ -35,3 +35,9 @@ To run linting on save, add the following to the VS-Code settings.json file:
   },
 }
 ```
+
+### Try this
+
+```shell
+npm run yeet
+```
