@@ -1,9 +1,10 @@
+import path from 'path';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
-
+import http from 'http';
 import MasterRouter from './routers/MasterRouter';
 import ErrorHandler from './models/ErrorHandler';
 
@@ -24,8 +25,19 @@ class Server {
 // initialize server app
 const server = new Server();
 
+// Connect with the client
+server.app.use(express.static(path.join(__dirname, '../../client/dist')));
+server.app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
+});
+
 // make server app handle any route starting with '/api'
 server.app.use('/api', server.router);
+
+// To check if the server is up.
+server.app.get('/heartbeat', (req: Request, res: Response) => {
+  res.status(200).send();
+});
 
 server.app.use(
   session({
@@ -52,8 +64,11 @@ server.app.use((err: ErrorHandler, req: Request, res: Response, next: NextFuncti
   }
 });
 
+let serverInstance: http.Server;
 // make server listen on some port
 ((port = process.env.APP_PORT || 5000) => {
   // eslint-disable-next-line no-console
-  server.app.listen(port, () => console.log(`> Listening on port ${port}`));
+  serverInstance = server.app.listen(port, () => console.log(`Listening on port ${port} 💻`));
 })();
+
+export = serverInstance;

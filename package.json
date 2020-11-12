@@ -1,0 +1,26 @@
+{
+  "name": "business-blvd",
+  "version": "1.0.0",
+  "description": "6.170 Final Project",
+  "main": "index.js",
+  "scripts": {
+    "install": "cd server/ && npm install && cd ../client && npm install && cd ..",
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "start": "node server/build/index.js",
+    "test": "cd server/ && npm test"
+  },
+  "cacheDirectories": [
+    "server/node_modules",
+    "client/node_modules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/6170-fa20/final-project-tater-tots.git"
+  },
+  "author": "johanc,yaseen,nsalinas,tschoulte",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/6170-fa20/final-project-tater-tots/issues"
+  },
+  "homepage": "https://github.com/6170-fa20/final-project-tater-tots#readme"
+}
