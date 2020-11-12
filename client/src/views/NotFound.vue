@@ -1,9 +1,9 @@
 <template>
-    <p>hello world</p>
+    <p>Page does not exist.</p>
 </template>
 
 <script>
 export default {
-    name: 'Home',
+    name: 'NotFound',
 }
 </script>

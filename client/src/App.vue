@@ -1,14 +1,19 @@
 <template>
   <div id="app">
+    <Navbar />
     <router-view />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import Navbar from './components/nav/Navbar.vue';
 
 export default {
   name: 'App',
+  components: {
+    Navbar
+  },
   mounted() {
     axios.get('/heartbeat')
     .then(() => {
@@ -26,7 +31,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: #4d5b8a;
+  color: white;
 }
 </style>
