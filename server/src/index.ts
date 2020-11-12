@@ -1,3 +1,4 @@
+import path from 'path';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
@@ -23,6 +24,12 @@ class Server {
 
 // initialize server app
 const server = new Server();
+
+// Connect with the client
+server.app.use(express.static(path.join(__dirname, '../../client/dist')));
+server.app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
+});
 
 // make server app handle any route starting with '/api'
 server.app.use('/api', server.router);
@@ -61,7 +68,7 @@ let serverInstance: http.Server;
 // make server listen on some port
 ((port = process.env.APP_PORT || 5000) => {
   // eslint-disable-next-line no-console
-  serverInstance = server.app.listen(port, () => console.log(`> Listening on port ${port}`));
+  serverInstance = server.app.listen(port, () => console.log(`Listening on port ${port} 💻`));
 })();
 
 export = serverInstance;
