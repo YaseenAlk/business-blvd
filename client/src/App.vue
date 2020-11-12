@@ -1,23 +1,25 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Navbar />
+    <router-view />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import axios from 'axios';
+import Navbar from './components/nav/Navbar.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Navbar
   },
   mounted() {
     axios.get('/heartbeat')
     .then(() => {
       console.log('Server connected.');
+    }).catch((err) => {
+      console.log(err.response.statusText);
     })
   }
 }
@@ -29,7 +31,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: #4d5b8a;
+  color: white;
 }
 </style>
