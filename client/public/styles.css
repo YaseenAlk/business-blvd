@@ -19,12 +19,6 @@ p {
     outline: none;
 }
 
-a,
-a:visited {
-    text-decoration: none;
-    color: var(--primary-color);
-}
-
 .flex-row {
     display: flex;
     flex-direction: row;
