@@ -8,9 +8,11 @@ import x5GMaps from 'x5-gmaps';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+const GOOGLE_API_KEY = '-'; //Ask Nico for API key
+
 Vue.use(VueCookie);
 Vue.use(BootstrapVue);
-Vue.use(x5GMaps, 'AIzaSyAbz0sx6stm-M10t1XmipmyXDY-3EJPj4g');
+Vue.use(x5GMaps, GOOGLE_API_KEY);
 
 export const eventBus = new Vue();
 
