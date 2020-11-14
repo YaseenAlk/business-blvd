@@ -12,10 +12,17 @@ export default new Router({
                 import ('./views/Home.vue')
         },
         {
+            path: '/map',
+            name: 'Map',
+            component: () =>
+                import ('./views/Map.vue')
+        },
+        {
             path: '*',
             name: 'NotFound',
             component: () =>
                 import ('./views/NotFound.vue')
         },
+
     ]
 })

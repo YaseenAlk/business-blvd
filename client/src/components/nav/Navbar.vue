@@ -3,14 +3,17 @@
         <router-link to="/">
             <h1 class="navbar-title">{{title}}</h1>
         </router-link>
-        <BNav>
-            <BNavItemDropdown right text="Account">
-                <BNavItem to="/account">Profile</BNavItem>
-                <BNavItem to="/signup">Sign Up</BNavItem>
-                <BNavItem to="/signin">Sign In</BNavItem>
-                <BNavItem to="/signout">Sign Out</BNavItem>
-            </BNavItemDropdown>
-        </BNav>
+        <div class="flex-row align-items-center">
+            <router-link to="/map">Map</router-link>
+            <BNav>
+                <BNavItemDropdown right text="Account">
+                    <BNavItem to="/account">Profile</BNavItem>
+                    <BNavItem to="/signup">Sign Up</BNavItem>
+                    <BNavItem to="/signin">Sign In</BNavItem>
+                    <BNavItem to="/signout">Sign Out</BNavItem>
+                </BNavItemDropdown>
+            </BNav>
+        </div>
     </div>
 </template>
 
@@ -34,8 +37,6 @@ export default {
 .navbar {
     background-color: #102b49;
     padding: 1em;
-    position: sticky;
-    top: 0;
 }
 
 .navbar-title {

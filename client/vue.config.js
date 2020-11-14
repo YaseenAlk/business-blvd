@@ -14,5 +14,6 @@ module.exports = {
             'vue$',
             path.resolve(__dirname, 'node_modules/vue/dist/vue.runtime.esm.js')
         )
-    }
+    },
+    transpileDependencies: ['x5-gmaps'],
 };
