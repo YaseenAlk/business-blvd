@@ -8,7 +8,7 @@ import x5GMaps from 'x5-gmaps';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-const GOOGLE_API_KEY = '-'; //Ask Nico for API key
+import { GOOGLE_API_KEY } from './KEYS.js';
 
 Vue.use(VueCookie);
 Vue.use(BootstrapVue);
