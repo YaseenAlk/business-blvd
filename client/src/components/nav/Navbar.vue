@@ -3,24 +3,29 @@
         <router-link to="/">
             <h1 class="navbar-title">{{title}}</h1>
         </router-link>
-        <div class="flex-row">
-            <NavBarButton to="/account" title="Account" />
-            <NavBarButton to="/signin" title="Sign In" />
-            <NavBarButton to="/signup" title="Sign Up" />
-            <NavBarButton to="/logout" title="Log Out" />
-        </div>
+        <BNav>
+            <BNavItemDropdown right text="Account">
+                <BNavItem to="/account">Profile</BNavItem>
+                <BNavItem to="/signup">Sign Up</BNavItem>
+                <BNavItem to="/signin">Sign In</BNavItem>
+                <BNavItem to="/signout">Sign Out</BNavItem>
+            </BNavItemDropdown>
+        </BNav>
     </div>
 </template>
 
 <script>
-import NavBarButton from './NavBarButton.vue';
+import { BNav, BNavItem, BNavItemDropdown } from 'bootstrap-vue';
+
 export default {
     name: 'Navbar',
     data(){
         return {'title': 'Business Boulevard'};
     },
     components: {
-        NavBarButton,
+        BNav,
+        BNavItem,
+        BNavItemDropdown,
     },
 }
 </script>
@@ -28,7 +33,6 @@ export default {
 <style>
 .navbar {
     background-color: #102b49;
-    color: white;
     padding: 1em;
     position: sticky;
     top: 0;
