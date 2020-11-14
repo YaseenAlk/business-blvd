@@ -11,11 +11,23 @@ export default new Router({
             component: () =>
                 import ('./views/Home.vue')
         },
-        {
+        { 
             path: '/map',
             name: 'Map',
             component: () =>
                 import ('./views/Map.vue')
+        },
+         {
+            path: '/signup',
+            name: 'SignUp',
+            component: () =>
+                import ('./views/SignUp.vue')
+        },
+        {
+            path: '/signin',
+            name: 'SignIn',
+            component: () =>
+                import ('./views/SignIn.vue')
         },
         {
             path: '*',
