@@ -1,16 +1,16 @@
 <template>
     <div class="flex-row justify-space-between align-items-center navbar">
-        <router-link to="/">
+        <router-link to="/" class="title-link">
             <h1 class="navbar-title">{{title}}</h1>
         </router-link>
-        <BNav>
-            <BNavItemDropdown right text="Account">
-                <BNavItem to="/account">Profile</BNavItem>
-                <BNavItem to="/signup">Sign Up</BNavItem>
-                <BNavItem to="/signin">Sign In</BNavItem>
-                <BNavItem to="/signout">Sign Out</BNavItem>
-            </BNavItemDropdown>
-        </BNav>
+        <b-nav>
+            <b-nav-item-dropdown right text="Account">
+                <b-nav-item to="/account">Profile</b-nav-item>
+                <b-nav-item to="/signup">Sign Up</b-nav-item>
+                <b-nav-item to="/signin">Sign In</b-nav-item>
+                <b-nav-item to="/signout">Sign Out</b-nav-item>
+            </b-nav-item-dropdown>
+        </b-nav>
     </div>
 </template>
 
@@ -31,6 +31,11 @@ export default {
 </script>
 
 <style>
+
+.title-link, .title-link:hover, .navbar-title:hover {
+    text-decoration: none;
+}
+
 .navbar {
     background-color: #102b49;
     padding: 1em;
@@ -40,5 +45,6 @@ export default {
 
 .navbar-title {
     text-align: left;
+    color: white;
 }
 </style>
