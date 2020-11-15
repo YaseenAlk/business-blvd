@@ -155,3 +155,29 @@ class BusinessFAQ {
         }
     }
 }
+
+enum Days {
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY
+  }
+
+class BusinessHours {
+    private _businessHours: Map<Days, Object>;
+
+    constructor(businessHours: Map<Days, Object>) {
+        this._businessHours = businessHours;
+    }
+
+    public setHours(day: Days, openTime: number, closeTime: number) {
+        this._businessHours.set(day, {"open": openTime, "close": closeTime});
+    }
+
+    public getHours() {
+        return this._businessHours;
+    }
+}
