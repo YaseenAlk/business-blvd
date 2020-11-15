@@ -115,3 +115,43 @@ class Question {
         this._answered = true;
     }
 }
+
+class BusinessFAQ {
+    private _privateFAQMap: Map<string, Question>;
+    private _publicFAQMap: Map<string, Question>;
+
+    constructor( privateFAQMap: Map<string, Question>, publicFAQMap: Map<string, Question>) {
+        this._privateFAQMap = privateFAQMap;
+        this._publicFAQMap = publicFAQMap;
+    }
+
+    public getPrivateFAQ() {
+        return this._privateFAQMap;
+    }
+
+    public getPublicFAQ() {
+        return this._publicFAQMap;
+    }
+
+    public setQuestionPublic(questionId: string) {
+        if (this._privateFAQMap.has(questionId)) {
+            const questionEntry = this._privateFAQMap.get(questionId)!;
+            this._privateFAQMap.delete(questionId);
+            this._publicFAQMap.set(questionId, questionEntry);
+        }
+        else {
+            throw new Error('Question ID is not in the list of private questions');
+        }
+    }
+
+    public setQuestionPrivate(questionId: string) {
+        if (this._publicFAQMap.has(questionId)) {
+            const questionEntry = this._publicFAQMap.get(questionId)!;
+            this._publicFAQMap.delete(questionId);
+            this._privateFAQMap.set(questionId, questionEntry);
+        }
+        else {
+            throw new Error('Question ID is not in the list of public questions');
+        }
+    }
+}
