@@ -181,3 +181,54 @@ class BusinessHours {
         return this._businessHours;
     }
 }
+
+class Business {
+    _name: string;
+    _address: string;
+    _description: string;
+    _businessId: string;
+    _ratings: BusinessRatings;
+    _hours: BusinessHours;
+    _socialMedia: BusinessSocialMedia;
+    _tags: BusinessTags[];
+    _faq: BusinessFAQ;
+    _ownerId: string | undefined;
+    _url: string | undefined;
+    _phone: string | undefined;
+
+    constructor(name: string,
+        address: string,
+        description: string,
+        businessId?: string,
+        ratings?: BusinessRatings,
+        hours?: BusinessHours,
+        socialMedia?: BusinessSocialMedia,
+        tags?: BusinessTags[],
+        faq?: BusinessFAQ,
+        ownerId?: string | undefined,
+        url?: string | undefined,
+        phone?: string | undefined
+        ) {
+
+
+        // Will never be assigned null
+            // mandatory parameters
+        this._name = name;
+        this._address = address;
+            // optional parameters
+        this._description = description || "";
+        this._businessId = businessId || uuidv4();
+        this._ratings = ratings || new BusinessRatings(new Map(), new Map());
+        this._hours = hours || new BusinessHours(new Map());
+        this._socialMedia = socialMedia || new BusinessSocialMedia();
+        this._ratings = ratings || new BusinessRatings(new Map(), new Map());
+        this._tags = tags || [];
+        this._faq = faq || new BusinessFAQ(new Map(), new Map());
+
+        // Can be assigned null
+            // optional parameters
+        this._ownerId = ownerId;
+        this._url = url;
+        this._phone = phone;
+    }
+}
