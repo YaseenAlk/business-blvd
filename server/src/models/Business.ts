@@ -21,3 +21,8 @@ class Location {
         return this._coordinates;
     }
 }
+
+enum BusinessTags {
+    DELIVERY,
+    PICKUP
+  }
