@@ -82,3 +82,31 @@ class BusinessSocialMedia {
         this._instagram = instagram;
     }
 }
+
+class Question {
+    private _customerId: string;
+    private _questionText: string;
+    private _answered: boolean;
+    private _answerText: string | undefined;
+
+    constructor(customerId: string, questionText: string, answered: boolean, answerText?: string) {
+        this._customerId = customerId;
+        this._questionText = questionText;
+        this._answered = answered;
+        this._answerText = answerText;
+    }
+    
+    public getQuestion(): object {
+        return {
+            customerId: this._customerId,
+            questionText: this._questionText,
+            answered: this._answered,
+            answerText: this._answerText
+        }
+    }
+
+    public answerQuestion(answer: string) {
+        this._answerText = answer;
+        this._answered = true;
+    }
+}
