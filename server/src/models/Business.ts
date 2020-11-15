@@ -50,3 +50,35 @@ class BusinessRatings {
         return this._safetyRatingsMap.get(customerId);
     }
 }
+
+class BusinessSocialMedia {
+    private _facebook: string | undefined;
+    private _twitter: string | undefined;
+    private _instagram: string |undefined;
+
+    constructor(facebook?: string, twitter?: string, instagram?: string) {
+        this._facebook = facebook;
+        this._twitter = twitter;
+        this._instagram = instagram;
+    }
+
+    public getSocialUrls(): object {
+        return {
+            "facebook": this._facebook,
+            "twitter": this._twitter,
+            "instagram": this._instagram
+        }
+    }
+
+    public updateTwitter(twitter: string) {
+        this._twitter = twitter;
+    }
+
+    public updateFacebook(facebook: string) {
+        this._facebook = facebook;
+    }
+
+    public updateInstagram(instagram: string) {
+        this._instagram = instagram;
+    }
+}
