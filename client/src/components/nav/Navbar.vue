@@ -3,20 +3,8 @@
         <router-link to="/" class="title-link">
             <h1 class="navbar-title">{{title}}</h1>
         </router-link>
-<<<<<<< HEAD
-        <div class="flex-row align-items-center">
+        <b-nav class="flex-row align-items-center">
             <router-link to="/map">Map</router-link>
-            <BNav>
-                <BNavItemDropdown right text="Account">
-                    <BNavItem to="/account">Profile</BNavItem>
-                    <BNavItem to="/signup">Sign Up</BNavItem>
-                    <BNavItem to="/signin">Sign In</BNavItem>
-                    <BNavItem to="/signout">Sign Out</BNavItem>
-                </BNavItemDropdown>
-            </BNav>
-        </div>
-=======
-        <b-nav>
             <b-nav-item-dropdown right text="Account">
                 <b-nav-item to="/account">Profile</b-nav-item>
                 <b-nav-item to="/signup">Sign Up</b-nav-item>
@@ -24,7 +12,6 @@
                 <b-nav-item to="/signout">Sign Out</b-nav-item>
             </b-nav-item-dropdown>
         </b-nav>
->>>>>>> dcb6c3f (updated navbar to use Bootsrap tags)
     </div>
 </template>
 
