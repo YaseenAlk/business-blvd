@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import FooRouter from './foo/FooRouter';
 import BarRouter from './bar/BarRouter';
+import InquiryRouter from "./inquiries/InquiryRouter";
 
 class MasterRouter {
   private _router = Router();
@@ -8,6 +9,8 @@ class MasterRouter {
   private _subrouterFoo = FooRouter;
 
   private _subrouterBar = BarRouter;
+
+  private _subrouterInquiries = InquiryRouter;
 
   get router() {
     return this._router;
@@ -23,6 +26,7 @@ class MasterRouter {
   private _configure() {
     this._router.use('/foo', this._subrouterFoo);
     this._router.use('/bar', this._subrouterBar);
+    this._router.use('/inquiries', this._subrouterInquiries);
   }
 }
 
