@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 class Location {
     private _address: string;
     private _coordinates: number[] | undefined;
@@ -85,12 +87,14 @@ class BusinessSocialMedia {
 
 class Question {
     private _customerId: string;
+    private _questionId: string;
     private _questionText: string;
     private _answered: boolean;
     private _answerText: string | undefined;
 
-    constructor(customerId: string, questionText: string, answered: boolean, answerText?: string) {
+    constructor(customerId: string, questionText: string, answered: boolean, answerText?: string, questionId?: string) {
         this._customerId = customerId;
+        this._questionId = questionId || uuidv4();
         this._questionText = questionText;
         this._answered = answered;
         this._answerText = answerText;
@@ -99,6 +103,7 @@ class Question {
     public getQuestion(): object {
         return {
             customerId: this._customerId,
+            questionId: this._questionId,
             questionText: this._questionText,
             answered: this._answered,
             answerText: this._answerText
