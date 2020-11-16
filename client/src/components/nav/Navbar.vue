@@ -3,7 +3,8 @@
         <router-link to="/" class="title-link">
             <h1 class="navbar-title">{{title}}</h1>
         </router-link>
-        <b-nav>
+        <b-nav class="flex-row align-items-center">
+            <router-link to="/map">Map</router-link>
             <b-nav-item-dropdown right text="Account">
                 <b-nav-item to="/account">Profile</b-nav-item>
                 <b-nav-item to="/signup">Sign Up</b-nav-item>
@@ -39,8 +40,6 @@ export default {
 .navbar {
     background-color: #102b49;
     padding: 1em;
-    position: sticky;
-    top: 0;
 }
 
 .navbar-title {

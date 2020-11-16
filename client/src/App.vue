@@ -32,10 +32,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 
-  width: 100vw;
-  height: 100vh;
-
-  background-color: #4d5b8a;
-  color: white;
+  display: grid;
+  grid-template-rows: min-content auto;
+  height: 100%;
 }
 </style>
