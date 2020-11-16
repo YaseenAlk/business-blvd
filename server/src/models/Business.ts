@@ -208,7 +208,7 @@ interface BusinessDBEntry {
 
 interface Business extends BusinessDBEntry { }
 
-class Business implements BusinessDBEntry{
+class Business {
     constructor(private entry: BusinessDBEntry) {
         (<any>Object).assign(this, entry);
     }
