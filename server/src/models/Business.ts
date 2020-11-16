@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 class Location {
     private _address: string;
-    private _coordinates: number[] | undefined;
+    private _coordinates?: number[];
 
     constructor(address: string, coordinates?: number[]) {
         this._address = address;
@@ -30,22 +30,26 @@ enum BusinessTags {
   }
 
 class BusinessRatings {
-    private _serviceRatingsMap: Map<string, number>;
-    private _safetyRatingsMap: Map<string, number>;
+    private _serviceRatingsMap: Map<string, number> = new Map();
+    private _safetyRatingsMap: Map<string, number> = new Map();
 
-    constructor(serviceRatingsMap: Map<string, number>, safetyRatingsMap: Map<string, number>) {
-        this._serviceRatingsMap = serviceRatingsMap;
-        this._safetyRatingsMap = safetyRatingsMap;
+    constructor() {}
+
+    static fromData(serviceRatingsMap: Map<string, number>, safetyRatingsMap: Map<string, number>) {
+        let ratings = new BusinessRatings();
+        ratings._serviceRatingsMap = serviceRatingsMap;
+        ratings._safetyRatingsMap = safetyRatingsMap;
+        return ratings;
     }
 
-    public updateServiceRating(customerId: string, rating: number) {
+    public updateServiceRating(customerId: string, rating: number): void {
         this._serviceRatingsMap.set(customerId, rating);
     }
     public getCustomerServiceRating(customerId: string): number | undefined {
         return this._serviceRatingsMap.get(customerId);
     }
 
-    public updateSafetyeRating(customerId: string, rating: number) {
+    public updateSafetyeRating(customerId: string, rating: number): void {
         this._safetyRatingsMap.set(customerId, rating);
     }
     public getSafetyServiceRating(customerId: string): number | undefined {
@@ -54,9 +58,9 @@ class BusinessRatings {
 }
 
 class BusinessSocialMedia {
-    private _facebook: string | undefined;
-    private _twitter: string | undefined;
-    private _instagram: string |undefined;
+    private _facebook?: string;
+    private _twitter?: string;
+    private _instagram?: string;
 
     constructor(facebook?: string, twitter?: string, instagram?: string) {
         this._facebook = facebook;
@@ -72,89 +76,89 @@ class BusinessSocialMedia {
         }
     }
 
-    public updateTwitter(twitter: string) {
+    set twitter(twitter: string) {
         this._twitter = twitter;
     }
 
-    public updateFacebook(facebook: string) {
+    set facebook(facebook: string) {
         this._facebook = facebook;
     }
 
-    public updateInstagram(instagram: string) {
+    set instagram(instagram: string) {
         this._instagram = instagram;
     }
 }
 
-class Question {
-    private _customerId: string;
-    private _questionId: string;
-    private _questionText: string;
-    private _answered: boolean;
-    private _answerText: string | undefined;
+// class Question {
+//     private _customerId: string;
+//     private _questionId: string;
+//     private _questionText: string;
+//     private _answered: boolean;
+//     private _answerText: string | undefined;
 
-    constructor(customerId: string, questionText: string, answered: boolean, answerText?: string, questionId?: string) {
-        this._customerId = customerId;
-        this._questionId = questionId || uuidv4();
-        this._questionText = questionText;
-        this._answered = answered;
-        this._answerText = answerText;
-    }
+//     constructor(customerId: string, questionText: string, answered: boolean, answerText?: string, questionId?: string) {
+//         this._customerId = customerId;
+//         this._questionId = questionId || uuidv4();
+//         this._questionText = questionText;
+//         this._answered = answered;
+//         this._answerText = answerText;
+//     }
     
-    public getQuestion(): object {
-        return {
-            customerId: this._customerId,
-            questionId: this._questionId,
-            questionText: this._questionText,
-            answered: this._answered,
-            answerText: this._answerText
-        }
-    }
+//     public getQuestion(): object {
+//         return {
+//             customerId: this._customerId,
+//             questionId: this._questionId,
+//             questionText: this._questionText,
+//             answered: this._answered,
+//             answerText: this._answerText
+//         }
+//     }
 
-    public answerQuestion(answer: string) {
-        this._answerText = answer;
-        this._answered = true;
-    }
-}
+//     public answerQuestion(answer: string) {
+//         this._answerText = answer;
+//         this._answered = true;
+//     }
+// }
 
-class BusinessFAQ {
-    private _privateFAQMap: Map<string, Question>;
-    private _publicFAQMap: Map<string, Question>;
+// class BusinessFAQ {
+//     private _privateFAQMap: Map<string, Question>;
+//     private _publicFAQMap: Map<string, Question>;
 
-    constructor( privateFAQMap: Map<string, Question>, publicFAQMap: Map<string, Question>) {
-        this._privateFAQMap = privateFAQMap;
-        this._publicFAQMap = publicFAQMap;
-    }
+//     constructor( privateFAQMap: Map<string, Question>, publicFAQMap: Map<string, Question>) {
+//         this._privateFAQMap = privateFAQMap;
+//         this._publicFAQMap = publicFAQMap;
+//     }
 
-    public getPrivateFAQ() {
-        return this._privateFAQMap;
-    }
+//     public getPrivateFAQ() {
+//         return this._privateFAQMap;
+//     }
 
-    public getPublicFAQ() {
-        return this._publicFAQMap;
-    }
+//     public getPublicFAQ() {
+//         return this._publicFAQMap;
+//     }
 
-    public setQuestionPublic(questionId: string) {
-        if (this._privateFAQMap.has(questionId)) {
-            const questionEntry = this._privateFAQMap.get(questionId)!;
-            this._privateFAQMap.delete(questionId);
-            this._publicFAQMap.set(questionId, questionEntry);
-        }
-        else {
-            throw new Error('Question ID is not in the list of private questions');
-        }
-    }
+//     public setQuestionPublic(questionId: string) {
+//         if (this._privateFAQMap.has(questionId)) {
+//             const questionEntry = this._privateFAQMap.get(questionId)!;
+//             this._privateFAQMap.delete(questionId);
+//             this._publicFAQMap.set(questionId, questionEntry);
+//         }
+//         else {
+//             throw new Error('Question ID is not in the list of private questions');
+//         }
+//     }
 
-    public setQuestionPrivate(questionId: string) {
-        if (this._publicFAQMap.has(questionId)) {
-            const questionEntry = this._publicFAQMap.get(questionId)!;
-            this._publicFAQMap.delete(questionId);
-            this._privateFAQMap.set(questionId, questionEntry);
-        }
-        else {
-            throw new Error('Question ID is not in the list of public questions');
-        }
-    }
-}
+//     public setQuestionPrivate(questionId: string) {
+//         if (this._publicFAQMap.has(questionId)) {
+//             const questionEntry = this._publicFAQMap.get(questionId)!;
+//             this._publicFAQMap.delete(questionId);
+//             this._privateFAQMap.set(questionId, questionEntry);
+//         }
+//         else {
+//             throw new Error('Question ID is not in the list of public questions');
+//         }
+//     }
+// }
 
 enum Days {
     SUNDAY,
@@ -167,68 +171,65 @@ enum Days {
   }
 
 class BusinessHours {
-    private _businessHours: Map<Days, Object>;
 
-    constructor(businessHours: Map<Days, Object>) {
-        this._businessHours = businessHours;
+    private _businessHours: Map<Days, Object> = new Map();
+
+    constructor() {}
+
+    static fromData(businessHours: Map<Days, Object>): BusinessHours {
+        let hours = new BusinessHours();
+        hours._businessHours = businessHours;
+        return hours;
     }
 
-    public setHours(day: Days, openTime: number, closeTime: number) {
+    public setHours(day: Days, openTime: number, closeTime: number): void {
         this._businessHours.set(day, {"open": openTime, "close": closeTime});
     }
 
-    public getHours() {
-        return this._businessHours;
+    public getHours(): Map<Days, Object> {
+        return new Map(this._businessHours);
     }
 }
 
-class Business {
-    _name: string;
-    _address: string;
-    _description: string;
-    _businessId: string;
-    _ratings: BusinessRatings;
-    _hours: BusinessHours;
-    _socialMedia: BusinessSocialMedia;
-    _tags: BusinessTags[];
-    _faq: BusinessFAQ;
-    _ownerId: string | undefined;
-    _url: string | undefined;
-    _phone: string | undefined;
+interface BusinessDBEntry {
+    name: string;
+    location: Location;
+    description: string;
+    businessId: string;
+    ratings: BusinessRatings;
+    hours: BusinessHours;
+    socialMedia: BusinessSocialMedia;
+    tags: BusinessTags[];
+    // _faq: BusinessFAQ;
+    ownerId: string;
+    url: string;
+    phone: string;
+}
 
-    constructor(name: string,
-        address: string,
-        description: string,
-        businessId?: string,
-        ratings?: BusinessRatings,
-        hours?: BusinessHours,
-        socialMedia?: BusinessSocialMedia,
-        tags?: BusinessTags[],
-        faq?: BusinessFAQ,
-        ownerId?: string | undefined,
-        url?: string | undefined,
-        phone?: string | undefined
-        ) {
+interface Business extends BusinessDBEntry { }
 
-
-        // Will never be assigned null
-            // mandatory parameters
-        this._name = name;
-        this._address = address;
-            // optional parameters
-        this._description = description || "";
-        this._businessId = businessId || uuidv4();
-        this._ratings = ratings || new BusinessRatings(new Map(), new Map());
-        this._hours = hours || new BusinessHours(new Map());
-        this._socialMedia = socialMedia || new BusinessSocialMedia();
-        this._ratings = ratings || new BusinessRatings(new Map(), new Map());
-        this._tags = tags || [];
-        this._faq = faq || new BusinessFAQ(new Map(), new Map());
-
-        // Can be assigned null
-            // optional parameters
-        this._ownerId = ownerId;
-        this._url = url;
-        this._phone = phone;
+class Business implements BusinessDBEntry{
+    constructor(private entry: BusinessDBEntry) {
+        (<any>Object).assign(this, entry);
     }
 }
+
+let businessProps = {
+    name: "Poppa's Workshop",
+    location: new Location("123 Seasame Street"),
+    description: "Where the elbow grease is used.",
+    businessId: uuidv4(),
+    ratings: new BusinessRatings(),
+    hours: new BusinessHours(),
+    socialMedia: new BusinessSocialMedia(),
+    tags: [], //helpful
+    // _faq: BusinessFAQ;
+    ownerId: uuidv4(),
+    url: "www.poppasworkshop.com",
+    phone: "867-5309",
+}
+
+let business = new Business(businessProps);
+
+business.description = "new description";
+console.log(business);
