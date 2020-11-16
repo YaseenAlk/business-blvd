@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-row justify-content-center align-items-center">
+  <div class="home-page">
       <HomePageGrid />
   </div>
 </template>
@@ -14,3 +14,13 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.home-page{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+}
+</style>
