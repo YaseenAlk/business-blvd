@@ -4,11 +4,6 @@ body {
     --primary-color: white;
 }
 
-::marker {
-    display: none;
-    margin: 0;
-}
-
 h1,
 h2,
 h3,
