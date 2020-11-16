@@ -15,6 +15,12 @@ export default {
             mapOptions: {
                 center: { lat: 42.3601, lng: -71.0942 },
                 zoom: 15,
+                fullscreenControl: false,
+                mapTypeControl: false,
+                rotateControl: false,
+                scaleControl: false,
+                streetViewControl: false,
+                clickableIcons: false,
             }
         };
     },
