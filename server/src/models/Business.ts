@@ -1,101 +1,101 @@
 import { v4 as uuidv4 } from 'uuid';
 
 class Location {
-    private _address: string;
-    private _lat?: number;
-    private _lng?: number;
+  private _address: string;
+  private _lat?: number;
+  private _lng?: number;
 
-    constructor(address: string, lat?: number, lng?: number) {
-        this._address = address;
-        this._lat = lat;
-        this._lng = lng;
-    }
+  constructor(address: string, lat?: number, lng?: number) {
+    this._address = address;
+    this._lat = lat;
+    this._lng = lng;
+  }
 
-    public getAddress(): string {
-        return this._address;
-    } 
-    public setAddress(address: string) {
-        this._address = address;
-    } 
+  public getAddress(): string {
+    return this._address;
+  }
+  public setAddress(address: string) {
+    this._address = address;
+  }
 
-    public setLng(lng: number) {
-        this._lng = lng;
-    }
-    public getLng(): number | undefined {
-        return this._lng;
-    }
+  public setLng(lng: number) {
+    this._lng = lng;
+  }
+  public getLng(): number | undefined {
+    return this._lng;
+  }
 
-    public setLat(lat: number) {
-        this._lat = lat;
-    }
-    public getLat(): number | undefined {
-        return this._lat;
-    }
+  public setLat(lat: number) {
+    this._lat = lat;
+  }
+  public getLat(): number | undefined {
+    return this._lat;
+  }
 }
 
 enum BusinessTags {
-    DELIVERY,
-    PICKUP
-  }
+  DELIVERY,
+  PICKUP,
+}
 
 class BusinessRatings {
-    private _serviceRatingsMap: Map<string, number> = new Map();
-    private _safetyRatingsMap: Map<string, number> = new Map();
+  private _serviceRatingsMap: Map<string, number> = new Map();
+  private _safetyRatingsMap: Map<string, number> = new Map();
 
-    constructor() {}
+  //   constructor() {}
 
-    static fromData(serviceRatingsMap: Map<string, number>, safetyRatingsMap: Map<string, number>) {
-        let ratings = new BusinessRatings();
-        ratings._serviceRatingsMap = serviceRatingsMap;
-        ratings._safetyRatingsMap = safetyRatingsMap;
-        return ratings;
-    }
+  static fromData(serviceRatingsMap: Map<string, number>, safetyRatingsMap: Map<string, number>) {
+    const ratings = new BusinessRatings();
+    ratings._serviceRatingsMap = serviceRatingsMap;
+    ratings._safetyRatingsMap = safetyRatingsMap;
+    return ratings;
+  }
 
-    public updateServiceRating(customerId: string, rating: number): void {
-        this._serviceRatingsMap.set(customerId, rating);
-    }
-    public getCustomerServiceRating(customerId: string): number | undefined {
-        return this._serviceRatingsMap.get(customerId);
-    }
+  public updateServiceRating(customerId: string, rating: number): void {
+    this._serviceRatingsMap.set(customerId, rating);
+  }
+  public getCustomerServiceRating(customerId: string): number | undefined {
+    return this._serviceRatingsMap.get(customerId);
+  }
 
-    public updateSafetyeRating(customerId: string, rating: number): void {
-        this._safetyRatingsMap.set(customerId, rating);
-    }
-    public getSafetyServiceRating(customerId: string): number | undefined {
-        return this._safetyRatingsMap.get(customerId);
-    }
+  public updateSafetyeRating(customerId: string, rating: number): void {
+    this._safetyRatingsMap.set(customerId, rating);
+  }
+  public getSafetyServiceRating(customerId: string): number | undefined {
+    return this._safetyRatingsMap.get(customerId);
+  }
 }
 
 class BusinessSocialMedia {
-    private _facebook?: string;
-    private _twitter?: string;
-    private _instagram?: string;
+  private _facebook?: string;
+  private _twitter?: string;
+  private _instagram?: string;
 
-    constructor(facebook?: string, twitter?: string, instagram?: string) {
-        this._facebook = facebook;
-        this._twitter = twitter;
-        this._instagram = instagram;
-    }
+  constructor(facebook?: string, twitter?: string, instagram?: string) {
+    this._facebook = facebook;
+    this._twitter = twitter;
+    this._instagram = instagram;
+  }
 
-    public getSocialUrls(): object {
-        return {
-            "facebook": this._facebook,
-            "twitter": this._twitter,
-            "instagram": this._instagram
-        }
-    }
+  public getSocialUrls(): { facebook: string | undefined; twitter: string | undefined; instagram: string | undefined } {
+    return {
+      facebook: this._facebook,
+      twitter: this._twitter,
+      instagram: this._instagram,
+    };
+  }
 
-    set twitter(twitter: string) {
-        this._twitter = twitter;
-    }
+  set twitter(twitter: string) {
+    this._twitter = twitter;
+  }
 
-    set facebook(facebook: string) {
-        this._facebook = facebook;
-    }
+  set facebook(facebook: string) {
+    this._facebook = facebook;
+  }
 
-    set instagram(instagram: string) {
-        this._instagram = instagram;
-    }
+  set instagram(instagram: string) {
+    this._instagram = instagram;
+  }
 }
 
 // class Question {
@@ -112,7 +112,7 @@ class BusinessSocialMedia {
 //         this._answered = answered;
 //         this._answerText = answerText;
 //     }
-    
+
 //     public getQuestion(): object {
 //         return {
 //             customerId: this._customerId,
@@ -170,37 +170,66 @@ class BusinessSocialMedia {
 // }
 
 enum Days {
-    SUNDAY,
-    MONDAY,
-    TUESDAY,
-    WEDNESDAY,
-    THURSDAY,
-    FRIDAY,
-    SATURDAY
-  }
-
-class BusinessHours {
-
-    private _businessHours: Map<Days, Object> = new Map();
-
-    constructor() {}
-
-    static fromData(businessHours: Map<Days, Object>): BusinessHours {
-        let hours = new BusinessHours();
-        hours._businessHours = businessHours;
-        return hours;
-    }
-
-    public setHours(day: Days, openTime: number, closeTime: number): void {
-        this._businessHours.set(day, {"open": openTime, "close": closeTime});
-    }
-
-    public getHours(): Map<Days, Object> {
-        return new Map(this._businessHours);
-    }
+  SUNDAY,
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
 }
 
-interface BusinessDBEntry {
+class BusinessHours {
+  private _businessHours: Map<Days, { open: number; close: number }> = new Map();
+
+  //   constructor() {}
+
+  static fromData(businessHours: Map<Days, { open: number; close: number }>): BusinessHours {
+    const hours = new BusinessHours();
+    hours._businessHours = businessHours;
+    return hours;
+  }
+
+  public setHours(day: Days, openTime: number, closeTime: number): void {
+    this._businessHours.set(day, { open: openTime, close: closeTime });
+  }
+
+  public getHours(): Map<Days, { open: number; close: number }> {
+    return new Map(this._businessHours);
+  }
+}
+
+// interface BusinessDBEntry {
+//   name: string;
+//   location: Location;
+//   description: string;
+//   businessId: string;
+//   ratings: BusinessRatings;
+//   hours: BusinessHours;
+//   socialMedia: BusinessSocialMedia;
+//   tags: BusinessTags[];
+//   // _faq: BusinessFAQ;
+//   ownerId: string;
+//   url: string;
+//   phone: string;
+// }
+
+// interface Business extends BusinessDBEntry { }
+
+export default class Business {
+  name: string;
+  location: Location;
+  description: string;
+  businessId: string;
+  ratings: BusinessRatings;
+  hours: BusinessHours;
+  socialMedia: BusinessSocialMedia;
+  tags: BusinessTags[];
+  // _faq: BusinessFAQ;
+  ownerId: string;
+  url: string;
+  phone: string;
+  constructor(entry: {
     name: string;
     location: Location;
     description: string;
@@ -209,37 +238,62 @@ interface BusinessDBEntry {
     hours: BusinessHours;
     socialMedia: BusinessSocialMedia;
     tags: BusinessTags[];
-    // _faq: BusinessFAQ;
+    // _faq: BusinessFAQ,
     ownerId: string;
     url: string;
     phone: string;
-}
-
-interface Business extends BusinessDBEntry { }
-
-class Business {
-    constructor(private entry: BusinessDBEntry) {
-        (<any>Object).assign(this, entry);
-    }
-}
-
-let businessProps = {
-    name: "Poppa's Workshop",
-    location: new Location("123 Seasame Street"),
-    description: "Where the elbow grease is used.",
-    businessId: uuidv4(),
-    ratings: new BusinessRatings(),
-    hours: new BusinessHours(),
-    socialMedia: new BusinessSocialMedia(),
-    tags: [], //helpful
+  }) {
+    this.name = entry.name;
+    this.location = entry.location;
+    this.description = entry.description;
+    this.businessId = entry.businessId;
+    this.ratings = entry.ratings;
+    this.hours = entry.hours;
+    this.socialMedia = entry.socialMedia;
+    this.tags = entry.tags;
     // _faq: BusinessFAQ;
-    ownerId: uuidv4(),
-    url: "www.poppasworkshop.com",
-    phone: "867-5309",
+    this.ownerId = entry.ownerId;
+    this.url = entry.url;
+    this.phone = entry.phone;
+  }
+
+  static generateNew(): Business {
+    const businessProps = {
+      name: "Poppa's Workshop",
+      location: new Location('123 Seasame Street'),
+      description: 'Where the elbow grease is used.',
+      businessId: uuidv4(),
+      ratings: new BusinessRatings(),
+      hours: new BusinessHours(),
+      socialMedia: new BusinessSocialMedia(),
+      tags: [], //helpful
+      // _faq: BusinessFAQ;
+      ownerId: uuidv4(),
+      url: 'www.poppasworkshop.com',
+      phone: '867-5309',
+    };
+
+    return new Business(businessProps);
+  }
 }
 
-let business = new Business(businessProps);
+// const businessProps = {
+//   name: "Poppa's Workshop",
+//   location: new Location('123 Seasame Street'),
+//   description: 'Where the elbow grease is used.',
+//   businessId: uuidv4(),
+//   ratings: new BusinessRatings(),
+//   hours: new BusinessHours(),
+//   socialMedia: new BusinessSocialMedia(),
+//   tags: [], //helpful
+//   // _faq: BusinessFAQ;
+//   ownerId: uuidv4(),
+//   url: 'www.poppasworkshop.com',
+//   phone: '867-5309',
+// };
 
-business.description = "new description";
-business.hours.setHours(Days.FRIDAY, 11, 5);
-console.log(business);
+// const business = new Business(businessProps);
+
+// business.description = 'new description';
+// business.hours.setHours(Days.FRIDAY, 11, 5);
+// console.log(business);
