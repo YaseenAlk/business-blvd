@@ -38,12 +38,16 @@ export default {
 }
 
 .navbar {
-    background-color: #102b49;
     padding: 1em;
+    box-shadow: 0 0 20px -1px rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+h1 {
+    margin-bottom: 0;
 }
 
 .navbar-title {
     text-align: left;
-    color: white;
 }
 </style>
