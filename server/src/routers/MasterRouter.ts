@@ -26,7 +26,7 @@ class MasterRouter {
   private _configure() {
     this._router.use('/foo', this._subrouterFoo);
     this._router.use('/bar', this._subrouterBar);
-    this._router.use('/business/:id/', this._subrouterBusiness);
+    this._router.use('/business/:id', this._subrouterBusiness);
   }
 }
 
