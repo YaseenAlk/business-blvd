@@ -224,6 +224,7 @@ export default class Business {
   ratings: BusinessRatings;
   hours: BusinessHours;
   socialMedia: BusinessSocialMedia;
+  followers: Set<Object> = new Set();
   tags: BusinessTags[];
   // _faq: BusinessFAQ;
   ownerId: string;
@@ -255,6 +256,18 @@ export default class Business {
     this.ownerId = entry.ownerId;
     this.url = entry.url;
     this.phone = entry.phone;
+  }
+
+  public addFollower(id: string) {
+    this.followers.add(id);
+  }
+
+  public removeFollower(id: string) {
+    this.followers.delete(id);
+  }
+
+  public getFollowers() {
+    return new Set(this.followers);
   }
 
   static generateNew(): Business {
