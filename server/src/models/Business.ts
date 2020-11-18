@@ -2,11 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 class Location {
     private _address: string;
-    private _coordinates?: number[];
+    private _lat?: number;
+    private _lng?: number;
 
-    constructor(address: string, coordinates?: number[]) {
+    constructor(address: string, lat?: number, lng?: number) {
         this._address = address;
-        this._coordinates = coordinates || undefined;
+        this._lat = lat;
+        this._lng = lng;
     }
 
     public getAddress(): string {
@@ -16,11 +18,18 @@ class Location {
         this._address = address;
     } 
 
-    public setCoordinates(coordinates: number[]) {
-        this._coordinates = coordinates;
+    public setLng(lng: number) {
+        this._lng = lng;
     }
-    public getCoordinates(): number[] | undefined {
-        return this._coordinates;
+    public getLng(): number | undefined {
+        return this._lng;
+    }
+
+    public setLat(lat: number) {
+        this._lat = lat;
+    }
+    public getLat(): number | undefined {
+        return this._lat;
     }
 }
 
@@ -232,4 +241,5 @@ let businessProps = {
 let business = new Business(businessProps);
 
 business.description = "new description";
+business.hours.setHours(Days.FRIDAY, 11, 5);
 console.log(business);
