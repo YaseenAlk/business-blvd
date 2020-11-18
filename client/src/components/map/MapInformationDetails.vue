@@ -1,7 +1,7 @@
 <template>
     <div class="info-page">
         <div v-if="selectedBusiness !== undefined">
-            <MapCard v-bind:data="selectedBusiness" />
+            <MapCard v-bind:business="selectedBusiness" />
         </div>
     </div>
 </template>

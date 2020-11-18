@@ -1,32 +1,35 @@
 <template>
     <div class="card">
-        <h2>{{data.title}}</h2>
-        <p>{{data.address}}</p>
+        <h2>{{business.title}}</h2>
+        <p>{{business.address}}</p>
         <div class="card-bottom">
             <div>
-                <QuestionIcon size="20" class="card-bottom-icon" />
-                <span>{{data.questionCount}} questions</span>
+                <b-icon-question-circle class="card-bottom-icon" />
+                <span>{{business.questionCount}} questions</span>
             </div>
             <div>
-                <ReviewsIcon size="20" class="card-bottom-icon" />
-                <span>{{data.reviewCount}} reviews</span>
+                <b-icon-star-half size="20" class="card-bottom-icon" />
+                <span>{{business.reviewCount}} reviews</span>
             </div>
-            <div class="covid-score"><div class="covid-score-number">{{data.covidScore}}</div><span class="covid-score-subtitle">Covid Safety Score</span></div>
+            <div class="covid-score">
+                <div class="covid-score-number">{{business.covidScore}}</div>
+                <span class="covid-score-subtitle">Covid Safety Score</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import QuestionIcon from '../../icons/QuestionIcon.vue';
-import ReviewsIcon from '../../icons/ReviewsIcon.vue';
+import { BIconQuestionCircle, BIconStarHalf } from 'bootstrap-vue';
 
 export default {
     name: 'MapCard',
     props: {
-        data: Object
+        business: Object
     },
     components: {
-        ReviewsIcon, QuestionIcon,
+        BIconQuestionCircle,
+        BIconStarHalf,
     },
 }
 </script>
