@@ -1,23 +1,31 @@
 import Business from '../models/Business';
 
-const data: Business[] = [];
+const data: Map<string, Business> = new Map();
 
 class BusinessController {
   constructor() {
-    data.push(Business.generateNew());
+    data.set("1", Business.generateNew());
+    data.set("2", Business.generateNew());
   }
 
-  defaultMethod() {
-    return {
-      text: `You've reached the ${this.constructor.name} default method`,
-    };
+  getBusiness(id: string) {
+    return data.get(id);
   }
 
-  getHours() {
-    console.log(data[0].name);
-    return {
-      response: data[0].name,
-    };
+  getAllBusinesses() {
+    let listOfBusinesses: Business[] = [];
+    data.forEach((value, key, map) => {
+      // console.log(value);
+      // console.log(key);
+      listOfBusinesses.push(value);
+    });
+    return listOfBusinesses;
+  }
+
+  getHours(id: string) {
+    let business = data.get(id);
+    
+    return business?.hours;
   }
 }
 
