@@ -14,6 +14,11 @@ Methods:
 - Follow a Business
 - Unfollow a Business
 - Get followed businesses
+
+- Sign up
+
+- Sign out
+- Sign in
 */
 
 /*
@@ -33,12 +38,21 @@ POST /api/users
 PUT /api/users/:id
 {
     (optional) username: "username",
-    (optional) password: "password".
+    (optional) password: "password",
     (optional) email: "email@email.com"
 }
 
 // delete account
 DELETE /api/users/:id
+
+// sign in
+POST /api/users/:id/signin
+
+// sign out
+DELETE /api/users/:id/signout
+
+// check following status
+GET /api/businesses/:id/isFollowing
 
 // follow a business (uses session)
 POST /api/businesses/:id/follow
