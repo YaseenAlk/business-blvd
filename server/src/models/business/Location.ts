@@ -17,7 +17,7 @@ export default class Location {
   }
 
   set lng(lng: number) {
-    this.lng = lng;
+    this._lng = lng;
   }
   get lng(): number {
     return this._lng;
