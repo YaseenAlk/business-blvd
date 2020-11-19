@@ -29,20 +29,15 @@ class UserRouter {
     //     username: "username",
     //     password: "password"
     // }
-    this._router.post(
-      '/',
-      Auth.enforceSignedOut,
-      Validation.createAccountMiddleware,
-      (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const { email, username, password } = req.body;
-          const resp = this._controller.createAccount(email, username, password);
-          res.status(200).json(resp).end();
-        } catch (error) {
-          next(error);
-        }
-      },
-    );
+    this._router.post('/', Auth.enforceSignedOut, (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { email, username, password } = req.body;
+        const resp = this._controller.createAccount(email, username, password);
+        res.status(200).json(resp).end();
+      } catch (error) {
+        next(error);
+      }
+    });
 
     // edit username or password (probably just email/password...)
     // PUT /api/users/:id

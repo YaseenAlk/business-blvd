@@ -31,7 +31,9 @@ export class Validation {
   }
 
   static usernameValid(req: Request, res: Response, next: NextFunction): void {
-    const username = req.params.username || req.body.username;
+    console.log(req.params);
+    console.log(req.body);
+    const username = req.body.username || req.body.username;
     // for now, shouldn't be empty. can be expanded to have specific length and stuff later
     // its OK to get undefined inputs as long as usernameDefined is also inserted as middleware
     if (username !== undefined && username.length === 0) {
