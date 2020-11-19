@@ -1,11 +1,11 @@
-import Business from '../models/Business';
+import Business from '../models/business/Business';
 
 const data: Map<string, Business> = new Map();
 
 class BusinessController {
   constructor() {
-    data.set("1", Business.generateNew());
-    data.set("2", Business.generateNew());
+    data.set('1', Business.generateExample());
+    data.set('2', Business.generateExample());
   }
 
   businessExists(id: string) {
@@ -17,18 +17,16 @@ class BusinessController {
   }
 
   getAllBusinesses() {
-    let listOfBusinesses: Business[] = [];
-    data.forEach((value, key, map) => {
-      // console.log(value);
-      // console.log(key);
+    const listOfBusinesses: Business[] = [];
+    data.forEach((value) => {
       listOfBusinesses.push(value);
     });
     return listOfBusinesses;
   }
 
   getHours(id: string) {
-    let business = data.get(id);
-    
+    const business = data.get(id);
+
     return business?.hours;
   }
 }
