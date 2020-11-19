@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../controllers/BusinessController';
 
 class BusinessRouter {
-  private _router = Router({mergeParams:true});
+  private _router = Router({ mergeParams: true });
 
   private _controller = BusinessController;
 
@@ -21,18 +21,16 @@ class BusinessRouter {
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        if (id == "all") { 
+        if (id == 'all') {
           const result = this._controller.getAllBusinesses();
           console.log(result);
           res.status(200).json(result);
-        }
-        else {
+        } else {
           const businessExists = this._controller.businessExists(id);
           if (businessExists) {
             const result = this._controller.getBusiness(id);
             res.status(200).json(result);
-          }
-          else {
+          } else {
             res.status(404).json(`No business found with id ${id}`);
           }
         }
@@ -48,8 +46,7 @@ class BusinessRouter {
         if (businessExists) {
           const result = this._controller.getHours(id);
           res.status(200).json(result);
-        }
-        else {
+        } else {
           res.status(404).json(`No business found with id ${id}`);
         }
       } catch (error) {

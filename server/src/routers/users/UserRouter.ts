@@ -35,7 +35,8 @@ class UserRouter {
       Validation.createAccountMiddleware,
       (req: Request, res: Response, next: NextFunction) => {
         try {
-          const resp = this._controller.createAccount(req.body.email, req.body.username, req.body.password);
+          const { email, username, password } = req.body;
+          const resp = this._controller.createAccount(email, username, password);
           res.status(200).json(resp).end();
         } catch (error) {
           next(error);

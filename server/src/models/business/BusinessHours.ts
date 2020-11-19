@@ -11,8 +11,6 @@ export enum Days {
 export class BusinessHours {
   private _businessHours: Map<Days, { open: number; close: number }> = new Map();
 
-  //   constructor() {}
-
   static fromData(businessHours: Map<Days, { open: number; close: number }>): BusinessHours {
     const hours = new BusinessHours();
     hours._businessHours = new Map(businessHours);
