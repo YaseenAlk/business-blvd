@@ -8,6 +8,10 @@ class BusinessController {
     data.set("2", Business.generateNew());
   }
 
+  businessExists(id: string) {
+    return data.has(id);
+  }
+
   getBusiness(id: string) {
     return data.get(id);
   }

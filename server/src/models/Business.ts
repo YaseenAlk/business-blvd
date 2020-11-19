@@ -46,8 +46,8 @@ class BusinessRatings {
 
   static fromData(serviceRatingsMap: Map<string, number>, safetyRatingsMap: Map<string, number>) {
     const ratings = new BusinessRatings();
-    ratings._serviceRatingsMap = serviceRatingsMap;
-    ratings._safetyRatingsMap = safetyRatingsMap;
+    ratings._serviceRatingsMap = new Map(serviceRatingsMap);
+    ratings._safetyRatingsMap = new Map(safetyRatingsMap);
     return ratings;
   }
 
@@ -58,7 +58,7 @@ class BusinessRatings {
     return this._serviceRatingsMap.get(customerId);
   }
 
-  public updateSafetyeRating(customerId: string, rating: number): void {
+  public updateSafetyRating(customerId: string, rating: number): void {
     this._safetyRatingsMap.set(customerId, rating);
   }
   public getSafetyServiceRating(customerId: string): number | undefined {

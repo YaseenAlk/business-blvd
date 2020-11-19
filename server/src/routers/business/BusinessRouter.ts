@@ -27,8 +27,9 @@ class BusinessRouter {
           res.status(200).json(result);
         }
         else {
-          const result = this._controller.getBusiness(id);
-          if (result) {
+          const businessExists = this._controller.businessExists(id);
+          if (businessExists) {
+            const result = this._controller.getBusiness(id);
             res.status(200).json(result);
           }
           else {
@@ -43,8 +44,14 @@ class BusinessRouter {
     this._router.get('/hours/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const result = this._controller.getHours(id);
-        res.status(200).json(result);
+        const businessExists = this._controller.businessExists(id);
+        if (businessExists) {
+          const result = this._controller.getHours(id);
+          res.status(200).json(result);
+        }
+        else {
+          res.status(404).json(`No business found with id ${id}`);
+        }
       } catch (error) {
         next(error);
       }
