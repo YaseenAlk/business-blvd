@@ -42,6 +42,8 @@ export default {
 .card-item {
     padding: 32px 32px 8px 32px;
     color: black;
+    box-shadow: 0 0 20px -1px rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
 }
 
 .card-title {

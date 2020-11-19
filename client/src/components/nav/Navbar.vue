@@ -80,12 +80,9 @@ export default {
     z-index: 1;
 }
 
-h1 {
-    margin-bottom: 0;
-}
-
 .navbar-title {
     text-align: left;
+    margin-bottom: 0;
 }
 
 </style>

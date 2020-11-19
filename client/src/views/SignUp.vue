@@ -2,6 +2,7 @@
     <div class="form-container">
         <h2>Sign Up</h2>
         <i>Create an account to access Business Boulevard.</i>
+        <p>Already have an account? <b-link to="/login">Log in here!</b-link></p>
         <b-form id="signup-form" @submit.prevent="onSubmit" class="form-content">
             <b-form-group label="Email address:" label-for="email" label-align="left" label-cols-sm="4">
                 <b-form-input id="email" type="email" v-model="form.email" size="sm" required/>
