@@ -36,12 +36,6 @@ export default new Router({
                 import ('./views/Map.vue')
         },
         {
-            path: '/account',
-            name: 'Account',
-            component: () =>
-                import ('./views/Account.vue')
-        },
-        {
             path: '*',
             name: 'NotFound',
             component: () =>
