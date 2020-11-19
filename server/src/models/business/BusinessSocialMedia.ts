@@ -9,7 +9,7 @@ export default class BusinessSocialMedia {
     this._instagram = instagram;
   }
 
-  public getSocialUrls(): { facebook: string | undefined; twitter: string | undefined; instagram: string | undefined } {
+  public getSocialUrls(): { facebook?: string; twitter?: string; instagram?: string } {
     return {
       facebook: this._facebook,
       twitter: this._twitter,
