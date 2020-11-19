@@ -89,6 +89,24 @@ export class Validation {
     next();
   }
 
+  static usernameNotTaken(req: Request, res: Response, next: NextFunction): void {
+    const user = UserRepository.findOneByUsername(req.params.username || req.body.username);
+    if (user !== undefined) {
+      res.status(409).json({ message: 'Username already in use' }).end();
+      return;
+    }
+    next();
+  }
+
+  static emailNotTaken(req: Request, res: Response, next: NextFunction): void {
+    const user = UserRepository.findOneByEmail(req.params.email || req.body.email);
+    if (user !== undefined) {
+      res.status(409).json({ message: 'Email already in use' }).end();
+      return;
+    }
+    next();
+  }
+
   static signinMiddleware = [
     Validation.usernameDefined,
     Validation.passwordDefined,
@@ -97,5 +115,16 @@ export class Validation {
     Validation.usernameExists,
     Validation.passwordValid,
     Validation.passwordCorrect,
+  ];
+
+  static createAccountMiddleware = [
+    Validation.usernameDefined,
+    Validation.passwordDefined,
+    Validation.emailDefined,
+    Validation.usernameValid,
+    Validation.emailValid,
+    Validation.passwordValid,
+    Validation.usernameNotTaken,
+    Validation.emailNotTaken,
   ];
 }

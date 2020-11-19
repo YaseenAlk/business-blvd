@@ -22,10 +22,6 @@ class UserRouter {
   }
 
   private _account() {
-    // Get user info
-    // GET /api/users/:id
-    this._router.get('/:id', (req: Request, res: Response, next: NextFunction) => {});
-
     // create account
     // POST /api/users
     // {
@@ -33,7 +29,19 @@ class UserRouter {
     //     username: "username",
     //     password: "password"
     // }
-    this._router.post('/', (req: Request, res: Response, next: NextFunction) => {});
+    this._router.post(
+      '/',
+      Auth.enforceSignedOut,
+      Validation.createAccountMiddleware,
+      (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const resp = this._controller.createAccount(req.body.email, req.body.username, req.body.password);
+          res.status(200).json(resp).end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
 
     // edit username or password (probably just email/password...)
     // PUT /api/users/:id
@@ -42,11 +50,11 @@ class UserRouter {
     //     (optional) password: "password",
     //     (optional) email: "email@email.com"
     // }
-    this._router.put('/:id', (req: Request, res: Response, next: NextFunction) => {});
+    //this._router.put('/:id', (req: Request, res: Response, next: NextFunction) => {});
 
     // delete account
     // DELETE /api/users/:id
-    this._router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {});
+    //this._router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {});
   }
 
   private _authentication() {

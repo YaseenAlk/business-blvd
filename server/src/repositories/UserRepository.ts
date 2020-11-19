@@ -15,6 +15,14 @@ class UserRepository {
   findOneByUsername(username: string): User {
     return this.data.filter((user) => user.username === username)[0];
   }
+
+  findOneByEmail(email: string): User {
+    return this.data.filter((user) => user.email === email)[0];
+  }
+
+  addOne(id: string, email: string, username: string, password: string) {
+    this.data.push(new User(id, email, username, password));
+  }
 }
 
 export = new UserRepository();
