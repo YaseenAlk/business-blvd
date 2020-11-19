@@ -123,6 +123,9 @@ export default class Business {
       return false;
     }
   }
+  public isOwner(ownerId: string): boolean {
+    return this._ownerId == ownerId;
+  }
 
   get url(): string {
     return this._url;
