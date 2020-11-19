@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import BusinessController from '../../controllers/BusinessController';
+import BusinessController from '../../controllers/business/BusinessController';
 
 import LocationRouter from './subrouters/LocationRouter';
 import RatingsRouter from './subrouters/RatingsRouter';

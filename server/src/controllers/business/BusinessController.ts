@@ -1,4 +1,4 @@
-import Business from '../models/business/Business';
+import Business from '../../models/business/Business';
 
 const data: Map<string, Business> = new Map();
 

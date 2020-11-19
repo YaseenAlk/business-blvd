@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import BusinessController from '../../../controllers/BusinessController';
+import BusinessController from '../../../controllers/business/BusinessController';
 
 class RatingsRouter {
   private _router = Router({ mergeParams: true });

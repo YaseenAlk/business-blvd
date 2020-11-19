@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import BusinessController from '../../../controllers/BusinessController';
+import BusinessController from '../../../controllers/business/BusinessController';
 
-class FollwersRouter {
+class FollowersRouter {
   private _router = Router({ mergeParams: true });
 
   private _controller = BusinessController;
@@ -29,4 +29,4 @@ class FollwersRouter {
   }
 }
 
-export = new FollwersRouter().router;
+export = new FollowersRouter().router;
