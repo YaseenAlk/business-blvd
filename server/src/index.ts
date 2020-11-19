@@ -24,7 +24,13 @@ class Server {
 
 // initialize server app
 const server = new Server();
-
+server.app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'BusinessBlvd',
+    resave: true,
+    saveUninitialized: true,
+  }),
+);
 // Connect with the client
 server.app.use(express.static(path.join(__dirname, '../../client/dist')));
 server.app.get('/', (req, res) => {
@@ -38,14 +44,6 @@ server.app.use('/api', server.router);
 server.app.get('/heartbeat', (req: Request, res: Response) => {
   res.status(200).send();
 });
-
-server.app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'BusinessBlvd',
-    resave: true,
-    saveUninitialized: true,
-  }),
-);
 
 server.app.use(logger('dev'));
 server.app.use(express.json());
