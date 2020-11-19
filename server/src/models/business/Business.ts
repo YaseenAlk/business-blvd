@@ -6,46 +6,48 @@ import BusinessRatings from './BusinessRatings';
 import BusinessSocialMedia from './BusinessSocialMedia';
 import { Days, BusinessHours } from './BusinessHours';
 
-export default class Business {
-  private _name: string;
-  private _location: Location;
+interface BusinessEntry {
+  name: string;
+  location: Location;
   description: string;
   businessId: string;
   ratings: BusinessRatings;
   hours: BusinessHours;
   socialMedia: BusinessSocialMedia;
-  private followers: Set<string> = new Set();
-  tags: BusinessTags[];
-  // faq: BusinessFAQ;
+  tags: Set<BusinessTags>;
+  // faq: BusinessFAQ,
   ownerId: string;
   url: string;
   phone: string;
-  constructor(entry: {
-    name: string;
-    location: Location;
-    description: string;
-    businessId: string;
-    ratings: BusinessRatings;
-    hours: BusinessHours;
-    socialMedia: BusinessSocialMedia;
-    tags: BusinessTags[];
-    // faq: BusinessFAQ,
-    ownerId: string;
-    url: string;
-    phone: string;
-  }) {
+}
+
+export default class Business {
+  private _name: string;
+  private _location: Location;
+  private _description: string;
+  private _businessId: string;
+  private _ratings: BusinessRatings;
+  private _hours: BusinessHours;
+  private _socialMedia: BusinessSocialMedia;
+  private _followers: Set<string> = new Set();
+  private _tags: Set<BusinessTags>;
+  // private faq: BusinessFAQ;
+  private _ownerId: string;
+  private _url: string;
+  private _phone: string;
+  constructor(entry: BusinessEntry) {
     this._name = entry.name;
     this._location = entry.location;
-    this.description = entry.description;
-    this.businessId = entry.businessId;
-    this.ratings = entry.ratings;
-    this.hours = entry.hours;
-    this.socialMedia = entry.socialMedia;
-    this.tags = entry.tags;
+    this._description = entry.description;
+    this._businessId = entry.businessId;
+    this._ratings = entry.ratings;
+    this._hours = entry.hours;
+    this._socialMedia = entry.socialMedia;
+    this._tags = entry.tags;
     // faq: BusinessFAQ;
-    this.ownerId = entry.ownerId;
-    this.url = entry.url;
-    this.phone = entry.phone;
+    this._ownerId = entry.ownerId;
+    this._url = entry.url;
+    this._phone = entry.phone;
   }
 
   get name(): string {
@@ -59,20 +61,85 @@ export default class Business {
     return this._location;
   }
 
+  get description(): string {
+    return this._description;
+  }
+  set description(description: string) {
+    this._description = this.description;
+  }
+
+  get businessId(): string {
+    return this._businessId;
+  }
+
+  get ratings(): BusinessRatings {
+    return this._ratings;
+  }
+
+  get hours(): BusinessHours {
+    return this._hours;
+  }
+
+  get socialMedia(): BusinessSocialMedia {
+    return this._socialMedia;
+  }
+
   public addFollower(id: string): void {
-    this.followers.add(id);
+    this._followers.add(id);
   }
-
   public removeFollower(id: string): void {
-    this.followers.delete(id);
+    this._followers.delete(id);
+  }
+  public getFollowers(): Set<string> {
+    return new Set(this._followers);
+  }
+  public isFollowedBy(userId: string): boolean {
+    return this._followers.has(userId);
   }
 
-  getFollowers(): Set<string> {
-    return new Set(this.followers);
+  get tags(): Set<BusinessTags> {
+    return new Set(this._tags);
+  }
+  public addTag(tag: BusinessTags): void {
+    this._tags.add(tag);
+  }
+  public removeTag(tag: BusinessTags): void {
+    this._tags.delete(tag);
+  }
+  public hasTag(tag: BusinessTags): boolean {
+    return this._tags.has(tag);
+  }
+
+  get ownerId(): string {
+    return this._ownerId;
+  }
+  set ownerId(userId: string) {
+    this._ownerId = userId;
+  }
+  public hasOwner(): boolean {
+    if (this._ownerId) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  get url(): string {
+    return this._url;
+  }
+  set url(newUrl: string) {
+    this._url = newUrl;
+  }
+
+  get phone(): string {
+    return this._phone;
+  }
+  set phone(newPhone: string) {
+    this._phone = newPhone;
   }
 
   static generateExample(): Business {
-    const businessProps = {
+    const BusinessEntry: BusinessEntry = {
       name: "Poppa's Workshop",
       location: new Location('123 Seasame Street', 42.3736, 71.1097),
       description: 'Where the elbow grease is used.',
@@ -80,14 +147,14 @@ export default class Business {
       ratings: new BusinessRatings(),
       hours: new BusinessHours(),
       socialMedia: new BusinessSocialMedia('www.facebook.com', 'www.twitter.com'),
-      tags: [BusinessTags.DELIVERY],
+      tags: new Set([BusinessTags.DELIVERY]),
       // faq: BusinessFAQ;
       ownerId: uuidv4(),
       url: 'www.poppasworkshop.com',
       phone: '867-5309',
     };
 
-    const exampleBusiness = new Business(businessProps);
+    const exampleBusiness = new Business(BusinessEntry);
 
     // extra additions
     exampleBusiness.hours.setHours(Days.SATURDAY, 4, 4);
