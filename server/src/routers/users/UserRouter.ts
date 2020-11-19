@@ -107,3 +107,5 @@ class UserRouter {
         */
   }
 }
+
+export = new UserRouter().router;
