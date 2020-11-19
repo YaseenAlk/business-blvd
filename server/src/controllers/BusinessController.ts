@@ -8,6 +8,12 @@ class BusinessController {
     data.set('2', Business.generateExample());
   }
 
+  defaultMethod(): { text: string } {
+    return {
+      text: `You've reached the ${this.constructor.name} default method`,
+    };
+  }
+
   businessExists(id: string) {
     return data.has(id);
   }
