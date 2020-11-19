@@ -2,6 +2,7 @@
     <div class="form-container">
         <h2>Log In</h2>
         <i>Log In to access your Business Boulevard.</i>
+        <p>Don't have an account? <b-link to="/signup">Sign up today!</b-link></p>
         <b-form id="login-form" @submit.prevent="onSubmit" class="form-content">
             <b-form-group label="Username:" label-for="username" label-align="left" label-cols-sm="4">
                 <b-form-input id="username" type="text" v-model="form.username" size="sm" required/>
