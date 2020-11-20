@@ -38,23 +38,20 @@ class BusinessController {
 
   getBusiness(id: string): ReturnObj {
     if (id == 'all') {
-      return { status: 200, data: this.getAllBusinesses() };
+      return {
+        status: 200,
+        data: data.values().map((business) => {
+          return business.toJSON();
+        }),
+      };
     } else {
       const businessExists = this.businessExists(id);
       if (businessExists) {
-        return { status: 200, data: [data.get(id)] };
+        return { status: 200, data: [data.get(id).toJSON()] };
       } else {
         return { status: 404, data: `No business found with id ${id}` };
       }
     }
-  }
-
-  getAllBusinesses(): Business[] {
-    const listOfBusinesses: Business[] = [];
-    data.forEach((value) => {
-      listOfBusinesses.push(value);
-    });
-    return listOfBusinesses;
   }
 
   /***************
