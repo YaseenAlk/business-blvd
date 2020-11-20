@@ -7,7 +7,6 @@ export class Auth {
       res.status(401).json({ message: 'You must be signed in to perform this action' }).end();
       return;
     }
-
     next();
   }
 
