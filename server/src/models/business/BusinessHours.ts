@@ -1,3 +1,5 @@
+import { TSMap } from 'typescript-map';
+
 export enum Days {
   SUNDAY,
   MONDAY,
@@ -8,20 +10,27 @@ export enum Days {
   SATURDAY,
 }
 
-export class BusinessHours {
-  private _businessHours: Map<Days, { open: number; close: number }> = new Map();
+export type Time = {
+  hour: number;
+  minute: number;
+};
 
-  static fromData(businessHours: Map<Days, { open: number; close: number }>): BusinessHours {
+export class BusinessHours {
+  private _businessHours: TSMap<Days, { open: Time; close: Time }> = new TSMap();
+
+  //   constructor() {}
+
+  static fromData(businessHours: TSMap<Days, { open: Time; close: Time }>): BusinessHours {
     const hours = new BusinessHours();
-    hours._businessHours = new Map(businessHours);
+    hours._businessHours = businessHours.clone();
     return hours;
   }
 
-  public setHours(day: Days, openTime: number, closeTime: number): void {
+  public setHours(day: Days, openTime: Time, closeTime: Time): void {
     this._businessHours.set(day, { open: openTime, close: closeTime });
   }
 
-  public getHours(): Map<Days, { open: number; close: number }> {
-    return new Map(this._businessHours);
+  public getHours(): TSMap<Days, { open: Time; close: Time }> {
+    return this._businessHours.clone();
   }
 }
