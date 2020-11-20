@@ -32,6 +32,9 @@ class BusinessRouter {
    * Connect routes to their matching controller endpoints.
    */
   private _configure() {
+    /***************
+    EXTERNAL BUSINESS ROUTE
+    ****************/
     this._router.use('/location', this._subrouterLocation);
     this._router.use('/ratings', this._subrouterRatings);
     this._router.use('/hours', this._subrouterHours);
@@ -39,6 +42,9 @@ class BusinessRouter {
     this._router.use('/followers', this._subrouterFollowers);
     this._router.use('/tags', this._subrouterTags);
 
+    /***************
+    GET BUSINESS ROUTE
+    ****************/
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
@@ -49,12 +55,35 @@ class BusinessRouter {
       }
     });
 
-    // /name: SET and GET
-    // description: SET and GET
-    // /businessId: GET
-    // /ownerId: SET and GET
-    // /url: SET and GET
-    // /phone: SET and GET
+    /***************
+    SET/GET BUSINESS NAME ROUTE
+    ****************/
+    // TODO
+
+    /***************
+    SET/GET BUSINESS DESCRIPTION ROUTE
+    ****************/
+    // TODO
+
+    /***************
+    GET BUSINESS DESCRIPTION ROUTE
+    ****************/
+    // TODO
+
+    /***************
+    GET BUSINESS OWNERID ROUTE
+    ****************/
+    // TODO
+
+    /***************
+    SET/GET BUSINESS URL ROUTE
+    ****************/
+    // TODO
+
+    /***************
+    SET/GET BUSINESS PHONE ROUTE
+    ****************/
+    // TODO
   }
 }
 
