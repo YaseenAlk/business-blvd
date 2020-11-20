@@ -75,6 +75,39 @@ class BusinessController {
       return { status: 404, data: `No business found with id ${id}` };
     }
   }
+
+  /***************
+  LOCATION METHODS
+  ****************/
+  getLocation(id: string): ReturnObj {
+    const businessExists = this.businessExists(id);
+    if (businessExists) {
+      const location = data.get(id)?.location;
+      return {
+        status: 200,
+        data: {
+          address: location?.address,
+          lat: location?.lat,
+          lng: location?.lng,
+        },
+      };
+    } else {
+      return { status: 404, data: `No business found with id ${id}` };
+    }
+  }
+
+  setLocation(id: string, address: string, lat: number, lng: number): ReturnObj {
+    // const businessExists = this.businessExists(id);
+    const business = data.get(id);
+    if (business) {
+      business.location.address = address;
+      business.location.lat = lat;
+      business.location.lng = lng;
+      return { status: 200, data: `Updated address successfully` };
+    } else {
+      return { status: 404, data: `No business found with id ${id}` };
+    }
+  }
 }
 
 export = new BusinessController();
