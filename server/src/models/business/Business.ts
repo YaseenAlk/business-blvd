@@ -159,7 +159,7 @@ export default class Business {
 
     const exampleBusiness = new Business(BusinessEntry);
 
-    // extra additions
+    // extra augmentations
     exampleBusiness.hours.setHours(Days.SATURDAY, 4, 4);
     exampleBusiness.addFollower('44');
     exampleBusiness.ratings.updateSafetyRating('22', 4);
