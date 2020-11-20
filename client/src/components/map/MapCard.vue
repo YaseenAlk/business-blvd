@@ -12,6 +12,10 @@
                 <span>{{business.reviewCount}} reviews</span>
             </div>
             <div class="covid-score">
+              <div class="covid-score-number">{{business.rating}}</div>
+              <span class="covid-score-subtitle">Rating</span>
+            </div>
+            <div class="covid-score">
                 <div class="covid-score-number">{{business.covidScore}}</div>
                 <span class="covid-score-subtitle">Covid Safety Score</span>
             </div>

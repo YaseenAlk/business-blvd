@@ -36,6 +36,12 @@ export default new Router({
                 import ('./views/Map.vue')
         },
         {
+            path: '/business',
+            name: 'Business',
+            component: () => 
+                import('./views/Business.vue')
+        },
+        {
             path: '*',
             name: 'NotFound',
             component: () =>
