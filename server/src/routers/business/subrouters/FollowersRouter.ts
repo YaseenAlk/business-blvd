@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import BarController from '../../controllers/BarController';
+import BusinessController from '../../../controllers/business/BusinessController';
 
-class BarRouter {
-  private _router = Router();
+class FollowersRouter {
+  private _router = Router({ mergeParams: true });
 
-  private _controller = BarController;
+  private _controller = BusinessController;
 
   get router() {
     return this._router;
@@ -20,4 +20,4 @@ class BarRouter {
   private _configure() {}
 }
 
-export = new BarRouter().router;
+export = new FollowersRouter().router;
