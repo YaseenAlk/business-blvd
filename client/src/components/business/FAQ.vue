@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Community Questions</h1>
+	<div>
+    <h2>Community Questions</h2>
      <div class="card-container">
         <div class="card">
           <div class="card-info">
@@ -12,25 +12,6 @@
   </div>
 </template>
 <style scoped>
-
-@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
-
-* {
-	box-sizing: border-box;
-}
-
-
-body {
-	font-family: 'Muli', sans-serif;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	min-height: 100vh;
-	margin: 0;
-}
-
-
 .card {
 	background-color: #fff;
 	border-radius: 10px;
@@ -38,8 +19,6 @@ body {
 	display: flex;
 	max-width: 100%;
 	margin: 20px;
-	overflow: hidden;
-	width: 700px;
 }
 
 .card h6 {
@@ -73,61 +52,5 @@ body {
 	padding: 30px;
 	position: relative;
 	width: 100%;
-}
-
-
-.floating-btn {
-	border-radius: 26.5px;
-	background-color: #001F61;
-	border: 1px solid #001F61;
-	box-shadow: 0 16px 22px -17px #03153B;
-	color: #fff;
-	cursor: pointer;
-	font-size: 16px;
-	line-height: 20px;
-	padding: 12px 20px;
-	position: fixed;
-	bottom: 20px;
-	right: 20px;
-	z-index: 999;
-}
-
-.floating-btn:hover {
-	background-color: #ffffff;
-	color: #001F61;
-}
-
-.floating-btn:focus {
-	outline: none;
-}
-
-.floating-text {
-	background-color: #001F61;
-	border-radius: 10px 10px 0 0;
-	color: #fff;
-	font-family: 'Muli';
-	padding: 7px 15px;
-	position: fixed;
-	bottom: 0;
-	left: 50%;
-	transform: translateX(-50%);
-	text-align: center;
-	z-index: 998;
-}
-
-.floating-text a {
-	color: #FF7500;
-	text-decoration: none;
-}
-
-@media screen and (max-width: 480px) {
-
-	.social-panel-container.visible {
-		transform: translateX(0px);
-	}
-	
-	.floating-btn {
-		right: 10px;
-	}
 }
 </style>

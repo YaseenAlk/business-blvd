@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>About</h1>
+    <h2>About</h2>
     <div class="cards-container">
       <div class="card">
         <div class="card-preview">
@@ -16,24 +16,6 @@
 </template>
 <style scoped>
 
-@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
-
-* {
-	box-sizing: border-box;
-}
-
-
-body {
-	font-family: 'Muli', sans-serif;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	min-height: 100vh;
-	margin: 0;
-}
-
-
 .card {
 	background-color: #fff;
 	border-radius: 10px;
@@ -42,7 +24,6 @@ body {
 	max-width: 100%;
 	margin: 20px;
 	overflow: hidden;
-	width: 700px;
 }
 
 .card h6 {

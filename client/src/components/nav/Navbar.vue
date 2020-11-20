@@ -4,8 +4,8 @@
             <h1 class="navbar-title">Business Boulevard</h1>
         </router-link>
         <b-nav class="flex-row align-items-center">
-            <router-link to="/map">Map</router-link>
-            <router-link to="/business">Business Demo</router-link>
+            <router-link to="/map" class="nav-link">Map</router-link>
+            <router-link to="/business" class="nav-link">Business Demo</router-link>
             <b-nav-item-dropdown right v-bind:text="dropdownText">
                 <b-dropdown-item v-if="loggedIn" to="/account">Profile</b-dropdown-item>
                 <b-dropdown-divider v-if="loggedIn" />
@@ -79,6 +79,10 @@ export default {
     padding: 1em;
     box-shadow: 0 0 20px -1px rgba(0, 0, 0, 0.4);
     z-index: 1;
+}
+
+.nav-link {
+    padding-right: 1em;
 }
 
 .navbar-title {

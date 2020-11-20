@@ -2,37 +2,29 @@
   <div>
     <b-toast id="toast" variant="info" toaster="b-toaster-bottom-right" no-auto-hide>
       <template v-slot:toast-title>
-        <h6>Have a question?</h6>
+        <h6 class="toast-title">Have a question?</h6>
       </template>
       <b-button variant="primary" v-b-modal.question>Just ask.</b-button>
-      <b-modal id="question" title="Submit a question" hide-backdrop ok-disabled content-class="shadow" >
+      <b-modal id="question" title="Submit a question" hide-backdrop content-class="shadow" hide-footer>
          <b-form id="question-form" @submit.prevent="onSubmit" class="form-content">
-            <b-form-input id="question" type="question" v-model="form.email" size="sm" required/>
-            <b-alert variant="success" v-bind:show="success !== undefined">{{success}}</b-alert>
-            <b-alert variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
+            <b-form-textarea id="question" v-model="form.question" size="sm" required rows="3" placeholder="Enter a question for this business" />
+            <b-alert class="alert" variant="success" v-bind:show="success !== undefined">{{success}}</b-alert>
+            <b-alert class="alert" variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
+            <b-button type="submit" class="modal-button" variant="primary">Send question</b-button>
         </b-form>
-        <template #modal-footer="{ ok }">
-          <b-button size='md' variant="primary" @click="() => { 
-              onSubmit();
-              if (!error) {
-                ok();
-              }
-            }" >
-            Submit
-          </b-button>
-        </template>
       </b-modal>
     </b-toast>
   </div>
 </template>
 <script>
-import { BForm, BFormInput, BAlert } from 'bootstrap-vue';
-// import axios from 'axios';
+import { BForm, BFormTextarea, BAlert } from 'bootstrap-vue';
+import axios from 'axios';
+
 export default {
     name: 'Ask',
     components: {
         BForm, 
-        BFormInput,
+        BFormTextarea,
         BAlert,
     },
     mounted() {
@@ -45,13 +37,17 @@ export default {
         },
         onSubmit: function(){
             this.clearAlerts(); 
-            this.error = 'No backend yet :(';
-            // axios.post('/api/users', this.form).then((res) => {
-            //     this.success = res.data.message;
-            // }).catch((err) => {
-            //     this.error = err.response.data.message;
-            // });
+            let fields = JSON.parse(JSON.stringify(this.form));
+
+            axios.post('/api/inquiry', fields).then(() => {
+              this.$bvModal.hide('question');
+            }).catch((err) => {
+              this.error = err.response.data.message || err;
+            });
         },
+        handleSubmit: () => { 
+          this.onSubmit();
+        }
     },
     data() {
       return {
@@ -79,5 +75,21 @@ export default {
     min-width: 400px;
     width: 100%;
     max-width: 500px;
+    display: flex;
+    flex-direction: column;
 }
+
+.alert {
+  margin-top: 16px;
+}
+
+.toast-title {
+  padding-top: 8px;
+}
+
+.modal-button {
+  align-self: flex-end;
+  margin-top: 1rem;
+}
+
 </style>

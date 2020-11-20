@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
-    <router-view />
+    <router-view class="app-body" />
   </div>
 </template>
 
@@ -68,4 +68,12 @@ export default {
   grid-template-rows: min-content auto;
   height: 100%;
 }
+
+.app-body{
+  overflow: scroll;
+  min-width: 100vw;
+  margin: 0;
+}
+
+
 </style>
