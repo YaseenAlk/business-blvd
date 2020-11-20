@@ -1,3 +1,5 @@
+import { TSMap } from 'typescript-map';
+
 import Business from '../../models/business/Business';
 import { Days } from '../../models/business/BusinessHours';
 
@@ -6,7 +8,7 @@ type ReturnObj = {
   data: any;
 };
 
-const data: Map<string, Business> = new Map();
+const data: TSMap<string, Business> = new TSMap();
 
 class BusinessController {
   constructor() {
