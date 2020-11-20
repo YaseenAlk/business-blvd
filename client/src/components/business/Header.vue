@@ -2,7 +2,10 @@
     <b-jumbotron bg-variant="primary" text-variant="white" border-variant="light" class="header">
       <template #header>{{business.name}}</template>
       <template #lead>
-        {{business.address}}
+        {{business.address}} 
+        <br/>
+        <br/>
+        {{ business.phone }}
       </template>  
     </b-jumbotron>
 </template>
