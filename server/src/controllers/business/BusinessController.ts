@@ -37,7 +37,7 @@ class BusinessController {
     } else {
       const businessExists = this.businessExists(id);
       if (businessExists) {
-        return { status: 200, data: [data.get(id).toJSON()] };
+        return { status: 200, data: data.get(id).toJSON() };
       } else {
         return { status: 404, data: `No business found with id ${id}` };
       }
