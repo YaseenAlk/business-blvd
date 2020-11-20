@@ -2,6 +2,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
+import bodyParser from 'body-parser';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import http from 'http';
@@ -16,44 +17,36 @@ dotenv.config({
 /**
  * Express server application class.
  */
-class Server {
-  public app = express();
+// Hook up the express app instance w/middleware.
+const app = express();
 
-  public router = MasterRouter;
-}
-
-// initialize server app
-const server = new Server();
-
-// Connect with the client
-server.app.use(express.static(path.join(__dirname, '../../client/dist')));
-server.app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
-});
-
-// make server app handle any route starting with '/api'
-server.app.use('/api', server.router);
-
-// To check if the server is up.
-server.app.get('/heartbeat', (req: Request, res: Response) => {
-  res.status(200).send();
-});
-
-server.app.use(
+app.use(
   session({
     secret: process.env.SESSION_SECRET || 'BusinessBlvd',
     resave: true,
     saveUninitialized: true,
   }),
 );
+// Connect with the client
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
+});
 
-server.app.use(logger('dev'));
-server.app.use(express.json());
-server.app.use(express.urlencoded({ extended: true }));
-server.app.use(cookieParser());
+// make server app handle any route starting with '/api'
+
+// To check if the server is up.
+app.get('/heartbeat', (req: Request, res: Response) => {
+  res.status(200).send();
+});
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // make server app handle any error
-server.app.use((err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {
+app.use((err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {
   if (err !== undefined) {
     res.status(err.statusCode || 500).json({
       statusCode: err.statusCode,
@@ -63,6 +56,15 @@ server.app.use((err: ErrorHandler, req: Request, res: Response, next: NextFuncti
     next();
   }
 });
+class Server {
+  public app = app;
+
+  public router = MasterRouter;
+}
+
+// initialize server app
+const server = new Server();
+app.use('/api', server.router);
 
 let serverInstance: http.Server;
 // make server listen on some port
