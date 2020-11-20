@@ -18,14 +18,14 @@ export default {
       business: Object,
     },
     data() {
-
       const hours = [];
       const keys = Object.keys(this.business.hours._businessHours);
-      keys.map((k) => hours.push({
-        hours: this.business.hours._businessHours[k],
-        day: k,
-      }));
-
+      keys.forEach((k) => {
+        hours.push({
+          hours: this.business.hours._businessHours[k],
+          day: k,
+        });
+      });
       return {
         hours,
       }

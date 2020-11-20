@@ -5,7 +5,6 @@
         </router-link>
         <b-nav class="flex-row align-items-center">
             <router-link to="/map" class="nav-link">Map</router-link>
-            <router-link to="/business" class="nav-link">Business Demo</router-link>
             <b-nav-item-dropdown right v-bind:text="dropdownText">
                 <b-dropdown-item v-if="loggedIn" to="/account">Profile</b-dropdown-item>
                 <b-dropdown-divider v-if="loggedIn" />
