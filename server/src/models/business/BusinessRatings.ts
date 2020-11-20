@@ -1,14 +1,24 @@
+import { TSMap } from 'typescript-map';
+
 export default class BusinessRatings {
-  private _serviceRatingsMap: Map<string, number> = new Map();
-  private _safetyRatingsMap: Map<string, number> = new Map();
+  private _serviceRatingsMap: TSMap<string, number> = new TSMap();
+  private _safetyRatingsMap: TSMap<string, number> = new TSMap();
 
   //   constructor() {}
 
-  static fromData(serviceRatingsMap: Map<string, number>, safetyRatingsMap: Map<string, number>): BusinessRatings {
+  static fromData(serviceRatingsMap: TSMap<string, number>, safetyRatingsMap: TSMap<string, number>): BusinessRatings {
     const ratings = new BusinessRatings();
-    ratings._serviceRatingsMap = new Map(serviceRatingsMap);
-    ratings._safetyRatingsMap = new Map(safetyRatingsMap);
+    ratings._serviceRatingsMap = serviceRatingsMap.clone();
+    ratings._safetyRatingsMap = safetyRatingsMap.clone();
     return ratings;
+  }
+
+  get serviceRatingsMap(): TSMap<string, number> {
+    return this._serviceRatingsMap.clone();
+  }
+
+  get safetyRatingsMap(): TSMap<string, number> {
+    return this._safetyRatingsMap.clone();
   }
 
   public updateServiceRating(customerId: string, rating: number): void {
