@@ -3,10 +3,8 @@ import UserRepository from '../repositories/UserRepository';
 import { v4 as uuidv4 } from 'uuid';
 
 class UserController {
-  // eslint-disable-next-line
-  signIn(session: any, username: string) {
+  signIn(username: string) {
     const account = UserRepository.findOneByUsername(username);
-    session.userID = account.id;
     return {
       message: `Successfully logged in! Welcome ${username}.`,
       userId: account.id,
@@ -14,24 +12,20 @@ class UserController {
     };
   }
 
-  // eslint-disable-next-line
-  signOut(session: any) {
-    session.userID = undefined;
+  signOut() {
     // we don't say their name on Goodbye for security reasons (e.g. if they were logged in on a public computer)
     return { message: 'Successfully logged out.' };
   }
 
-  // eslint-disable-next-line
-  getLoginStatus(session: any) {
-    const sessionId = session.userID;
-    const account = UserRepository.findOneByID(sessionId);
+  getLoginStatus(sessionId?: string) {
+    const account = sessionId ? UserRepository.findOneByID(sessionId) : undefined;
     const response: { message: string; signedIn: boolean; userId?: string; username?: string } = {
-      message: `You are ${sessionId ? '' : 'not'} signed in ${sessionId ? ` as ${account.username}` : '.'}`,
+      message: `You are ${sessionId ? '' : 'not'} signed in ${sessionId ? ` as ${account?.username}` : '.'}`,
       signedIn: sessionId ? true : false,
     };
     if (sessionId) {
-      response.userId = account.id;
-      response.username = account.username;
+      response.userId = account?.id;
+      response.username = account?.username;
     }
     return response;
   }

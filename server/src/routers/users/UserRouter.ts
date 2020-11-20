@@ -71,7 +71,8 @@ class UserRouter {
       Validation.signinMiddleware,
       (req: Request, res: Response, next: NextFunction) => {
         try {
-          const resp = this._controller.signIn(req.session, req.body.username);
+          const resp = this._controller.signIn(req.body.username);
+          req.session.userID = resp.userId;
           res.status(200).json(resp).end();
         } catch (error) {
           next(error);
@@ -83,7 +84,8 @@ class UserRouter {
     // POST /api/users/signout
     this._router.post('/signout', Auth.enforceSignedIn, (req: Request, res: Response, next: NextFunction) => {
       try {
-        const resp = this._controller.signOut(req.session);
+        const resp = this._controller.signOut();
+        req.session.userID = undefined;
         res.status(200).json(resp).end();
       } catch (error) {
         next(error);
@@ -92,7 +94,7 @@ class UserRouter {
 
     this._router.get('/loginStatus', (req: Request, res: Response, next: NextFunction) => {
       try {
-        const resp = this._controller.getLoginStatus(req.session);
+        const resp = this._controller.getLoginStatus(req.session.userID);
         res.status(200).json(resp).end();
       } catch (error) {
         next(error);
