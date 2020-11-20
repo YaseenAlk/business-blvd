@@ -5,11 +5,9 @@
       <div class="card">
         <div class="card-preview">
           <h6>Coffee Shop</h6>
-          <h2>About</h2>
-          <a href="#">Local<i class="fas"></i></a>
+          <h2>Darwin's Story</h2>
         </div>
         <div class="card-info">
-          <h6>Darwin's</h6>
           <h4>Rooted in Cambridge for over 27 years, Darwin’s four locations are locally-owned and independently authentic, serving award-winning sandwiches and carefully curated coffees in a vibrant atmosphere that is homegrown and unique.</h4>
         </div>
       </div>

@@ -1,44 +1,44 @@
 <template>
-  <swiper class="swiper" :options="swiperOption">
-    <swiper-slide>
-      <div class="card">
-        <div class="card-preview">
-          <h2>Review</h2>
-          <h6>Ben Bitdiddle</h6>
+  <div>
+    <h1>Reviews</h1>
+    <swiper class="swiper" :options="swiperOption">
+      <swiper-slide>
+        <div class="card">
+          <div class="card-preview">
+            <h2>Ben Bitdiddle</h2>
+            <h6>"The best coffee I had in my life."</h6>
+          </div>
+          <div class="card-info">
+            <h4>The moment I took the first sip I knew. I knew there was no other coffee shop that would compare to this. The baristas were friendly and quick. </h4>
+          </div>
         </div>
-        <div class="card-info">
-          <h6>"The best coffee I had in my life."</h6>
-          <h4>The moment I took the first sip I knew. I knew there was no other coffee shop that would compare to this. The baristas were friendly and quick. </h4>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="card">
+          <div class="card-preview">
+            <h2>Melon Usk</h2>
+            <h6>"Out of this world"</h6>
+          </div>
+          <div class="card-info">
+            <h4>The moment I took the first sip I knew. I knew there was no other coffee shop that would compare to this. The baristas were friendly and quick. </h4>
+          </div>
         </div>
-      </div>
-    </swiper-slide>
-    <swiper-slide>
-      <div class="card">
-        <div class="card-preview">
-          <h2>Review</h2>
-          <h6>Ben Bitdiddle</h6>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="card">
+          <div class="card-preview">
+            <h2>Alyssa P Hacker</h2>
+            <h6>"all my homies hate vue"</h6>
+          </div>
+          <div class="card-info">
+            <h4> after the first sip I knew. I knew that this one was the one. the perfect coffee cup. The caffeine flowing was so strong I've never slept since.</h4>
+          </div>
         </div>
-        <div class="card-info">
-          <h6>"The best coffee I had in my life."</h6>
-          <h4>The moment I took the first sip I knew. I knew there was no other coffee shop that would compare to this. The baristas were friendly and quick. </h4>
-        </div>
-      </div>
-    </swiper-slide>
-    <swiper-slide>
-      <div class="card">
-        <div class="card-preview">
-          <h2>Review</h2>
-          <h6>Alyssa P Hacker</h6>
-        </div>
-        <div class="card-info">
-          <h6>"all my homies hate vue"</h6>
-          <h4> after the first sip I knew. I knew that this one was the one. the perfect coffee cup.</h4>
-        </div>
-      </div>
-    </swiper-slide>
-    <div class="swiper-button-prev" slot="button-prev"></div>
-    <div class="swiper-button-next" slot="button-next"></div>
-  </swiper>
+      </swiper-slide>
+      <div class="swiper-button-prev" slot="button-prev"></div>
+      <div class="swiper-button-next" slot="button-next"></div>
+    </swiper>
+  </div>
 </template>
 
 <script>

@@ -20,7 +20,6 @@
             }" >
             Submit
           </b-button>
-
         </template>
       </b-modal>
     </b-toast>

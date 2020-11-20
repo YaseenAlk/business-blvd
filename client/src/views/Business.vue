@@ -1,11 +1,11 @@
 <template>
   <b-container>
-    <b-row class='title' style='height: min-content'>
-       <div style="text-align: left;">
-         <h1>Darwin's Ltd.</h1>
-         <h3>313 Massachusetts Avenue, Cambridge, MA</h3>
-       </div>
-    </b-row>
+    <b-jumbotron bg-variant="primary" text-variant="white" border-variant="light">
+      <template #header>Darwin's Ltd.</template>
+      <template #lead>
+        313 Massachusetts Avenue, Cambridge, MA
+      </template>  
+    </b-jumbotron>
     <b-row style='height: 90vh;'> 
       <b-container>
         <b-row style='height: 90vh'>
@@ -25,16 +25,15 @@
               </b-list-group-item>
             </b-list-group>
             <!-- hours -->
-            <h3 style="margin-top: 1em 0 0 1em;">Hours of Operation</h3>
+            <h3 style="margin-top: 2em;">Hours of Operation</h3>
             
           </b-col>
           <!-- main content -->
           <b-col md='8'>
             <b-container>
               <about></about>
-              <h1>Reviews</h1>
-              <reviews/>
               <FAQ/>
+              <reviews/>
               <Ask/>
             </b-container>
           </b-col>

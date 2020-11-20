@@ -1,8 +1,9 @@
 <template>
     <div class="form-container">
-        <h2>Sign In</h2>
+        <h2>Log In</h2>
         <i>Log In to access your Business Boulevard.</i>
-        <b-form id="signin-form" @submit.prevent="onSubmit" class="form-content">
+        <p>Don't have an account? <b-link to="/signup">Sign up today!</b-link></p>
+        <b-form id="login-form" @submit.prevent="onSubmit" class="form-content">
             <b-form-group label="Username:" label-for="username" label-align="left" label-cols-sm="4">
                 <b-form-input id="username" type="text" v-model="form.username" size="sm" required/>
             </b-form-group>
@@ -11,15 +12,18 @@
             </b-form-group>
             {{fields}}
             <b-alert variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
-            <b-button type="submit" variant="success">Sign In</b-button>
+            <b-button type="submit" variant="success">Log In</b-button>
         </b-form>
     </div>
 </template>
 
 <script>
 import { BForm, BFormGroup, BFormInput, BButton, BAlert } from 'bootstrap-vue';
+import { eventBus } from '../main';
+import axios from 'axios';
+
 export default {
-    name: 'SignIn',
+    name: 'LogIn',
     components: {
         BForm, 
         BFormGroup,
@@ -30,20 +34,26 @@ export default {
     data(){
         return {
             form: {
-                username: '',
-                password: '',
+                username: undefined,
+                password: undefined,
             },
             error: undefined,
             fields: undefined // For debugging purposes, remove for deployment
         };
     },
     methods: {
+        clearAlerts(){
+            this.error = undefined;
+        },
         onSubmit: function(){
-            this.fields = JSON.stringify(this.form);
-            console.log("Submitted form", this.fields);
-            this.error = "Missing Axios connection for user authentication 😕.";
-
-            //TODO: Connect axios to handle user log in
+            this.clearAlerts();
+            axios.post('/api/users/signin', this.form).then((res) => {
+                let user = { username: res.data.username, userID: res.data.userId };
+                eventBus.$emit('successful-login', user);
+                this.$router.push('/map');
+            }).catch((err) => {
+                this.error = err.response.data.message;
+            });
         }
     }
 }
