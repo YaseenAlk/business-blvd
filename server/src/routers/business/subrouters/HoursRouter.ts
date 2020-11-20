@@ -22,13 +22,19 @@ class HoursRouter {
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const businessExists = this._controller.businessExists(id);
-        if (businessExists) {
-          const result = this._controller.getHours(id);
-          res.status(200).json(result);
-        } else {
-          res.status(404).json(`No business found with id ${id}`);
-        }
+        const { status, data } = this._controller.getHours(id);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    this._router.post('/', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params;
+        const { day, openTime, closeTime } = req.body;
+        const { status, data } = this._controller.setHours(id, day, openTime, closeTime);
+        res.status(status).json(data);
       } catch (error) {
         next(error);
       }

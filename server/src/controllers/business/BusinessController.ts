@@ -1,4 +1,10 @@
 import Business from '../../models/business/Business';
+import { Days } from '../../models/business/BusinessHours';
+
+type ReturnObj = {
+  status: number;
+  data: any;
+};
 
 const data: Map<string, Business> = new Map();
 
@@ -8,21 +14,40 @@ class BusinessController {
     data.set('2', Business.generateExample());
   }
 
-  defaultMethod(): { text: string } {
+  /***************
+  DEFAULT METHOD
+  ****************/
+  defaultMethod(): ReturnObj {
     return {
-      text: `You've reached the ${this.constructor.name} default method`,
+      status: 200,
+      data: `You've reached the ${this.constructor.name} default method.`,
     };
   }
 
-  businessExists(id: string) {
-    return data.has(id);
+  /***************
+  GET BUSINESSES METHODS
+  ****************/
+  businessExists(id: string): ReturnObj {
+    return {
+      status: 200,
+      data: data.has(id),
+    };
   }
 
-  getBusiness(id: string) {
-    return data.get(id);
+  getBusiness(id: string): ReturnObj {
+    if (id == 'all') {
+      return { status: 200, data: this.getAllBusinesses() };
+    } else {
+      const businessExists = this.businessExists(id);
+      if (businessExists) {
+        return { status: 200, data: [data.get(id)] };
+      } else {
+        return { status: 404, data: `No business found with id ${id}` };
+      }
+    }
   }
 
-  getAllBusinesses() {
+  getAllBusinesses(): Business[] {
     const listOfBusinesses: Business[] = [];
     data.forEach((value) => {
       listOfBusinesses.push(value);
@@ -30,10 +55,25 @@ class BusinessController {
     return listOfBusinesses;
   }
 
-  getHours(id: string) {
-    const business = data.get(id);
+  /***************
+  HOURS METHODS
+  ****************/
+  getHours(id: string): ReturnObj {
+    const businessExists = this.businessExists(id);
+    if (businessExists) {
+      return { status: 200, data: data.get(id)?.hours.getHours() };
+    } else {
+      return { status: 404, data: `No business found with id ${id}` };
+    }
+  }
 
-    return business?.hours;
+  setHours(id: string, day: Days, openTime: number, closeTime: number): ReturnObj {
+    const businessExists = this.businessExists(id);
+    if (businessExists) {
+      return { status: 200, data: data.get(id)?.hours.setHours(day, openTime, closeTime) };
+    } else {
+      return { status: 404, data: `No business found with id ${id}` };
+    }
   }
 }
 
