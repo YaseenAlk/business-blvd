@@ -18,14 +18,27 @@ class RatingsRouter {
    * Connect routes to their matching controller endpoints.
    */
   private _configure() {
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const result = this._controller.defaultMethod();
-        res.status(200).json(result);
-      } catch (error) {
-        next(error);
-      }
-    });
+    /***************
+    GET BOTH RATINGS
+    ****************/
+    // this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    //   try {
+    //     const { id } = req.params;
+    //     const { status, data } = this._controller.getBothRatings(id);
+    //     res.status(status).json(data);
+    //   } catch (error) {
+    //     next(error);
+    //   }
+    // });
+    /***************
+    GET USER RATINGS
+    ****************/
+    // /:id
+    /***************
+    SET USER RATINGS
+    ****************/
+    // /:id
+    // {safety?: null | number , service?: null | number }
   }
 }
 
