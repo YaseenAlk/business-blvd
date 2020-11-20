@@ -18,7 +18,9 @@ class HoursRouter {
    * Connect routes to their matching controller endpoints.
    */
   private _configure() {
-    // GET HOURS
+    /***************
+    GET HOURS ROUTE
+    ****************/
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
@@ -29,6 +31,9 @@ class HoursRouter {
       }
     });
 
+    /***************
+    SET HOURS ROUTE
+    ****************/
     this._router.post('/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
@@ -39,9 +44,6 @@ class HoursRouter {
         next(error);
       }
     });
-
-    // POST HOURS (set them)
-    // Probably an entire object required? {sun: {close, open}, ...}
   }
 }
 
