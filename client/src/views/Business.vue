@@ -7,6 +7,7 @@
 			<b-col md='4'>
 				<!-- at a glance -->
 				<AtAGlance v-bind:business="business" />
+        <SocialMedia class="mt-4" v-bind:business="business" />
 				<!-- hours -->
 				<Hours v-bind:business="business" />
 			</b-col>
@@ -32,6 +33,7 @@ import Ask from '../components/business/Ask.vue';
 import Header from '../components/business/Header.vue';
 import AtAGlance from '../components/business/AtAGlance.vue';
 import Hours from '../components/business/Hours.vue';
+import SocialMedia from '../components/business/SocialMedia.vue';
 
 export default {
     name: 'Test',
@@ -42,13 +44,20 @@ export default {
 		Reviews,
 		FAQ,
 		Ask,
-		About,
+    About,
+    SocialMedia,
 	},
 	data(){
 		return {
 			business: {
 				name: "Darwin's Ltd",
         address: "313 Massachusetts Avenue, Cambridge, MA",
+        url: "https://www.darwinsltd.com/",
+        socialMedia: {
+          _twitter: "https://www.twitter.com",
+          _facebook: "https://www.facebook.com",
+          _instagram: "https://www.instagram.com",
+        },
         hours: {
           _businessHours: {
             "0": {
