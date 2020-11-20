@@ -179,12 +179,12 @@ export default class Business {
     const exampleBusiness = new Business(businessJSON);
 
     // extra augmentations
-    exampleBusiness.hours.setHours(Days.SUNDAY, 12, 5);
-    exampleBusiness.hours.setHours(Days.MONDAY, 8, 8);
-    exampleBusiness.hours.setHours(Days.TUESDAY, 8, 8);
-    exampleBusiness.hours.setHours(Days.WEDNESDAY, 8, 8);
-    exampleBusiness.hours.setHours(Days.FRIDAY, 8, 5);
-    exampleBusiness.hours.setHours(Days.SATURDAY, 12, 5);
+    exampleBusiness.hours.setHours(Days.SUNDAY, { hour: 12, minute: 0 }, { hour: 18, minute: 0 });
+    exampleBusiness.hours.setHours(Days.MONDAY, { hour: 8, minute: 30 }, { hour: 20, minute: 0 });
+    exampleBusiness.hours.setHours(Days.TUESDAY, { hour: 8, minute: 30 }, { hour: 20, minute: 0 });
+    exampleBusiness.hours.setHours(Days.WEDNESDAY, { hour: 8, minute: 30 }, { hour: 20, minute: 0 });
+    exampleBusiness.hours.setHours(Days.FRIDAY, { hour: 8, minute: 30 }, { hour: 20, minute: 0 });
+    exampleBusiness.hours.setHours(Days.SATURDAY, { hour: 12, minute: 0 }, { hour: 18, minute: 0 });
 
     exampleBusiness.ratings.updateSafetyRating('22', 4);
     exampleBusiness.ratings.updateSafetyRating('13', 4);

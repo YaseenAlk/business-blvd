@@ -1,7 +1,7 @@
 import { TSMap } from 'typescript-map';
 
 import Business from '../../models/business/Business';
-import { Days } from '../../models/business/BusinessHours';
+import { Days, Time } from '../../models/business/BusinessHours';
 
 type ReturnObj = {
   status: number;
@@ -99,7 +99,7 @@ class BusinessController {
     }
   }
 
-  setHours(id: string, day: Days, openTime: number, closeTime: number): ReturnObj {
+  setHours(id: string, day: Days, openTime: Time, closeTime: Time): ReturnObj {
     const businessExists = this.businessExists(id);
     if (businessExists) {
       return { status: 200, data: data.get(id)?.hours.setHours(day, openTime, closeTime) };
