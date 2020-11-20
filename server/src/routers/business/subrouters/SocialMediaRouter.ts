@@ -17,16 +17,7 @@ class SocialMediaRouter {
   /**
    * Connect routes to their matching controller endpoints.
    */
-  private _configure() {
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const result = this._controller.defaultMethod();
-        res.status(200).json(result);
-      } catch (error) {
-        next(error);
-      }
-    });
-  }
+  private _configure() {}
 }
 
 export = new SocialMediaRouter().router;

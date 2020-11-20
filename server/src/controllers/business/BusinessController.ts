@@ -17,16 +17,6 @@ class BusinessController {
   }
 
   /***************
-  DEFAULT METHOD
-  ****************/
-  defaultMethod(): ReturnObj {
-    return {
-      status: 200,
-      data: `You've reached the ${this.constructor.name} default method.`,
-    };
-  }
-
-  /***************
   GET BUSINESSES METHODS
   ****************/
   businessExists(id: string): ReturnObj {
