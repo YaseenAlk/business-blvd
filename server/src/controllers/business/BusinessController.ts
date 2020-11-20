@@ -137,6 +137,44 @@ class BusinessController {
       return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
+
+  /***************
+  SOCIAL METHODS
+  ****************/
+
+  getSocialMedia(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      const businessSocialMedia = data.get(businessId)?.socialMedia.getSocialUrls();
+      return { status: 201, data: businessSocialMedia };
+    } else {
+      return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
+
+  setSocialMedia(
+    businessId: string,
+    twitter: string | undefined,
+    facebook: string | undefined,
+    instagram: string | undefined,
+  ): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      const business = data.get(businessId)?.socialMedia;
+      if (twitter) {
+        business.twitter = twitter;
+      }
+      if (facebook) {
+        business.facebook = facebook;
+      }
+      if (instagram) {
+        business.instagram = instagram;
+      }
+      return { status: 201, data: 'Updated social media!' };
+    } else {
+      return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
 }
 
 export = new BusinessController();

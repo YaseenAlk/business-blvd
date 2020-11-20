@@ -33,7 +33,7 @@ class BusinessRouter {
    */
   private _configure() {
     /***************
-    EXTERNAL BUSINESS ROUTE
+    EXTERNAL BUSINESS ROUTES
     ****************/
     this._router.use('/location', this._subrouterLocation);
     this._router.use('/ratings', this._subrouterRatings);
@@ -54,36 +54,6 @@ class BusinessRouter {
         next(error);
       }
     });
-
-    /***************
-    SET/GET BUSINESS NAME ROUTE
-    ****************/
-    // TODO
-
-    /***************
-    SET/GET BUSINESS DESCRIPTION ROUTE
-    ****************/
-    // TODO
-
-    /***************
-    GET BUSINESS DESCRIPTION ROUTE
-    ****************/
-    // TODO
-
-    /***************
-    GET BUSINESS OWNERID ROUTE
-    ****************/
-    // TODO
-
-    /***************
-    SET/GET BUSINESS URL ROUTE
-    ****************/
-    // TODO
-
-    /***************
-    SET/GET BUSINESS PHONE ROUTE
-    ****************/
-    // TODO
   }
 }
 
