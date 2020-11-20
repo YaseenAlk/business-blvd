@@ -34,7 +34,7 @@
 }
 
 .card-preview {
-	background-color: #2A265F;
+	background-color: #007bff;
 	color: #fff;
 	padding: 30px;
 }

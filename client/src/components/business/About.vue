@@ -39,7 +39,7 @@
 }
 
 .card-preview {
-	background-color: #2A265F;
+	background-color: #007bff;
 	color: #fff;
 	padding: 30px;
 }
@@ -62,9 +62,9 @@
 
 .floating-btn {
 	border-radius: 26.5px;
-	background-color: #001F61;
-	border: 1px solid #001F61;
-	box-shadow: 0 16px 22px -17px #03153B;
+	background-color: #007bff;
+	border: 1px solid #007bff;
+	box-shadow: 0 16px 22px -17px #007bff;
 	color: #fff;
 	cursor: pointer;
 	font-size: 16px;
@@ -78,7 +78,7 @@
 
 .floating-btn:hover {
 	background-color: #ffffff;
-	color: #001F61;
+	color: #007bff;
 }
 
 .floating-btn:focus {
@@ -86,7 +86,7 @@
 }
 
 .floating-text {
-	background-color: #001F61;
+	background-color: #007bff;
 	border-radius: 10px 10px 0 0;
 	color: #fff;
 	font-family: 'Muli';
