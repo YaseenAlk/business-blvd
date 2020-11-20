@@ -48,7 +48,71 @@ export default {
 		return {
 			business: {
 				name: "Darwin's Ltd",
-				address: "313 Massachusetts Avenue, Cambridge, MA"
+        address: "313 Massachusetts Avenue, Cambridge, MA",
+        hours: {
+          _businessHours: {
+            "0": {
+              "open": {
+                "hour": 12,
+                "minute": "00"
+              },
+              "close": {
+                "hour": 18,
+                "minute": "00"
+              }
+            },
+            "1": {
+              "open": {
+                "hour": 8,
+                "minute": 30
+              },
+              "close": {
+                "hour": 20,
+                "minute": "00"
+              }
+            },
+            "2": {
+              "open": {
+                "hour": 8,
+                "minute": 30
+              },
+              "close": {
+                "hour": 20,
+                "minute": "00"
+              }
+            },
+            "3": {
+              "open": {
+                "hour": 8,
+                "minute": 30
+              },
+              "close": {
+                "hour": 20,
+                "minute": "00"
+              }
+            },
+            "5": {
+              "open": {
+                "hour": 8,
+                "minute": 30
+              },
+              "close": {
+                "hour": 20,
+                "minute": "00"
+              }
+            },
+            "6": {
+              "open": {
+                "hour": 12,
+                "minute": "00"
+              },
+              "close": {
+                "hour": 18,
+                "minute": "00"
+              }
+            }
+          }
+        }
 			}
 		};
 	}
