@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 :v-if="!subscribed" style="margin-top: 2em;">Love {{ business.name}}? Subscribe!</h4>
+    <h4 v-if="!subscribed" style="margin-top: 2em;">Love {{ business.name}}? Subscribe!</h4>
     <b-button @click="onClick" variant="primary">
       {{ subscribed ? "Unsubscribe" : "Subscribe" }}
     </b-button>
