@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import Location from './Location';
+import BusinessLocation from './BusinessLocation';
 import { BusinessTags } from './BusinessTags';
 import BusinessRatings from './BusinessRatings';
 import BusinessSocialMedia from './BusinessSocialMedia';
@@ -8,7 +8,7 @@ import { Days, BusinessHours } from './BusinessHours';
 
 interface BusinessEntry {
   name: string;
-  location: Location;
+  location: BusinessLocation;
   description: string;
   businessId: string;
   ratings: BusinessRatings;
@@ -23,7 +23,7 @@ interface BusinessEntry {
 
 export default class Business {
   private _name: string;
-  private _location: Location;
+  private _location: BusinessLocation;
   private _description: string;
   private _businessId: string;
   private _ratings: BusinessRatings;
@@ -57,7 +57,7 @@ export default class Business {
     this._name = name;
   }
 
-  get location(): Location {
+  get location(): BusinessLocation {
     return this._location;
   }
 
@@ -144,7 +144,7 @@ export default class Business {
   static generateExample(): Business {
     const BusinessEntry: BusinessEntry = {
       name: "Poppa's Workshop",
-      location: new Location('123 Seasame Street', 42.3736, 71.1097),
+      location: new BusinessLocation('123 Seasame Street', 42.3736, 71.1097),
       description: 'Where the elbow grease is used.',
       businessId: uuidv4(),
       ratings: new BusinessRatings(),
