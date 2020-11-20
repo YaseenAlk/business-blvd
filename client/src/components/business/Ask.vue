@@ -39,7 +39,7 @@ export default {
             this.clearAlerts(); 
             let fields = JSON.parse(JSON.stringify(this.form));
 
-            axios.post('/api/inquiry', fields).then(() => {
+            axios.post('/api/inquiries', fields).then(() => {
               this.$bvModal.hide('question');
             }).catch((err) => {
               this.error = err.response.data.message || err;
@@ -56,7 +56,6 @@ export default {
         },
         success: undefined,
         error: undefined,
-        fields: undefined //for debugging purposes, remove in deployment
       };
     }
 }

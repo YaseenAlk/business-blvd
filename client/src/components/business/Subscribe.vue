@@ -19,7 +19,6 @@ export default {
   },
   methods: {
     onClick() {
-      console.log('hi')
       this.subscribed = !this.subscribed;
     },
   }
