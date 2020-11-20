@@ -19,15 +19,12 @@ class BusinessController {
   /***************
   GET BUSINESSES METHODS
   ****************/
-  businessExists(id: string): ReturnObj {
-    return {
-      status: 200,
-      data: data.has(id),
-    };
+  businessExists(businessId: string): boolean {
+    return data.has(businessId);
   }
 
-  getBusiness(id: string): ReturnObj {
-    if (id == 'all') {
+  getBusiness(businessId: string): ReturnObj {
+    if (businessId == 'all') {
       return {
         status: 200,
         data: data.values().map((business) => {
@@ -35,11 +32,11 @@ class BusinessController {
         }),
       };
     } else {
-      const businessExists = this.businessExists(id);
+      const businessExists = this.businessExists(businessId);
       if (businessExists) {
-        return { status: 200, data: data.get(id).toJSON() };
+        return { status: 200, data: data.get(businessId).toJSON() };
       } else {
-        return { status: 404, data: `No business found with id ${id}` };
+        return { status: 404, data: `No business found with id ${businessId}` };
       }
     }
   }
@@ -47,10 +44,10 @@ class BusinessController {
   /***************
   LOCATION METHODS
   ****************/
-  getLocation(id: string): ReturnObj {
-    const businessExists = this.businessExists(id);
+  getLocation(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
     if (businessExists) {
-      const location = data.get(id)?.location;
+      const location = data.get(businessId)?.location;
       return {
         status: 200,
         data: {
@@ -60,41 +57,84 @@ class BusinessController {
         },
       };
     } else {
-      return { status: 404, data: `No business found with id ${id}` };
+      return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
 
-  setLocation(id: string, address: string, lat: number, lng: number): ReturnObj {
-    // const businessExists = this.businessExists(id);
-    const business = data.get(id);
+  setLocation(businessId: string, address: string, lat: number, lng: number): ReturnObj {
+    const business = data.get(businessId);
     if (business) {
       business.location.address = address;
       business.location.lat = lat;
       business.location.lng = lng;
-      return { status: 200, data: `Updated address successfully` };
+      return { status: 201, data: `Updated address successfully` };
     } else {
-      return { status: 404, data: `No business found with id ${id}` };
+      return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
 
   /***************
   HOURS METHODS
   ****************/
-  getHours(id: string): ReturnObj {
-    const businessExists = this.businessExists(id);
+  getHours(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
     if (businessExists) {
-      return { status: 200, data: data.get(id)?.hours.getHours() };
+      return { status: 200, data: data.get(businessId)?.hours.getHours() };
     } else {
-      return { status: 404, data: `No business found with id ${id}` };
+      return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
 
-  setHours(id: string, day: Days, openTime: Time, closeTime: Time): ReturnObj {
-    const businessExists = this.businessExists(id);
+  setHours(businessId: string, day: Days, openTime: Time, closeTime: Time): ReturnObj {
+    const businessExists = this.businessExists(businessId);
     if (businessExists) {
-      return { status: 200, data: data.get(id)?.hours.setHours(day, openTime, closeTime) };
+      return { status: 201, data: data.get(businessId)?.hours.setHours(day, openTime, closeTime) };
     } else {
-      return { status: 404, data: `No business found with id ${id}` };
+      return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
+
+  /***************
+  RATINGS METHODS
+  ****************/
+  getBothRatings(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId)?.ratings };
+    } else {
+      return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
+
+  getBothRatingsByUser(businessId: string, userId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      const businessRatings = data.get(businessId)?.ratings;
+      return {
+        status: 200,
+        data: {
+          safety: businessRatings.getSafetyRating(userId),
+          service: businessRatings.getServiceRating(userId),
+        },
+      };
+    } else {
+      return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
+
+  setRatings(businessId: string, userId: string, safetyRating: number, serviceRating: number): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      const business = data.get(businessId)?.ratings;
+      if (safetyRating) {
+        business.updateSafetyRating(userId, safetyRating);
+      }
+      if (serviceRating) {
+        business.updateServiceRating(userId, serviceRating);
+      }
+      return { status: 201, data: 'Updated ratings!' };
+    } else {
+      return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
 }

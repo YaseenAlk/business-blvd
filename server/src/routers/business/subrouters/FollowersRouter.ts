@@ -17,7 +17,9 @@ class FollowersRouter {
   /**
    * Connect routes to their matching controller endpoints.
    */
-  private _configure() {}
+  private _configure() {
+    return;
+  }
 }
 
 export = new FollowersRouter().router;

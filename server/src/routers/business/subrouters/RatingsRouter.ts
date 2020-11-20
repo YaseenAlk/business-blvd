@@ -19,26 +19,44 @@ class RatingsRouter {
    */
   private _configure() {
     /***************
-    GET BOTH RATINGS
+    GET ALL RATINGS
     ****************/
-    // this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
-    //   try {
-    //     const { id } = req.params;
-    //     const { status, data } = this._controller.getBothRatings(id);
-    //     res.status(status).json(data);
-    //   } catch (error) {
-    //     next(error);
-    //   }
-    // });
-    /***************
-    GET USER RATINGS
-    ****************/
-    // /:id
+    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getBothRatings(businessId);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
     /***************
     SET USER RATINGS
     ****************/
-    // /:id
-    // {safety?: null | number , service?: null | number }
+    this._router.put('/:userId', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId, userId } = req.params;
+        const { safetyRating, serviceRating } = req.body;
+        const { status, data } = this._controller.setRatings(businessId, userId, safetyRating, serviceRating);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    /***************
+    GET RATINGS BY USER
+    ****************/
+    this._router.get('/:userId', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId, userId } = req.params;
+        const { status, data } = this._controller.getBothRatingsByUser(businessId, userId);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
   }
 }
 

@@ -23,8 +23,8 @@ class LocationRouter {
     ****************/
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { id } = req.params;
-        const { status, data } = this._controller.getLocation(id);
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getLocation(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -36,9 +36,9 @@ class LocationRouter {
     ****************/
     this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { id } = req.params;
+        const { businessId } = req.params;
         const { address, lat, lng } = req.body;
-        const { status, data } = this._controller.setLocation(id, address, lat, lng);
+        const { status, data } = this._controller.setLocation(businessId, address, lat, lng);
         res.status(status).json(data);
       } catch (error) {
         next(error);

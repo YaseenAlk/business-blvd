@@ -11,8 +11,8 @@ export enum Days {
 }
 
 export type Time = {
-  hour: number;
-  minute: number;
+  hour: string;
+  minute: string;
 };
 
 export class BusinessHours {
