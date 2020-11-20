@@ -35,7 +35,7 @@
               <h1>Reviews</h1>
               <reviews/>
               <FAQ/>
-              <b-row> Review & Subscribe </b-row>
+              <Ask/>
             </b-container>
           </b-col>
         </b-row>
@@ -47,11 +47,14 @@
 import Reviews from '../components/business/Reviews.vue';
 import FAQ from '../components/business/FAQ.vue';
 import About from '../components/business/About.vue';
+import Ask from '../components/business/Ask.vue';
+
 export default {
     name: 'Test',
     components: {
       Reviews,
       FAQ,
+      Ask,
       About,
     },
 }
