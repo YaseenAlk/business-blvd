@@ -56,27 +56,6 @@ class BusinessController {
   }
 
   /***************
-  HOURS METHODS
-  ****************/
-  getHours(id: string): ReturnObj {
-    const businessExists = this.businessExists(id);
-    if (businessExists) {
-      return { status: 200, data: data.get(id)?.hours.getHours() };
-    } else {
-      return { status: 404, data: `No business found with id ${id}` };
-    }
-  }
-
-  setHours(id: string, day: Days, openTime: number, closeTime: number): ReturnObj {
-    const businessExists = this.businessExists(id);
-    if (businessExists) {
-      return { status: 200, data: data.get(id)?.hours.setHours(day, openTime, closeTime) };
-    } else {
-      return { status: 404, data: `No business found with id ${id}` };
-    }
-  }
-
-  /***************
   LOCATION METHODS
   ****************/
   getLocation(id: string): ReturnObj {
@@ -104,6 +83,27 @@ class BusinessController {
       business.location.lat = lat;
       business.location.lng = lng;
       return { status: 200, data: `Updated address successfully` };
+    } else {
+      return { status: 404, data: `No business found with id ${id}` };
+    }
+  }
+
+  /***************
+  HOURS METHODS
+  ****************/
+  getHours(id: string): ReturnObj {
+    const businessExists = this.businessExists(id);
+    if (businessExists) {
+      return { status: 200, data: data.get(id)?.hours.getHours() };
+    } else {
+      return { status: 404, data: `No business found with id ${id}` };
+    }
+  }
+
+  setHours(id: string, day: Days, openTime: number, closeTime: number): ReturnObj {
+    const businessExists = this.businessExists(id);
+    if (businessExists) {
+      return { status: 200, data: data.get(id)?.hours.setHours(day, openTime, closeTime) };
     } else {
       return { status: 404, data: `No business found with id ${id}` };
     }
