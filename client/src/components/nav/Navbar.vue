@@ -5,6 +5,7 @@
         </router-link>
         <b-nav class="flex-row align-items-center">
             <router-link to="/map">Map</router-link>
+            <router-link to="/business">Business</router-link>
             <b-nav-item-dropdown right text="Account">
                 <b-nav-item to="/account">Profile</b-nav-item>
                 <b-nav-item to="/signup">Sign Up</b-nav-item>
