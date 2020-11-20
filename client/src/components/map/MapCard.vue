@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <router-link class="card" to="/business">
         <h2>{{business.title}}</h2>
         <p>{{business.address}}</p>
         <div class="card-bottom">
@@ -16,7 +16,7 @@
                 <span class="covid-score-subtitle">Covid Safety Score</span>
             </div>
         </div>
-    </div>
+    </router-link>
 </template>
 
 <script>
@@ -34,7 +34,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+a, a:hover {
+    text-decoration: none;
+    color: #212529;
+}
+
 .card {
     border-radius: 12px;
     box-shadow: 0 0 20px -1px rgba(0, 0, 0, 0.4);
