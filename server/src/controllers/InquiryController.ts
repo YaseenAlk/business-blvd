@@ -1,4 +1,4 @@
-class BarController {
+class InquiryController {
   defaultMethod() {
     return {
       text: `You've reached the ${this.constructor.name} default method`,
@@ -6,4 +6,4 @@ class BarController {
   }
 }
 
-export = new BarController();
+export = new InquiryController();

@@ -23,8 +23,8 @@ class HoursRouter {
     ****************/
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { id } = req.params;
-        const { status, data } = this._controller.getHours(id);
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getHours(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -34,11 +34,11 @@ class HoursRouter {
     /***************
     SET HOURS ROUTE
     ****************/
-    this._router.post('/', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { id } = req.params;
+        const { businessId } = req.params;
         const { day, openTime, closeTime } = req.body;
-        const { status, data } = this._controller.setHours(id, day, openTime, closeTime);
+        const { status, data } = this._controller.setHours(businessId, day, openTime, closeTime);
         res.status(status).json(data);
       } catch (error) {
         next(error);

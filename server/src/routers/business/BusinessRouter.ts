@@ -47,8 +47,8 @@ class BusinessRouter {
     ****************/
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { id } = req.params;
-        const { status, data } = this._controller.getBusiness(id);
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getBusiness(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);

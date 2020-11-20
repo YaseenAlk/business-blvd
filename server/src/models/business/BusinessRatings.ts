@@ -21,17 +21,17 @@ export default class BusinessRatings {
     return this._safetyRatingsMap.clone();
   }
 
-  public updateServiceRating(customerId: string, rating: number): void {
-    this._serviceRatingsMap.set(customerId, rating);
+  public updateServiceRating(userId: string, rating: number): void {
+    this._serviceRatingsMap.set(userId, rating);
   }
-  public getServiceRating(customerId: string): number | undefined {
-    return this._serviceRatingsMap.get(customerId);
+  public getServiceRating(userId: string): number | undefined {
+    return this._serviceRatingsMap.get(userId);
   }
 
-  public updateSafetyRating(customerId: string, rating: number): void {
-    this._safetyRatingsMap.set(customerId, rating);
+  public updateSafetyRating(userId: string, rating: number): void {
+    this._safetyRatingsMap.set(userId, rating);
   }
-  public getSafetyRating(customerId: string): number | undefined {
-    return this._safetyRatingsMap.get(customerId);
+  public getSafetyRating(userId: string): number | undefined {
+    return this._safetyRatingsMap.get(userId);
   }
 }
