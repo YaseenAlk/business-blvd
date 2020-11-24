@@ -1,137 +1,41 @@
 <template>
     <div class="account-page">
-        <div class="account-title">
-            <h2>Account Settings</h2>
-            <i>Edit your account settings.</i>
-        </div>
-        <div>
-            <b-form id="editEmail" class="form" @submit.prevent="submitEmail">
-                <h4 class="form-title">Update Account Email</h4>
-                <b-form-group label="Email:" label-for="email" label-align="left" label-cols-sm="4">
-                    <b-form-input required id="email" type="email" v-model="form.newEmail" />
-                </b-form-group>
-                <b-alert variant="success" v-bind:show="emailSuccess !== undefined">{{emailSuccess}}</b-alert>
-                <b-alert variant="danger" v-bind:show="emailError !== undefined">{{emailError}}</b-alert>
-                <b-button class="form-button" type="submit" variant="success">Update Email</b-button>
-            </b-form>
-            <b-form id="editUsername" class="form" @submit.prevent="submitUsername">
-                <h4 class="form-title">Update Account Username</h4>
-                <b-form-group label="Username:" label-for="username" label-align="left" label-cols-sm="4">
-                    <b-form-input required id="username" type="text" v-model="form.newUsername" />
-                </b-form-group>
-                <b-alert variant="success" v-bind:show="usernameSuccess !== undefined">{{usernameSuccess}}</b-alert>
-                <b-alert variant="danger" v-bind:show="usernameError !== undefined">{{usernameError}}</b-alert>
-                <b-button class="form-button" type="submit" variant="success">Update Username</b-button>
-            </b-form>
-            <b-form id="editPassword" class="form" @submit.prevent="submitPassword">
-                <h4 class="form-title">Update Account Password</h4>
-                <b-form-group label="Current Password:" label-for="currentPassword" label-align="left" label-cols-sm="4">
-                    <b-form-input required id="currentPassword" type="password" v-model="form.newCurrentPassword" />
-                </b-form-group>
-                <b-form-group label="New Password:" label-for="newPassword" label-align="left" label-cols-sm="4">
-                    <b-form-input required id="newPassword" type="password" v-model="form.newPassword1" />
-                </b-form-group>
-                <b-form-group label="Confirm New Password:" label-for="confirmPassword" label-align="left" label-cols-sm="4">
-                    <b-form-input required id="confirmPassword" type="password" v-model="form.newPassword2"  />
-                </b-form-group>
-                <b-alert variant="success" v-bind:show="passwordSuccess !== undefined">{{passwordSuccess}}</b-alert>
-                <b-alert variant="danger" v-bind:show="passwordError !== undefined">{{passwordError}}</b-alert>
-                <b-button class="form-button" type="submit" variant="success">Update Password</b-button>
-            </b-form>
-        </div>
+        <AccountHeader />
+        <AccountOwner />
+        <AccountSettings />
     </div>
 </template>
 
 <script>
+import AccountHeader from '../components/account/AccountHeader.vue';
+import AccountOwner from '../components/account/AccountOwner.vue';
+import AccountSettings from '../components/account/AccountSettings.vue';
 
-import { BForm, BFormGroup, BFormInput, BAlert } from 'bootstrap-vue';
+import { eventBus } from '../main.js';
+import axios from 'axios';
 
 export default {
     name: 'Account',
     created(){
+        eventBus.$on('successful-logout', () => {
+            this.$router.push('/login');
+        });
 
-        // Optional if you want account page to only load if user is signed in
-        /*
-        if( this.loggedIn === '' || this.loggedIn === null ){
-            this.$router.push('/login')
-        }*/
-        
-    },
-    data(){
-        return {
-            loggedIn: this.$cookie.get('business-blvd-userID'),
-            form: {
-                currentEmail: undefined,
-                currentUsername: undefined,
-                currentPassword: undefined,
-
-                newEmail: undefined,
-                newUsername: undefined,
-                newCurrentPassword: undefined,
-                newPassword1: undefined,
-                newPassword2: undefined, 
-            },
-
-            emailSuccess: undefined,
-            emailError: undefined,
-
-            usernameSuccess: undefined,
-            usernameError: undefined,
-
-            passwordSuccess: undefined,
-            passwordError: undefined,
-        }
-    },
-    methods: {
-        submitEmail: function(){
-            this.emailSuccess = undefined;
-            this.emailError = undefined;
-
-            console.log('email click');
-
-            this.emailError = "No axios connection to update email";
-
-            // TODO: axios connection
-        },
-
-        submitUsername: function(){
-            this.usernameSuccess = undefined;
-            this.usernameError = undefined;
-
-            console.log('username click');
-
-            this.usernameError = "No axios connection to update email";
-
-            // TODO: axios connection
-        },
-
-        submitPassword: function(){
-            this.passwordSuccess = undefined;
-            this.passwordError = undefined;
-
-            if( this.form.newPassword1 !== this.form.newPassword2 ){
-                this.passwordError = "New passwords must match";
-                return
-            }
-
-            this.passwordError = "No axios connection to update password";
-
-            console.log('password click');
-
-            // TODO: axios connection
-        }
+        axios.get('/loginStatus').then((res) => {
+            console.log(res);
+        }).catch((err) => {
+            console.error(err.response.data || err)
+        })
     },
     components: {
-        BForm, 
-        BFormGroup, 
-        BFormInput, 
-        BAlert
+        AccountHeader,
+        AccountOwner,
+        AccountSettings,
     }
 }
 </script>
 
 <style>
-
 .account-title {
     margin-bottom: 2rem;
 }
@@ -163,5 +67,4 @@ export default {
     padding-right: 2rem;
     align-self: flex-end;
 }
-
 </style>
