@@ -1,5 +1,5 @@
 <template>
-    <img src="../assets/icons8-gps-location-100.png" v-bind:width="size" v-bind:height="size" />
+    <img src="@/assets/icons8-gps-location-100.png" v-bind:width="size" v-bind:height="size" />
 </template>
 
 <script>

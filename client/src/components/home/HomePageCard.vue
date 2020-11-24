@@ -20,10 +20,10 @@
 </template>
 
 <script>
-import AccountIcon from '../../icons/AccountIcon.vue';
-import BusinessIcon from '../../icons/BusinessIcon.vue';
-import ReportIcon from '../../icons/ReportIcon.vue';
-import GPSIcon from '../../icons/GPSIcon.vue';
+import AccountIcon from '@/icons/AccountIcon.vue';
+import BusinessIcon from '@/icons/BusinessIcon.vue';
+import ReportIcon from '@/icons/ReportIcon.vue';
+import GPSIcon from '@/icons/GPSIcon.vue';
 
 export default {
     name: 'HomePageCard',
