@@ -6,7 +6,7 @@
         <b-nav class="flex-row align-items-center">
             <router-link to="/map" class="nav-link">Map</router-link>
             <b-nav-item-dropdown right v-bind:text="dropdownText">
-                <b-dropdown-item v-if="loggedIn" to="/account">Profile</b-dropdown-item>
+                <b-dropdown-item v-if="loggedIn" to="/account">Account</b-dropdown-item>
                 <b-dropdown-divider v-if="loggedIn" />
                 <b-dropdown-item v-if="!loggedIn" to="/signup">Sign Up</b-dropdown-item>
                 <b-dropdown-item v-if="!loggedIn" to="/login">Log In</b-dropdown-item>
@@ -24,6 +24,15 @@ import axios from 'axios';
 
 export default {
     name: 'Navbar',
+
+    beforeCreate(){
+        axios.get('/api/users/loginStatus').then((res) => {
+            if(res.data.userId !== undefined){
+                eventBus.$emit('successful-login', res.data);
+            }
+        }).catch((err) => console.error(err.response.data || err));
+    },
+
     created(){
     
         eventBus.$on('successful-login', (user) => {

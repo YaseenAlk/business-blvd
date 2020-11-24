@@ -14,21 +14,23 @@ export default {
   name: 'App',
   created(){
 
-
     // Check session matches
     axios.get('/api/users/loginStatus').then((res) => {
-
+    
       let cookieUserID = this.$cookie.get('business-blvd-userID');
+      let emptyCookie = ( cookieUserID === 'undefined' || cookieUserID === '' );
       
       // Signed out on server, but signed in on client
-      if( res.data.userId === undefined && cookieUserID !== '' ){
+      if( res.data.userId === undefined && !emptyCookie ){
           eventBus.$emit('successful-logout');
+          return
       }
 
       // Signed in on server, but signed out on client
-      if( res.data.userId !== undefined && cookieUserID === '' ){
+      if( res.data.userId !== undefined && emptyCookie ){
         let user = { username: res.data.username, userID: res.data.userId };
           eventBus.$emit('successful-login', user);
+          return
       }
 
     }).catch((err) => {

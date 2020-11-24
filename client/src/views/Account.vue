@@ -22,13 +22,12 @@ import axios from 'axios';
 export default {
     name: 'Account',
     beforeCreate(){
-        if( this.$cookie.get('business-blvd-userID') === '' || this.$cookie.get('business-blvd-userID') === undefined ){
+        if( this.$cookie.get('business-blvd-userID') === '' || this.$cookie.get('business-blvd-userID') === 'undefined' ){
             this.$router.push('/login');
         }
     },
     created(){
         eventBus.$on('successful-logout', () => {
-            this.$router.push('/login');
             this.user = undefined;
         });
 
