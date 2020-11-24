@@ -22,7 +22,8 @@ import axios from 'axios';
 export default {
     name: 'Account',
     beforeCreate(){
-        if( this.$cookie.get('business-blvd-userID') === '' || this.$cookie.get('business-blvd-userID') === 'undefined' ){
+        let cookie = this.$cookie.get('business-blvd-userId');
+        if( cookie === '' || cookie === 'undefined' ){
             this.$router.push('/login');
         }
     },

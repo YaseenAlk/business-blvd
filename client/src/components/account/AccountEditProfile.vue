@@ -51,7 +51,7 @@ export default {
   },
   data(){
     return {
-      loggedIn: this.$cookie.get('business-blvd-userID'),
+      loggedIn: this.$cookie.get('business-blvd-userId'),
       form: {
         currentEmail: undefined,
         currentUsername: undefined,
