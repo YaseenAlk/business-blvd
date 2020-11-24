@@ -1,8 +1,8 @@
 <template>
 <div>
   <div class="account-title">
-    <h2>Account Settings</h2>
-    <i>Edit your account settings.</i>
+    <h2>Edit Account</h2>
+    <i>Edit your profile.</i>
   </div>
   <div>
     <b-form id="editEmail" class="form" @submit.prevent="submitEmail">
@@ -45,7 +45,10 @@
 <script>
 import { BForm, BFormGroup, BFormInput, BAlert } from 'bootstrap-vue';
 export default {
-  name: 'AccountSettings',
+  name: 'AccountEditProfile',
+  props: {
+    userId: String,
+  },
   data(){
     return {
       loggedIn: this.$cookie.get('business-blvd-userID'),
@@ -118,5 +121,26 @@ export default {
 </script>
 
 <style>
+.account-title {
+  text-align: left;
+}
 
+.form {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    padding: 1.5rem 0;
+}
+
+.form-title {
+    text-align: left;
+    margin-bottom: 1.25rem;   
+}
+
+.form-button {
+    width: fit-content;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    align-self: flex-end;
+}
 </style>

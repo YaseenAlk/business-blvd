@@ -1,70 +1,68 @@
 <template>
-    <div class="account-page">
-        <AccountHeader />
-        <AccountOwner />
-        <AccountSettings />
+    <div class="account-container">
+        <div class="account-content">
+            <h1 class="account-section">Account Settings</h1>
+            <AccountHeader v-bind:user="user" class="account-section"/>
+            <hr />
+            <AccountOwner v-bind:user="user" class="account-section"/>
+            <hr />
+            <AccountEditProfile v-bind:user="user" class="account-section"/>
+        </div>
     </div>
 </template>
 
 <script>
 import AccountHeader from '../components/account/AccountHeader.vue';
 import AccountOwner from '../components/account/AccountOwner.vue';
-import AccountSettings from '../components/account/AccountSettings.vue';
+import AccountEditProfile from '../components/account/AccountEditProfile.vue';
 
 import { eventBus } from '../main.js';
 import axios from 'axios';
 
 export default {
     name: 'Account',
+    beforeCreate(){
+        if( this.$cookie.get('business-blvd-userID') === '' || this.$cookie.get('business-blvd-userID') === undefined ){
+            this.$router.push('/login');
+        }
+    },
     created(){
         eventBus.$on('successful-logout', () => {
             this.$router.push('/login');
+            this.user = undefined;
         });
 
-        axios.get('/loginStatus').then((res) => {
-            console.log(res);
+        axios.get('/api/users/loginStatus').then((res) => {
+            this.user = res.data;
         }).catch((err) => {
-            console.error(err.response.data || err)
-        })
+            console.error(err.responses.data || err);
+        });
+    },
+    data(){
+        return {
+            user: {},
+        };
     },
     components: {
         AccountHeader,
         AccountOwner,
-        AccountSettings,
+        AccountEditProfile,
     }
 }
 </script>
 
 <style>
-.account-title {
-    margin-bottom: 2rem;
-}
-
-.account-page {
+.account-container {
     overflow: scroll;
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
 }
 
-.form {
-    display: flex;
-    flex-direction: column;
-    max-width: 65%;
+.account-content {
+    max-width: 85%;
     margin: auto;
-    padding: 1.5rem;
 }
 
-.form-title {
-    text-align: left;
-    margin-bottom: 1.25rem;   
+.account-section {
+    margin: 32px 0;
 }
 
-.form-button {
-    width: fit-content;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    align-self: flex-end;
-}
 </style>
