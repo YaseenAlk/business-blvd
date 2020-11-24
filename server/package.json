@@ -8,7 +8,7 @@
     "start": "npm run build && node build/index.js",
     "start:dev": "nodemon",
     "yeet": "nodemon",
-    "test": "jest",
+    "test": "jest src/*",
     "lint": "eslint 'src/*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "keywords": [],
@@ -25,7 +25,10 @@
     ]
   },
   "jest": {
-    "preset": "ts-jest"
+    "preset": "ts-jest",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
   },
   "type": "commonjs",
   "devDependencies": {
