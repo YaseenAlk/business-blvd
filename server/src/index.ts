@@ -66,6 +66,10 @@ class Server {
 const server = new Server();
 app.use('/api', server.router);
 
+app.get('/*', (req, res) => {
+  res.redirect('/');
+});
+
 let serverInstance: http.Server;
 // make server listen on some port
 ((port = process.env.APP_PORT || 5000) => {

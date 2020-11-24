@@ -12,8 +12,11 @@ const data: TSMap<string, Business> = new TSMap();
 
 class BusinessController {
   constructor() {
-    data.set('1', Business.generateExample());
-    data.set('2', Business.generateExample());
+    const b1 : Business = Business.generateExample();
+    const b2 : Business = Business.generateExample();
+
+    data.set( b1.businessId, b1);
+    data.set( b2.businessId, b2);
   }
 
   /***************
@@ -42,18 +45,18 @@ class BusinessController {
   }
 
   /***************
-  LOCATION METHODS
+  POSITION METHODS
   ****************/
-  getLocation(businessId: string): ReturnObj {
+  getPosition(businessId: string): ReturnObj {
     const businessExists = this.businessExists(businessId);
     if (businessExists) {
-      const location = data.get(businessId)?.location;
+      const position = data.get(businessId)?.position;
       return {
         status: 200,
         data: {
-          address: location?.address,
-          lat: location?.lat,
-          lng: location?.lng,
+          address: position?.getAddress(),
+          lat: position?.getLat(),
+          lng: position?.getLng(),
         },
       };
     } else {
@@ -61,12 +64,12 @@ class BusinessController {
     }
   }
 
-  setLocation(businessId: string, address: string, lat: number, lng: number): ReturnObj {
+  setPosition(businessId: string, address: string, lat: number, lng: number): ReturnObj {
     const business = data.get(businessId);
     if (business) {
-      business.location.address = address;
-      business.location.lat = lat;
-      business.location.lng = lng;
+      business.position.setAddress(address);
+      business.position.setLat(lat);
+      business.position.setLng(lng);
       return { status: 201, data: `Updated address successfully` };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };

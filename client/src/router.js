@@ -4,7 +4,6 @@ import Router from 'vue-router';
 Vue.use(Router)
 
 export default new Router({
-    mode: 'history',
     routes: [{
             path: '/',
             name: 'Home',
@@ -30,16 +29,13 @@ export default new Router({
                 import ('./views/LogIn.vue')
         },
         {
-            path: '/map',
-            name: 'Map',
-            component: () =>
-                import ('./views/Map.vue')
-        },
-        {
-            path: '/business',
+            path: '/business/:id',
+            props: {
+                id: String,
+            },
             name: 'Business',
-            component: () => 
-                import('./views/Business.vue')
+            component: () =>
+                import ('./views/Business.vue')
         },
         {
             path: '*',

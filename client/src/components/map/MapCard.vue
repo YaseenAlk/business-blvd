@@ -1,22 +1,18 @@
 <template>
-    <router-link class="card" to="/business">
-        <h2>{{business.title}}</h2>
-        <p>{{business.address}}</p>
+    <router-link class="card" v-bind:to="internalURL">
+        <h2>{{name}}</h2>
+        <p>{{address}}</p>
         <div class="card-bottom">
             <div>
                 <b-icon-question-circle class="card-bottom-icon" />
-                <span>{{business.questionCount}} questions</span>
+                <span>0 questions</span>
             </div>
             <div>
                 <b-icon-star-half size="20" class="card-bottom-icon" />
-                <span>{{business.reviewCount}} reviews</span>
+                <span>{{ratingCount}} rating</span>
             </div>
             <div class="covid-score">
-              <div class="covid-score-number">{{business.rating}}</div>
-              <span class="covid-score-subtitle">Rating</span>
-            </div>
-            <div class="covid-score">
-                <div class="covid-score-number">{{business.covidScore}}</div>
+                <div class="covid-score-number">{{covidScore}}</div>
                 <span class="covid-score-subtitle">Covid Safety Score</span>
             </div>
         </div>
@@ -34,6 +30,17 @@ export default {
     components: {
         BIconQuestionCircle,
         BIconStarHalf,
+    },
+    data(){
+        return {
+            name: this.business.name,
+            address: this.business.position.address,
+
+            ratingCount: Object.keys(this.business.ratings._serviceRatingsMap).length,
+            covidScore: Object.keys(this.business.ratings._safetyRatingsMap).length,
+
+            internalURL: this.business.internalURL,
+        }
     },
 }
 </script>
@@ -61,8 +68,9 @@ a, a:hover {
 .card-bottom {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 1em;
 }
 
 .card-bottom-icon {

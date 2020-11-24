@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import BusinessLocation from './BusinessLocation';
+import BusinessPosition from './BusinessPosition';
 import { BusinessTags } from './BusinessTags';
 import BusinessRatings from './BusinessRatings';
 import BusinessSocialMedia from './BusinessSocialMedia';
@@ -8,7 +8,7 @@ import { Days, BusinessHours } from './BusinessHours';
 
 interface BusinessJSON {
   name: string;
-  location: BusinessLocation;
+  position: BusinessPosition;
   description: string;
   businessId: string;
   ratings: BusinessRatings;
@@ -17,13 +17,14 @@ interface BusinessJSON {
   followers: string[];
   tags: BusinessTags[];
   ownerId: string;
-  url: string;
+  internalURL: string;
+  externalURL: string;
   phone: string;
 }
 
 export default class Business {
   private _name: string;
-  private _location: BusinessLocation;
+  private _position: BusinessPosition;
   private _description: string;
   private _businessId: string;
   private _ratings: BusinessRatings;
@@ -33,11 +34,12 @@ export default class Business {
   private _tags: Set<BusinessTags>;
   // private faq: BusinessFAQ;
   private _ownerId: string;
-  private _url: string;
+  private _internalURL: string;
+  private _externalURL: string;
   private _phone: string;
   constructor(entry: BusinessJSON) {
     this._name = entry.name;
-    this._location = entry.location;
+    this._position = entry.position;
     this._description = entry.description;
     this._businessId = entry.businessId;
     this._ratings = entry.ratings;
@@ -47,7 +49,8 @@ export default class Business {
     this._tags = new Set(entry.tags);
     // faq: BusinessFAQ;
     this._ownerId = entry.ownerId;
-    this._url = entry.url;
+    this._internalURL = entry.internalURL;
+    this._externalURL = entry.externalURL;
     this._phone = entry.phone;
   }
 
@@ -58,15 +61,15 @@ export default class Business {
     this._name = name;
   }
 
-  get location(): BusinessLocation {
-    return this._location;
+  get position(): BusinessPosition {
+    return this._position;
   }
 
   get description(): string {
     return this._description;
   }
   set description(description: string) {
-    this._description = this.description;
+    this._description = description;
   }
 
   get businessId(): string {
@@ -128,11 +131,15 @@ export default class Business {
     return this._ownerId == ownerId;
   }
 
-  get url(): string {
-    return this._url;
+  get externalURL(): string {
+    return this._externalURL;
   }
-  set url(newUrl: string) {
-    this._url = newUrl;
+  set externalURL(newUrl: string) {
+    this._externalURL = newUrl;
+  }
+
+  get internalURL(): string {
+    return this._internalURL;
   }
 
   get phone(): string {
@@ -145,7 +152,7 @@ export default class Business {
   public toJSON(): BusinessJSON {
     return {
       name: this._name,
-      location: this._location,
+      position: this._position,
       description: this._description,
       businessId: this._businessId,
       ratings: this._ratings,
@@ -154,17 +161,21 @@ export default class Business {
       followers: Array.from(this._followers),
       tags: Array.from(this._tags),
       ownerId: this._ownerId,
-      url: this._url,
+      internalURL: this._internalURL,
+      externalURL: this._externalURL,
       phone: this._phone,
     };
   }
 
   static generateExample(): Business {
+
+    const businessId = uuidv4();
+
     const businessJSON: BusinessJSON = {
       name: "Poppa's Workshop",
-      location: new BusinessLocation('123 Seasame Street', 42.3736, 71.1097),
+      position: new BusinessPosition('123 Seasame Street', 42.362541, -71.098450),
       description: 'Where the elbow grease is used.',
-      businessId: uuidv4(),
+      businessId: businessId,
       ratings: new BusinessRatings(),
       hours: new BusinessHours(),
       socialMedia: new BusinessSocialMedia('www.facebook.com', 'www.twitter.com'),
@@ -172,7 +183,8 @@ export default class Business {
       // faq: BusinessFAQ;
       ownerId: uuidv4(),
       followers: ['33', '13'],
-      url: 'www.poppasworkshop.com',
+      internalURL: 'business/' + businessId,
+      externalURL: 'www.poppasworkshop.com',
       phone: '867-5309',
     };
 

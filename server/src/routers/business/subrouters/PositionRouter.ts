@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
 
-class LocationRouter {
+class PositionRouter {
   private _router = Router({ mergeParams: true });
 
   private _controller = BusinessController;
@@ -19,12 +19,12 @@ class LocationRouter {
    */
   private _configure() {
     /***************
-    GET LOCATION ROUTE
+    GET POSITION ROUTE
     ****************/
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getLocation(businessId);
+        const { status, data } = this._controller.getPosition(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -32,13 +32,13 @@ class LocationRouter {
     });
 
     /***************
-    SET LOCATION ROUTE
+    SET POSITION ROUTE
     ****************/
     this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { address, lat, lng } = req.body;
-        const { status, data } = this._controller.setLocation(businessId, address, lat, lng);
+        const { status, data } = this._controller.setPosition(businessId, address, lat, lng);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -47,4 +47,4 @@ class LocationRouter {
   }
 }
 
-export = new LocationRouter().router;
+export = new PositionRouter().router;
