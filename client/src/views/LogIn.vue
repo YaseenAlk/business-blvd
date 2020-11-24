@@ -59,11 +59,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .form-container {
     display: flex;
     flex-direction: column;
-    margin: 32px;
+    padding: 32px;
     justify-content: center;
     align-items: center;
 }
