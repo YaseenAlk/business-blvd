@@ -7,7 +7,7 @@
 
 <script>
 import { gmapsMarker } from 'x5-gmaps';
-import { eventBus } from '../../main.js';
+import { eventBus } from '@/main.js';
 
 export default {
     name: 'MapMarker',

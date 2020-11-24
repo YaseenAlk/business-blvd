@@ -19,7 +19,7 @@
 
 <script>
 import { BForm, BFormGroup, BFormInput, BButton, BAlert } from 'bootstrap-vue';
-import { eventBus } from '../main';
+import { eventBus } from '@/main';
 import axios from 'axios';
 
 export default {

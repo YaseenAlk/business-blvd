@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { eventBus } from '../../main.js'; 
+import { eventBus } from '@/main.js'; 
 import MapCard from './MapCard.vue';
 
 export default {

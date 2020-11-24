@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import InquiryController from '../../controllers/InquiryController';
-import { Validation } from '../../middleware/Validation';
-import { Auth } from '../../middleware/Auth';
+import InquiryController from '@/controllers/InquiryController';
+import { Validation } from '@/middleware/Validation';
+import { Auth } from '@/middleware/Auth';
 
 class InquiryRouter {
   private _router = Router();

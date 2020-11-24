@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import HomePageGrid from '../components/home/HomePageGrid.vue';
+import HomePageGrid from '@/components/home/HomePageGrid.vue';
 
 export default {
     name: 'Home',

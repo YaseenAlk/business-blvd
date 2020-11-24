@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import MapContainer from '../components/map/MapContainer.vue';
-import MapInformationDetails from '../components/map/MapInformationDetails.vue';
+import MapContainer from '@/components/map/MapContainer.vue';
+import MapInformationDetails from '@/components/map/MapInformationDetails.vue';
 
 export default {
     name: 'Map',

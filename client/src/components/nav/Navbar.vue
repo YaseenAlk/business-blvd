@@ -18,7 +18,7 @@
 
 <script>
 import { BNav, BDropdownItem, BNavItemDropdown, BDropdownDivider } from 'bootstrap-vue';
-import { eventBus } from '../../main.js';
+import { eventBus } from '@/main.js';
 
 import axios from 'axios';
 

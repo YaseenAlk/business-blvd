@@ -34,15 +34,15 @@
 </template>
 <script>
 
-import Reviews from '../components/business/Reviews.vue';
-import FAQ from '../components/business/FAQ.vue';
-import About from '../components/business/About.vue';
-import Ask from '../components/business/Ask.vue';
-import Header from '../components/business/Header.vue';
-import AtAGlance from '../components/business/AtAGlance.vue';
-import Hours from '../components/business/Hours.vue';
-import SocialMedia from '../components/business/SocialMedia.vue';
-import Subscribe from '../components/business/Subscribe.vue';
+import Reviews from '@/components/business/Reviews.vue';
+import FAQ from '@/components/business/FAQ.vue';
+import About from '@/components/business/About.vue';
+import Ask from '@/components/business/Ask.vue';
+import Header from '@/components/business/Header.vue';
+import AtAGlance from '@/components/business/AtAGlance.vue';
+import Hours from '@/components/business/Hours.vue';
+import SocialMedia from '@/components/business/SocialMedia.vue';
+import Subscribe from '@/components/business/Subscribe.vue';
 
 import axios from 'axios';
 
