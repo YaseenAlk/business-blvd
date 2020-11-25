@@ -1,11 +1,11 @@
 import { default as request } from 'supertest-session';
 import { SuperTest, Test } from 'supertest';
 
-import server from '../index';
+import server from '../server';
 
 let testSession: SuperTest<Test>;
 
-beforeEach(() => {
+beforeAll(() => {
   testSession = request(server);
 });
 
@@ -70,8 +70,4 @@ describe('The user should be able to', () => {
     expect(cleanup.status).toBe(200);
     done();
   });
-});
-
-afterAll(() => {
-  server.close();
 });

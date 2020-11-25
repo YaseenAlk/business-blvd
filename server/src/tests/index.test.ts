@@ -1,6 +1,6 @@
 import { default as request } from 'supertest';
 
-import server from '../index';
+import server from '../server';
 
 const testSession = request(server);
 
@@ -10,8 +10,4 @@ describe('The index page', () => {
     expect(resp.status).toBe(200);
     done();
   });
-});
-
-afterAll(() => {
-  server.close();
 });
