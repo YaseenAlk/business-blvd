@@ -1,7 +1,7 @@
 import { TSMap } from 'typescript-map';
 
-import Business from '@/models/business/Business';
-import { Days, Time } from '@/models/business/BusinessHours';
+import Business from '../../models/business/Business';
+import { Days, Time } from '../../models/business/BusinessHours';
 
 type ReturnObj = {
   status: number;
@@ -12,11 +12,11 @@ const data: TSMap<string, Business> = new TSMap();
 
 class BusinessController {
   constructor() {
-    const b1 : Business = Business.generateExample();
-    const b2 : Business = Business.generateExample();
+    const b1: Business = Business.generateExample();
+    const b2: Business = Business.generateExample();
 
-    data.set( b1.businessId, b1);
-    data.set( b2.businessId, b2);
+    data.set(b1.businessId, b1);
+    data.set(b2.businessId, b2);
   }
 
   /***************

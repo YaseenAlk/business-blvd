@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import UserRepository from '@/repositories/UserRepository';
-import BusinessController from '@/controllers/business/BusinessController'; // hopefully we transition this to a repository
-import InquiryRepository from '@/repositories/InquiryRepository';
-import BusinessJSON from '@/models/business/Business';
+import UserRepository from '../repositories/UserRepository';
+import BusinessController from '../controllers/business/BusinessController'; // hopefully we transition this to a repository
+import InquiryRepository from '../repositories/InquiryRepository';
+import BusinessJSON from '../models/business/Business';
 
 export class Validation {
   // auth
