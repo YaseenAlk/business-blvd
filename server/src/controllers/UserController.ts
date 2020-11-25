@@ -20,8 +20,10 @@ class UserController {
   getLoginStatus(sessionId?: string) {
     const account = sessionId ? UserRepository.findOneByID(sessionId) : undefined;
     const response: { message: string; signedIn: boolean; userId?: string; username?: string } = {
-      message: `You are ${sessionId ? '' : 'not'} signed in ${sessionId ? ` as ${account?.username}` : '.'}`,
+      message: `You are ${sessionId ? '' : 'not'} signed in ${sessionId ? `as ${account?.username}.` : '.'}`,
       signedIn: sessionId ? true : false,
+      userId: account?.id, 
+      username: account?.username,
     };
     if (sessionId) {
       response.userId = account?.id;
