@@ -21,18 +21,15 @@ import axios from 'axios';
 
 export default {
     name: 'Account',
-    beforeCreate(){
-        let cookie = this.$cookie.get('business-blvd-userId');
-        if( cookie === '' || cookie === 'undefined' ){
-            this.$router.push('/login');
-        }
-    },
     created(){
         eventBus.$on('successful-logout', () => {
             this.user = undefined;
         });
 
         axios.get('/api/users/loginStatus').then((res) => {
+            if (!res.data.signedIn) {
+              this.$router.push('/login');
+            }
             this.user = res.data;
         }).catch((err) => {
             console.error(err.responses.data || err);
