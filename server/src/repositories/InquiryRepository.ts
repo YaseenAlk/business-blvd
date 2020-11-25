@@ -1,4 +1,4 @@
-import { Inquiry } from '@/models/Inquiry';
+import { Inquiry } from '../models/Inquiry';
 
 // this is a temporary class until we switch to data persistence
 // once we switch to a DB, might not be necessary because we can use typeorm repositories

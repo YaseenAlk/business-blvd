@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { Validation } from '@/middleware/Validation';
-import { Auth } from '@/middleware/Auth';
-import UserController from '@/controllers/UserController';
+import { Validation } from '../../middleware/Validation';
+import { Auth } from '../../middleware/Auth';
+import UserController from '../../controllers/UserController';
 
 class UserRouter {
   private _router = Router();
