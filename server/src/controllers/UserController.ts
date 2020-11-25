@@ -36,7 +36,15 @@ class UserController {
     const userID = uuidv4(); // this ID is internal so it's okay for it to be a long string
 
     UserRepository.addOne(userID, email, username, password);
-    return { message: 'Account created succesfully!' };
+    return { message: 'Account created succesfully!', userId: userID };
+  }
+
+  deleteAccount(sessionID: string) {
+    UserRepository.deleteOneById(sessionID);
+    const response = {
+      message: 'Account deleted.',
+    };
+    return response;
   }
 }
 
