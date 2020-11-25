@@ -26,6 +26,9 @@ app.use(
     secret: process.env.SESSION_SECRET || 'BusinessBlvd',
     resave: true,
     saveUninitialized: true,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+    },
   }),
 );
 // Connect with the client

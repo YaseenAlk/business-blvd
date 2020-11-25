@@ -23,6 +23,14 @@ class UserRepository {
   addOne(id: string, email: string, username: string, password: string) {
     this.data.push(new User(id, email, username, password));
   }
+
+  deleteOneById(id: string) {
+    const i = this.data.findIndex((user) => user.id === id);
+    if (i === -1) {
+      throw new Error('User does not exist');
+    }
+    this.data.splice(i, 1);
+  }
 }
 
 export = new UserRepository();
