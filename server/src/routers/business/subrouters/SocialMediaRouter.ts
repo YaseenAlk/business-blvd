@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import BusinessController from '../../..//controllers/business/BusinessController';
+import BusinessController from '../../../controllers/business/BusinessController';
 
 class SocialMediaRouter {
   private _router = Router({ mergeParams: true });
