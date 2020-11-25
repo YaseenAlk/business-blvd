@@ -10,7 +10,7 @@
             <HomePageCard title="Claim a Business" variant="business" size="64" />
         </b-link>
         <b-link to='/account' class="grid-item">
-            <HomePageCard title="My Account" variant="account" size="64" />
+            <HomePageCard title="Account" variant="account" size="64" />
         </b-link>
     </div>
 </template>
