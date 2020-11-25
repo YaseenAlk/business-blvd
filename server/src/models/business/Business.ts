@@ -168,12 +168,11 @@ export default class Business {
   }
 
   static generateExample(): Business {
-
     const businessId = uuidv4();
 
     const businessJSON: BusinessJSON = {
       name: "Poppa's Workshop",
-      position: new BusinessPosition('123 Seasame Street', 42.362541, -71.098450),
+      position: new BusinessPosition('123 Seasame Street', 42.362541, -71.09845),
       description: 'Where the elbow grease is used.',
       businessId: businessId,
       ratings: new BusinessRatings(),

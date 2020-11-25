@@ -1,7 +1,7 @@
 import InquiryRepository from '../repositories/InquiryRepository';
 import BusinessController from './business/BusinessController';
 import { v4 as uuidv4 } from 'uuid';
-import BusinessJSON from '@/models/business/Business';
+import BusinessJSON from '../models/business/Business';
 
 class InquiryController {
   getInquiriesFromBusiness(id: string, userId?: string) {
