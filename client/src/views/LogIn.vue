@@ -48,7 +48,7 @@ export default {
         onSubmit: function(){
             this.clearAlerts();
             axios.post('/api/users/signin', this.form).then((res) => {
-                let user = { username: res.data.username, userID: res.data.userId };
+                let user = { username: res.data.username, userId: res.data.userId };
                 eventBus.$emit('successful-login', user);
                 this.$router.push('/map');
             }).catch((err) => {
