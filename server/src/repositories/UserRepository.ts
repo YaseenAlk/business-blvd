@@ -26,9 +26,6 @@ class UserRepository {
 
   deleteOneById(id: string) {
     const i = this.data.findIndex((user) => user.id === id);
-    if (i === -1) {
-      throw new Error('User does not exist');
-    }
     this.data.splice(i, 1);
   }
 }
