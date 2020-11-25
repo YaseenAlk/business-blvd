@@ -9,7 +9,7 @@
         <b-link to='/claim' class="grid-item grid-item-disabled" disabled>
             <HomePageCard title="Claim a Business" variant="business" size="64" />
         </b-link>
-        <b-link to='/account' class="grid-item grid-item-disabled" disabled>
+        <b-link to='/account' class="grid-item">
             <HomePageCard title="My Account" variant="account" size="64" />
         </b-link>
     </div>

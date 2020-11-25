@@ -9,7 +9,7 @@
                 <b-dropdown-item v-if="loggedIn" to="/account">Profile</b-dropdown-item>
                 <b-dropdown-divider v-if="loggedIn" />
                 <b-dropdown-item v-if="!loggedIn" to="/signup">Sign Up</b-dropdown-item>
-                <b-dropdown-item v-if="!loggedIn"  to="/login">Log In</b-dropdown-item>
+                <b-dropdown-item v-if="!loggedIn" to="/login">Log In</b-dropdown-item>
                 <b-dropdown-item v-if="loggedIn" v-on:click="handleLogOut">Log Out</b-dropdown-item>
             </b-nav-item-dropdown>
         </b-nav>

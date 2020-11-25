@@ -38,6 +38,18 @@ export default new Router({
                 import ('./views/Business.vue')
         },
         {
+            path: '/edit',
+            name: 'EditBusiness',
+            component: () =>
+                import ('./views/EditBusiness.vue')
+        },
+        {
+            path: '/account',
+            name: 'Account',
+            component: () =>
+                import ('./views/Account.vue')
+        },
+        {
             path: '*',
             name: 'NotFound',
             component: () =>
