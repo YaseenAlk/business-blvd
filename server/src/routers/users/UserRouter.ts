@@ -37,6 +37,7 @@ class UserRouter {
         try {
           const { email, username, password } = req.body;
           const resp = this._controller.createAccount(email, username, password);
+          req.session.userID = resp.userId;
           res.status(200).json(resp).end();
         } catch (error) {
           next(error);
@@ -95,6 +96,16 @@ class UserRouter {
     this._router.get('/loginStatus', (req: Request, res: Response, next: NextFunction) => {
       try {
         const resp = this._controller.getLoginStatus(req.session.userID);
+        res.status(200).json(resp).end();
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    this._router.delete('/', Auth.enforceSignedIn, (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const resp = this._controller.deleteAccount(req.session.userID);
+        req.session.userID = undefined;
         res.status(200).json(resp).end();
       } catch (error) {
         next(error);
