@@ -8,6 +8,10 @@ import { User } from '../models/User';
 class UserRepository {
   private data: User[] = [];
 
+  verifyID(uuid: string): boolean {
+    return this.data.findIndex((user) => user.id === uuid) !== -1;
+  }
+
   findOneByID(uuid: string): User {
     return this.data.filter((user) => user.id === uuid)[0];
   }
