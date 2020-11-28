@@ -1,32 +1,28 @@
 import { User } from '../models/User';
 
-// this is a temporary class until we switch to data persistence
-// once we switch to a DB, might not be necessary because we can use typeorm repositories
-
-// however we could still use it to generalize more advanced DB operations
-
 class UserRepository {
-  private data: User[] = [];
-
-  findOneByID(uuid: string): User {
-    return this.data.filter((user) => user.id === uuid)[0];
+  findOneByID(uuid: string): Promise<User | undefined> {
+    return User.findOne({ id: uuid });
   }
 
-  findOneByUsername(username: string): User {
-    return this.data.filter((user) => user.username === username)[0];
+  findOneByUsername(username: string): Promise<User | undefined> {
+    return User.findOne({ _username: username });
   }
 
-  findOneByEmail(email: string): User {
-    return this.data.filter((user) => user.email === email)[0];
+  findOneByEmail(email: string): Promise<User | undefined> {
+    return User.findOne({ _email: email });
   }
 
-  addOne(id: string, email: string, username: string, password: string) {
-    this.data.push(new User(id, email, username, password));
+  addOne(email: string, username: string, password: string): Promise<User> {
+    const newUser: User = new User(email, username, password);
+    return newUser.save();
   }
 
   deleteOneById(id: string) {
-    const i = this.data.findIndex((user) => user.id === id);
-    this.data.splice(i, 1);
+    return User.findOne({ id: id }).then((user) => {
+      if (user === undefined) return;
+      return user.remove();
+    });
   }
 }
 

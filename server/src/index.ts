@@ -1,17 +1,24 @@
-import http from 'http';
-import server from './server';
+import 'reflect-metadata';
+import buildServer from './server';
 import dotenv from 'dotenv';
 
-// load the environment variables from the .env file
+// Load the environment variables from the .env file
 dotenv.config({
   path: '.env',
 });
-
-let serverInstance: http.Server;
 // // make server listen on some port
-((port = process.env.APP_PORT || 5000) => {
-  // eslint-disable-next-line no-console
-  serverInstance = server.listen(port, () => console.log(`Listening on port ${port} 💻`));
-})();
+(async (port = process.env.APP_PORT || 5000) => {
+  const server = await buildServer();
 
-export = serverInstance;
+  // catch CTRL+C for server kill
+  process.on('SIGINT', async function () {
+    // eslint-disable-next-line no-console
+    console.log('Server kill command detected. Closing DB Connection...');
+
+    await server.onClose();
+    process.exit();
+  });
+
+  // eslint-disable-next-line no-console
+  server.app.listen(port, () => console.log(`Listening on port ${port} 💻`));
+})();

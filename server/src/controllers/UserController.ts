@@ -1,14 +1,12 @@
-import { User } from '../models/User';
 import UserRepository from '../repositories/UserRepository';
-import { v4 as uuidv4 } from 'uuid';
 
 class UserController {
-  signIn(username: string) {
-    const account = UserRepository.findOneByUsername(username);
+  async signIn(username: string) {
+    const account = await UserRepository.findOneByUsername(username);
     return {
       message: `Successfully logged in! Welcome ${username}.`,
-      userId: account.id,
-      username: account.username,
+      userId: account?.id,
+      username: account?.username,
     };
   }
 
@@ -17,12 +15,12 @@ class UserController {
     return { message: 'Successfully logged out.' };
   }
 
-  getLoginStatus(sessionId?: string) {
-    const account = sessionId ? UserRepository.findOneByID(sessionId) : undefined;
+  async getLoginStatus(sessionId?: string) {
+    const account = sessionId ? await UserRepository.findOneByID(sessionId) : undefined;
     const response: { message: string; signedIn: boolean; userId?: string; username?: string } = {
       message: `You are ${sessionId ? '' : 'not'} signed in ${sessionId ? `as ${account?.username}.` : '.'}`,
       signedIn: sessionId ? true : false,
-      userId: account?.id, 
+      userId: account?.id,
       username: account?.username,
     };
     if (sessionId) {
@@ -32,19 +30,14 @@ class UserController {
     return response;
   }
 
-  createAccount(email: string, username: string, password: string) {
-    const userID = uuidv4(); // this ID is internal so it's okay for it to be a long string
-
-    UserRepository.addOne(userID, email, username, password);
-    return { message: 'Account created succesfully!', userId: userID };
+  async createAccount(email: string, username: string, password: string) {
+    const user = await UserRepository.addOne(email, username, password);
+    return { message: 'Account created succesfully!', userId: user.id };
   }
 
-  deleteAccount(sessionID: string) {
-    UserRepository.deleteOneById(sessionID);
-    const response = {
-      message: 'Account deleted.',
-    };
-    return response;
+  async deleteAccount(sessionID: string) {
+    await UserRepository.deleteOneById(sessionID);
+    return { message: 'Account deleted.' };
   }
 }
 
