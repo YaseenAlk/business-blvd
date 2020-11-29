@@ -4,7 +4,7 @@ import UserRepository from '../repositories/UserRepository';
 export class Auth {
   static enforceSignedIn(req: Request, res: Response, next: NextFunction): void {
     const session = req.session;
-    if (session.userID === undefined || !UserRepository.verifyID(session.userID)) {
+    if (session.userID === undefined || !UserRepository.verifyId(session.userID)) {
       res.status(401).json({ message: 'You must be signed in to perform this action' }).end();
       return;
     }
