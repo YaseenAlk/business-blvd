@@ -50,6 +50,12 @@ export default new Router({
                 import ('./views/Account.vue')
         },
         {
+            path: '/report',
+            name: 'Report',
+            component: () => 
+              import('./views/Report.vue')
+        },
+        {
             path: '*',
             name: 'NotFound',
             component: () =>
