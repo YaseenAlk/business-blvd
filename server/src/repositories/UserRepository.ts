@@ -18,10 +18,9 @@ class UserRepository {
     return newUser.save();
   }
 
-  deleteOneById(id: string) {
+  deleteOneById(id: string): Promise<User | undefined> {
     return User.findOne({ id: id }).then((user) => {
-      if (user === undefined) return;
-      return user.remove();
+      return user?.remove();
     });
   }
 }
