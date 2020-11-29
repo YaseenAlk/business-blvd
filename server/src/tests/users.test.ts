@@ -1,12 +1,17 @@
-import { default as request } from 'supertest-session';
 import { SuperTest, Test } from 'supertest';
+import { default as request } from 'supertest-session';
 
-import server from '../server';
+import buildServer, { Server } from '../server';
+let server: Server;
 
 let testSession: SuperTest<Test>;
-
-beforeAll(() => {
-  testSession = request(server);
+jest.setTimeout(20000); // Give the DB 20 seconds to connect.
+beforeAll(async (done) => {
+  await buildServer().then(async (s) => {
+    server = s;
+    testSession = request(server.app);
+    done();
+  });
 });
 
 const testUser = {
@@ -70,4 +75,9 @@ describe('The user should be able to', () => {
     expect(cleanup.status).toBe(200);
     done();
   });
+});
+
+afterAll(async (done) => {
+  await server.onClose();
+  done();
 });

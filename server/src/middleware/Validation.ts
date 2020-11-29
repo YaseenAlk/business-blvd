@@ -146,8 +146,8 @@ export class Validation {
   }
 
   // db-dependent auth middleware (TODO for future iterations: make more efficient by only making one DB call?)
-  static usernameExists(req: Request, res: Response, next: NextFunction): void {
-    const user = UserRepository.findOneByUsername(req.params.username || req.body.username);
+  static async usernameExists(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const user = await UserRepository.findOneByUsername(req.params.username || req.body.username);
     if (user === undefined) {
       res.status(404).json({ message: 'Username not found' }).end();
       return;
@@ -164,11 +164,11 @@ export class Validation {
     next();
   }
 
-  static passwordCorrect(req: Request, res: Response, next: NextFunction): void {
+  static async passwordCorrect(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.body.username;
     const password = req.body.password;
-    const account = UserRepository.findOneByUsername(username);
-    if (password !== account.password) {
+    const account = await UserRepository.findOneByUsername(username);
+    if (password !== account?.password) {
       // we keep it intentionally vague for security reasons
       res.status(401).json({ message: 'Incorrect username/password combination' }).end();
       return;
@@ -177,8 +177,8 @@ export class Validation {
     next();
   }
 
-  static usernameNotTaken(req: Request, res: Response, next: NextFunction): void {
-    const user = UserRepository.findOneByUsername(req.params.username || req.body.username);
+  static async usernameNotTaken(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const user = await UserRepository.findOneByUsername(req.params.username || req.body.username);
     if (user !== undefined) {
       res.status(409).json({ message: 'Username already in use' }).end();
       return;
@@ -186,8 +186,8 @@ export class Validation {
     next();
   }
 
-  static emailNotTaken(req: Request, res: Response, next: NextFunction): void {
-    const user = UserRepository.findOneByEmail(req.params.email || req.body.email);
+  static async emailNotTaken(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const user = await UserRepository.findOneByEmail(req.params.email || req.body.email);
     if (user !== undefined) {
       res.status(409).json({ message: 'Email already in use' }).end();
       return;

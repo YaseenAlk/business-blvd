@@ -22,6 +22,7 @@
 
 <script>
 import { BForm, BFormInput, BFormGroup, BAlert } from 'bootstrap-vue';
+import { eventBus } from '@/main';
 import axios from 'axios';
 
 export default {
@@ -41,6 +42,8 @@ export default {
             this.clearAlerts(); 
             axios.post('/api/users', this.form).then((res) => {
                 this.success = res.data.message;
+                let user = { username: this.form.username };
+                eventBus.$emit('successful-login', user);
             }).catch((err) => {
                 this.error = err.response.data.message;
             });

@@ -9,8 +9,8 @@
         <b-link to='/claim' class="grid-item grid-item-disabled" disabled>
             <HomePageCard title="Claim a Business" variant="business" size="64" />
         </b-link>
-        <b-link to='/account' class="grid-item grid-item-disabled" disabled>
-            <HomePageCard title="My Account" variant="account" size="64" />
+        <b-link to='/account' class="grid-item">
+            <HomePageCard title="Account" variant="account" size="64" />
         </b-link>
     </div>
 </template>
@@ -36,13 +36,13 @@ export default {
 }
 
 .grid-item {
-    background-color: white;
+    background-color: rgb(215, 253, 245);
     border-radius: 12px;
     transition: all 0.2s ease-in-out;
 }
 
 .grid-item:hover{
-    transform: scale(1.02);
+    background-color: rgb(162, 255, 235);
 }
 
 .grid-item-disabled {
@@ -54,6 +54,7 @@ export default {
     transform: none;
     cursor: not-allowed;
     text-transform: none;
+    background-color: rgba(247, 247, 247, 0.8);
 }
 
 </style>

@@ -14,21 +14,23 @@ export default {
   name: 'App',
   created(){
 
-
     // Check session matches
     axios.get('/api/users/loginStatus').then((res) => {
-
-      let cookieUserID = this.$cookie.get('business-blvd-userID');
+    
+      let cookieUserID = this.$cookie.get('business-blvd-userId');
+      let emptyCookie = ( cookieUserID === 'undefined' || cookieUserID === '' );
       
       // Signed out on server, but signed in on client
-      if( res.data.userId === undefined && cookieUserID !== '' ){
+      if( res.data.userId === undefined && !emptyCookie ){
           eventBus.$emit('successful-logout');
+          return
       }
 
       // Signed in on server, but signed out on client
-      if( res.data.userId !== undefined && cookieUserID === '' ){
-        let user = { username: res.data.username, userID: res.data.userId };
-          eventBus.$emit('successful-login', user);
+      if( res.data.userId !== undefined && emptyCookie ){
+        let user = { username: res.data.username, userId: res.data.userId };
+        eventBus.$emit('successful-login', user);
+        return
       }
 
     }).catch((err) => {
@@ -36,11 +38,11 @@ export default {
     });
 
     eventBus.$on('successful-login', (user) => {
-      this.$cookie.set('business-blvd-userID', user.userID);
+      this.$cookie.set('business-blvd-userId', user.userId);
     });
 
     eventBus.$on('successful-logout', () => {
-      this.$cookie.set('business-blvd-userID', '');
+      this.$cookie.set('business-blvd-userId', '');
     });
   },
   components: {
