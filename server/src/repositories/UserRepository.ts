@@ -23,6 +23,10 @@ class UserRepository {
       return user?.remove();
     });
   }
+
+  verifyId(id: string) {
+    return User.findOne({ id }).then((user) => user !== undefined);
+  }
 }
 
 export = new UserRepository();
