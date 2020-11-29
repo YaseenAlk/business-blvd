@@ -177,13 +177,17 @@ export default class Business {
       businessId: businessId,
       ratings: new BusinessRatings(),
       hours: new BusinessHours(),
-      socialMedia: new BusinessSocialMedia('www.facebook.com', 'www.twitter.com'),
+      socialMedia: new BusinessSocialMedia(
+        'https://www.facebook.com',
+        'https://www.twitter.com',
+        'https://www.instagram.com',
+      ),
       tags: [BusinessTags.DELIVERY],
       // faq: BusinessFAQ;
       ownerId: uuidv4(),
       followers: ['33', '13'],
       internalURL: 'business/' + businessId,
-      externalURL: 'www.poppasworkshop.com',
+      externalURL: 'https://www.poppasworkshop.com',
       phone: '867-5309',
     };
 
