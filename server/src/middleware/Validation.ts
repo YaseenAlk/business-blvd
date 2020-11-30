@@ -205,6 +205,16 @@ export class Validation {
     next();
   }
 
+  static businessIdUnclaimed(req: Request, res: Response, next: NextFunction): void {
+    // we will need to change this once BusinessRepository exists
+    const business: BusinessJSON = BusinessController.getBusiness(req.params.businessId || req.body.businessId).data;
+    if (business?.ownerId) {
+      res.status(409).json({ message: 'Business already claimed' }).end();
+      return;
+    }
+    next();
+  }
+
   static inquiryIdExists(req: Request, res: Response, next: NextFunction): void {
     const inquiry = InquiryRepository.findOneById(req.params.inquiryId || req.body.inquiryId);
     if (inquiry === undefined) {
@@ -254,6 +264,7 @@ export class Validation {
     Validation.businessIdValid,
     Validation.answerDefined,
     Validation.answerValid,
+    Validation.businessIdExists,
     Validation.inquiryIdExists,
     Validation.ownsBusiness,
   ];
@@ -261,7 +272,22 @@ export class Validation {
   static publicityToggleMiddleware = [
     Validation.businessIdDefined,
     Validation.businessIdValid,
+    Validation.businessIdExists,
     Validation.inquiryIdExists,
+    Validation.ownsBusiness,
+  ];
+
+  static claimBusinessMiddleware = [
+    Validation.businessIdDefined,
+    Validation.businessIdValid,
+    Validation.businessIdExists,
+    Validation.businessIdUnclaimed,
+  ];
+
+  static unclaimBusinessMiddleware = [
+    Validation.businessIdDefined,
+    Validation.businessIdValid,
+    Validation.businessIdExists,
     Validation.ownsBusiness,
   ];
 }

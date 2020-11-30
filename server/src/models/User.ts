@@ -1,6 +1,5 @@
 import { Entity, PrimaryColumn, Column, BaseEntity } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import Business from './business/Business';
 
 @Entity()
 export class User extends BaseEntity {
@@ -16,16 +15,26 @@ export class User extends BaseEntity {
   @Column({ name: 'password' })
   _password: string;
 
-  // TODO: make this a column (one-to-many? many-to-many?) once business class has entity definition
-  private _following: Set<Business>;
+  @Column('text', { name: 'owned', array: true })
+  _owned: string[];
 
-  constructor(email: string, username: string, password: string, following?: Business[] | Set<Business>) {
+  // TODO: make this a column (one-to-many? many-to-many?) once business class has entity definition
+  private _following: Set<string>;
+
+  constructor(
+    email: string,
+    username: string,
+    password: string,
+    following?: string[] | Set<string>,
+    owned?: Set<string>,
+  ) {
     super();
     this.id = uuidv4();
     this._email = email;
     this._username = username;
     this._password = password;
     this._following = new Set(following);
+    this._owned = Array.from(owned || []);
   }
 
   get email(): string {
@@ -52,15 +61,28 @@ export class User extends BaseEntity {
     this._password = password;
   }
 
-  get following(): Set<Business> {
+  get following(): Set<string> {
     return new Set(this._following);
   }
 
-  followBusiness(business: Business): void {
+  get owned(): string[] {
+    return this._owned;
+  }
+
+  claimBusiness(businessId: string): void {
+    this._owned.push(businessId);
+  }
+
+  unclaimBusiness(businessId: string): void {
+    this._owned = this._owned.filter((id) => id !== businessId);
+    //this._owned.delete(businessId);
+  }
+
+  followBusiness(business: string): void {
     this._following.add(business);
   }
 
-  unfollowBusiness(business: Business): void {
-    this._following.add(business);
+  unfollowBusiness(business: string): boolean {
+    return this._following.delete(business);
   }
 }

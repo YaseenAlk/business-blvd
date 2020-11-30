@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import UserRepository from '../repositories/UserRepository';
 
 export class Auth {
-  static enforceSignedIn(req: Request, res: Response, next: NextFunction): void {
+  static async enforceSignedIn(req: Request, res: Response, next: NextFunction): Promise<void> {
     const session = req.session;
-    if (session.userID === undefined || !UserRepository.verifyId(session.userID)) {
+    if (session.userID === undefined || !(await UserRepository.verifyId(session.userID))) {
       res.status(401).json({ message: 'You must be signed in to perform this action' }).end();
       return;
     }

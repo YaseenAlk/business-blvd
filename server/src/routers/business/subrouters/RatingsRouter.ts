@@ -24,7 +24,7 @@ class RatingsRouter {
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getBothRatings(businessId);
+        const { status, data } = this._controller.getBothRatingsAndAverages(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -34,10 +34,11 @@ class RatingsRouter {
     /***************
     SET USER RATINGS
     ****************/
-    this._router.put('/:userId', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { businessId, userId } = req.params;
+        const { businessId } = req.params;
         const { safetyRating, serviceRating } = req.body;
+        const { userId } = req.session;
         const { status, data } = this._controller.setRatings(businessId, userId, safetyRating, serviceRating);
         res.status(status).json(data);
       } catch (error) {

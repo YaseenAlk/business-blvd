@@ -34,4 +34,24 @@ export default class BusinessRatings {
   public getSafetyRating(userId: string): number | undefined {
     return this._safetyRatingsMap.get(userId);
   }
+
+  private getAverage(map: TSMap<string, number>) {
+    const values = map.values();
+    const sum = values.reduce((a, b) => a + b, 0);
+    const avg = sum / values.length || 0;
+    return avg;
+  }
+
+  public getSafetyRatings(): { average: number; ratings: Array<number> } {
+    return {
+      average: this.getAverage(this._safetyRatingsMap),
+      ratings: this._safetyRatingsMap.values(),
+    };
+  }
+  public getServiceRatings(): { average: number; ratings: Array<number> } {
+    return {
+      average: this.getAverage(this._serviceRatingsMap),
+      ratings: this._serviceRatingsMap.values(),
+    };
+  }
 }

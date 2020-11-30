@@ -45,6 +45,13 @@ class UserController {
       return { status: 200, message: 'Account deleted.' };
     });
   }
+
+  // might decide to move this to the BusinessController
+  getClaimedBusinesses(userId: string): Promise<ReturnObj & { data: string[] }> {
+    return UserRepository.getOwnedBusinesses(userId).then((businesses) => {
+      return { status: 200, data: businesses };
+    });
+  }
 }
 
 export = new UserController();

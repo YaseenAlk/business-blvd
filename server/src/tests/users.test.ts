@@ -1,6 +1,6 @@
 import { SuperTest, Test } from 'supertest';
 import { default as request } from 'supertest-session';
-
+import { v4 as uuidv4 } from 'uuid';
 import buildServer, { Server } from '../server';
 let server: Server;
 
@@ -13,10 +13,10 @@ beforeAll(async (done) => {
     done();
   });
 });
-
+const id = uuidv4();
 const testUser = {
-  email: 'benbit@mit.edu',
-  username: 'benbit',
+  email: `${id}@mit.edu`,
+  username: id,
   password: 'SixSmootsApart',
 };
 

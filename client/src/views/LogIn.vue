@@ -52,7 +52,7 @@ export default {
                 eventBus.$emit('successful-login', user);
                 this.$router.push('/map');
             }).catch((err) => {
-                this.error = err.response.data.message;
+                this.error = err.response.data.message || err;
             });
         }
     }

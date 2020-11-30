@@ -3,10 +3,10 @@
         <b-link to='/map' class="grid-item">
             <HomePageCard title="Business Map" variant="map" size="64" />
         </b-link>
-        <b-link to='report' class="grid-item grid-item-disabled" disabled>
-            <HomePageCard title="Submit a Covid Safety Report" variant="report" size="64"/>
+        <b-link to='/report' class="grid-item">
+            <HomePageCard title="Rate a Business" variant="report" size="64"/>
         </b-link>
-        <b-link to='/claim' class="grid-item grid-item-disabled" disabled>
+        <b-link to='/claim' class="grid-item">
             <HomePageCard title="Claim a Business" variant="business" size="64" />
         </b-link>
         <b-link to='/account' class="grid-item">
@@ -36,13 +36,13 @@ export default {
 }
 
 .grid-item {
-    background-color: rgb(215, 253, 245);
+    background-color: white;
     border-radius: 12px;
     transition: all 0.2s ease-in-out;
 }
 
 .grid-item:hover{
-    background-color: rgb(162, 255, 235);
+    background-color: rgb(255, 255, 255);
 }
 
 .grid-item-disabled {

@@ -13,7 +13,6 @@
             <b-form-group label="Password:" label-for="password" label-align="left" label-cols-sm="4">
                 <b-form-input id="password" type="password" v-model="form.password" size="sm" required/>
             </b-form-group>
-            <b-alert variant="success" v-bind:show="success !== undefined">{{success}}</b-alert>
             <b-alert variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
             <b-button type="submit" variant="success">Sign Up</b-button>
         </b-form>
@@ -35,17 +34,16 @@ export default {
     },
     methods: {
         clearAlerts(){
-            this.success = undefined;
             this.error = undefined;
         },
         onSubmit: function(){
             this.clearAlerts(); 
-            axios.post('/api/users', this.form).then((res) => {
-                this.success = res.data.message;
+            axios.post('/api/users', this.form).then(() => {
                 let user = { username: this.form.username };
                 eventBus.$emit('successful-login', user);
+                this.$router.push('/map');
             }).catch((err) => {
-                this.error = err.response.data.message;
+                this.error = err.response.data.message || err;
             });
         },
     },
@@ -56,7 +54,6 @@ export default {
             username: undefined,
             password: undefined,
         },
-        success: undefined,
         error: undefined,
         fields: undefined //for debugging purposes, remove in deployment
       };

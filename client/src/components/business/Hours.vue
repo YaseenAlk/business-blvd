@@ -4,7 +4,7 @@
     <b-list-group>
       <b-list-group-item v-for="day in hours" :key="day.k">
         <h4 class="text-center">
-          {{ day.hours.open.hour + ":" + day.hours.open.minute }} - {{ day.hours.close.hour + ":" + day.hours.close.minute }}
+          {{dayMap[day.day] + "  " +day.hours.open.hour + ":" + day.hours.open.minute }} - {{ day.hours.close.hour + ":" + day.hours.close.minute }}
         </h4>
       </b-list-group-item>
     </b-list-group>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+const dayMap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 export default {
     name: 'Hours',
     props: {
@@ -28,6 +30,7 @@ export default {
       });
       return {
         hours,
+        dayMap
       }
     },
 }

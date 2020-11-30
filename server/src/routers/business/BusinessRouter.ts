@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import BusinessController from '../..//controllers/business/BusinessController';
+import { Validation } from '../../middleware/Validation';
+import { Auth } from '../../middleware/Auth';
+import BusinessController from '../../controllers/business/BusinessController';
 import PositionRouter from './subrouters/PositionRouter';
 import RatingsRouter from './subrouters/RatingsRouter';
 import HoursRouter from './subrouters/HoursRouter';
@@ -53,6 +55,41 @@ class BusinessRouter {
         next(error);
       }
     });
+
+    /***************
+    CLAIM BUSINESS ROUTES
+    ****************/
+    this._router.post(
+      '/claim',
+      Auth.enforceSignedIn,
+      Validation.claimBusinessMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const userId = req.session.userID;
+          const { status, message } = await this._controller.claimBusiness(businessId, userId);
+          res.status(status).json({ message }).end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
+
+    this._router.delete(
+      '/claim',
+      Auth.enforceSignedIn,
+      Validation.unclaimBusinessMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const userId = req.session.userID;
+          const { status, message } = await this._controller.unclaimBusiness(businessId, userId);
+          res.status(status).json({ message }).end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
   }
 }
 
