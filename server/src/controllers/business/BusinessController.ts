@@ -2,6 +2,7 @@ import { TSMap } from 'typescript-map';
 
 import Business from '../../models/business/Business';
 import { Days, Time } from '../../models/business/BusinessHours';
+import UserRepository from '../../repositories/UserRepository';
 
 import { ReturnObj } from '../Common';
 
@@ -97,10 +98,26 @@ class BusinessController {
   /***************
   RATINGS METHODS
   ****************/
+  // deprecated?
   getBothRatings(businessId: string): ReturnObj {
     const businessExists = this.businessExists(businessId);
     if (businessExists) {
       return { status: 200, data: data.get(businessId)?.ratings };
+    } else {
+      return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
+
+  getBothRatingsAndAverages(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return {
+        status: 200,
+        data: {
+          safety: data.get(businessId)?.ratings.getSafetyRatings(),
+          service: data.get(businessId)?.ratings.getServiceRatings(),
+        },
+      };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
     }
@@ -146,7 +163,7 @@ class BusinessController {
     const businessExists = this.businessExists(businessId);
     if (businessExists) {
       const businessSocialMedia = data.get(businessId)?.socialMedia.getSocialUrls();
-      return { status: 201, data: businessSocialMedia };
+      return { status: 200, data: businessSocialMedia };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
     }
@@ -173,6 +190,59 @@ class BusinessController {
       return { status: 201, data: 'Updated social media!' };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
+
+  /***************
+  FOLLOWERS METHODS
+  ****************/
+  getFollowers(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).getFollowers() };
+    } else {
+      return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
+
+  isFollowedBy(businessId: string, userId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).isFollowedBy(userId) };
+    } else {
+      return { status: 404, data: `No business found with id ${businessId}` };
+    }
+  }
+
+  unfollow(businessId: string, userId: string): Promise<ReturnObj> {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      data.get(businessId).removeFollower(userId);
+      return UserRepository.findOneByID(userId).then((account) => {
+        account?.unfollowBusiness(businessId);
+        return {
+          status: 200,
+          message: `Unfollow successful!`,
+        };
+      });
+    } else {
+      return Promise.resolve({ status: 404, data: `No business found with id ${businessId}` });
+    }
+  }
+
+  follow(businessId: string, userId: string): Promise<ReturnObj> {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      data.get(businessId).addFollower(userId);
+      return UserRepository.findOneByID(userId).then((account) => {
+        account?.followBusiness(businessId);
+        return {
+          status: 200,
+          message: `Follow successful!`,
+        };
+      });
+    } else {
+      return Promise.resolve({ status: 404, data: `No business found with id ${businessId}` });
     }
   }
 }

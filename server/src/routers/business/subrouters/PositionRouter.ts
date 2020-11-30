@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
+import { Validation } from '../../../middleware/Validation';
 
 class PositionRouter {
   private _router = Router({ mergeParams: true });
@@ -34,7 +35,7 @@ class PositionRouter {
     /***************
     SET POSITION ROUTE
     ****************/
-    this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/', Validation.ownsBusiness, (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { address, lat, lng } = req.body;

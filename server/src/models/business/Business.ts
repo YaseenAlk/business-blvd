@@ -5,6 +5,7 @@ import { BusinessTags } from './BusinessTags';
 import BusinessRatings from './BusinessRatings';
 import BusinessSocialMedia from './BusinessSocialMedia';
 import { Days, BusinessHours } from './BusinessHours';
+import { Inquiry } from '../Inquiry';
 
 interface BusinessJSON {
   name: string;
@@ -16,6 +17,7 @@ interface BusinessJSON {
   socialMedia: BusinessSocialMedia;
   followers: string[];
   tags: BusinessTags[];
+  inquiries: Inquiry[];
   ownerId: string;
   internalURL: string;
   externalURL: string;
@@ -32,7 +34,7 @@ export default class Business {
   private _socialMedia: BusinessSocialMedia;
   private _followers: Set<string> = new Set();
   private _tags: Set<BusinessTags>;
-  // private faq: BusinessFAQ;
+  private _inquiries: Inquiry[];
   private _ownerId: string;
   private _internalURL: string;
   private _externalURL: string;
@@ -47,7 +49,7 @@ export default class Business {
     this._socialMedia = entry.socialMedia;
     this._followers = new Set(entry.followers);
     this._tags = new Set(entry.tags);
-    // faq: BusinessFAQ;
+    this._inquiries = Array.from(entry.inquiries);
     this._ownerId = entry.ownerId;
     this._internalURL = entry.internalURL;
     this._externalURL = entry.externalURL;
@@ -59,6 +61,10 @@ export default class Business {
   }
   set name(name: string) {
     this._name = name;
+  }
+
+  get inquiries(): Inquiry[] {
+    return Array.from(this._inquiries);
   }
 
   get position(): BusinessPosition {
@@ -160,6 +166,7 @@ export default class Business {
       socialMedia: this._socialMedia,
       followers: Array.from(this._followers),
       tags: Array.from(this._tags),
+      inquiries: Array.from(this._inquiries),
       ownerId: this._ownerId,
       internalURL: this._internalURL,
       externalURL: this._externalURL,
@@ -169,6 +176,14 @@ export default class Business {
 
   static generateExample(): Business {
     const businessId = uuidv4();
+    const inquiry = new Inquiry(
+      uuidv4(),
+      uuidv4(),
+      businessId,
+      'Are you open?',
+      'public',
+      'Yes we are. Buy something please.',
+    );
 
     const businessJSON: BusinessJSON = {
       name: "Poppa's Workshop",
@@ -183,7 +198,7 @@ export default class Business {
         'https://www.instagram.com',
       ),
       tags: [BusinessTags.DELIVERY],
-      // faq: BusinessFAQ;
+      inquiries: [inquiry, inquiry, inquiry],
       ownerId: uuidv4(),
       followers: ['33', '13'],
       internalURL: 'business/' + businessId,

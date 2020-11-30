@@ -27,7 +27,6 @@ class MasterRouter {
     this._router.use('/business/:businessId', this._subrouterBusiness);
     this._router.use('/users', this._subrouterUsers);
     this._router.use('/inquiries', this._subrouterInquiries);
-    this._router.use('/business/:id', this._subrouterBusiness);
   }
 }
 

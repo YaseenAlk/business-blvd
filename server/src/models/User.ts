@@ -1,6 +1,5 @@
 import { Entity, PrimaryColumn, Column, BaseEntity } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import Business from './business/Business';
 
 @Entity()
 export class User extends BaseEntity {
@@ -17,9 +16,9 @@ export class User extends BaseEntity {
   _password: string;
 
   // TODO: make this a column (one-to-many? many-to-many?) once business class has entity definition
-  private _following: Set<Business>;
+  private _following: Set<string>;
 
-  constructor(email: string, username: string, password: string, following?: Business[] | Set<Business>) {
+  constructor(email: string, username: string, password: string, following?: string[] | Set<string>) {
     super();
     this.id = uuidv4();
     this._email = email;
@@ -52,15 +51,15 @@ export class User extends BaseEntity {
     this._password = password;
   }
 
-  get following(): Set<Business> {
+  get following(): Set<string> {
     return new Set(this._following);
   }
 
-  followBusiness(business: Business): void {
+  followBusiness(business: string): void {
     this._following.add(business);
   }
 
-  unfollowBusiness(business: Business): void {
+  unfollowBusiness(business: string): void {
     this._following.add(business);
   }
 }
