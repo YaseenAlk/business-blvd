@@ -34,9 +34,10 @@ class RatingsRouter {
     /***************
     SET USER RATINGS
     ****************/
-    this._router.put('/:userId', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { businessId, userId } = req.params;
+        const { businessId } = req.params;
+        const { userId } = req.session;
         const { safetyRating, serviceRating } = req.body;
         const { status, data } = this._controller.setRatings(businessId, userId, safetyRating, serviceRating);
         res.status(status).json(data);
