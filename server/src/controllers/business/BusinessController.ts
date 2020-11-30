@@ -247,36 +247,36 @@ class BusinessController {
   TAG METHODS
   ****************/
   getTags(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).tags };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.tags };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   hasTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).hasTag(tagId) };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.hasTag(tagId) };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   addTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).addTag(tagId) };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.addTag(tagId) };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   removeTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).removeTag(tagId) };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.removeTag(tagId) };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
@@ -286,18 +286,18 @@ class BusinessController {
   NAME METHODS
   ****************/
   getName(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).name };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.name };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   setName(businessId: string, name: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      data.get(businessId).name = name;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      business.name = name;
       return { status: 200, data: `Changed business name.` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
@@ -308,18 +308,18 @@ class BusinessController {
   DESCRIPTION METHODS
   ****************/
   getDescription(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).description };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.description };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   setDescription(businessId: string, description: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      data.get(businessId).description = description;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      business.description = description;
       return { status: 200, data: `Changed business description.` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
@@ -330,18 +330,18 @@ class BusinessController {
   OWNER METHODS
   ****************/
   getOwner(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).ownerId };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.ownerId };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   setOwner(businessId: string, ownerId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      data.get(businessId).ownerId = ownerId;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      business.ownerId = ownerId;
       return { status: 200, data: `Changed business ownerId.` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
@@ -352,18 +352,18 @@ class BusinessController {
   URL METHODS
   ****************/
   getExternalURL(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).externalURL };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.externalURL };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   setExternalURL(businessId: string, url: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      data.get(businessId).externalURL = url;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      business.externalURL = url;
       return { status: 200, data: `Changed business external url.` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
@@ -374,18 +374,18 @@ class BusinessController {
   PHONE METHODS
   ****************/
   getPhoneNumber(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).phone };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.phone };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   setPhoneNumber(businessId: string, phone: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      data.get(businessId).phone = phone;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      business.phone = phone;
       return { status: 200, data: `Changed business external url.` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
