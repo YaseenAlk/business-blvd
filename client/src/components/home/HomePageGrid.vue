@@ -3,8 +3,8 @@
         <b-link to='/map' class="grid-item">
             <HomePageCard title="Business Map" variant="map" size="64" />
         </b-link>
-        <b-link to='report' class="grid-item grid-item-disabled" disabled>
-            <HomePageCard title="Submit a Covid Safety Report" variant="report" size="64"/>
+        <b-link to='/report' class="grid-item">
+            <HomePageCard title="Submit a Business Report" variant="report" size="64"/>
         </b-link>
         <b-link to='/claim' class="grid-item grid-item-disabled" disabled>
             <HomePageCard title="Claim a Business" variant="business" size="64" />
