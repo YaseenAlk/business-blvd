@@ -193,6 +193,24 @@ class BusinessController {
     }
   }
 
+  claimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
+    // errors and validation are already handled by middleware at the router level
+    const business = data.get(businessId);
+    business.ownerId = userId;
+    return UserRepository.addBusinessOwned(userId, businessId).then(() => {
+      return { status: 200, message: 'Business successfully claimed!' };
+    });
+  }
+
+  unclaimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
+    // errors and validation are already handled by middleware at the router level
+    const business = data.get(businessId);
+    business.ownerId = undefined;
+    return UserRepository.removeBusinessOwned(userId, businessId).then(() => {
+      return { status: 200, message: 'Business successfully unclaimed!' };
+    });
+  }
+
   /***************
   FOLLOWERS METHODS
   ****************/

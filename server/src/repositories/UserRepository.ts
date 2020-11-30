@@ -1,4 +1,5 @@
 import { User } from '../models/User';
+import Business from '../models/business/Business';
 
 class UserRepository {
   findOneByID(uuid: string): Promise<User | undefined> {
@@ -24,7 +25,27 @@ class UserRepository {
     });
   }
 
-  verifyId(id: string) {
+  addBusinessOwned(userId: string, businessId: string): Promise<User | undefined> {
+    return User.findOne({ id: userId }).then((user) => {
+      user?.claimBusiness(businessId);
+      return user?.save();
+    });
+  }
+
+  removeBusinessOwned(userId: string, businessId: string): Promise<User | undefined> {
+    return User.findOne({ id: userId }).then((user) => {
+      user?.unclaimBusiness(businessId);
+      return user?.save();
+    });
+  }
+
+  getOwnedBusinesses(userId: string): Promise<string[]> {
+    return User.findOne({ id: userId }).then((user) => {
+      return user ? Array.from(user.owned) : [];
+    });
+  }
+
+  verifyId(id: string): Promise<boolean> {
     return User.findOne({ id }).then((user) => user !== undefined);
   }
 }

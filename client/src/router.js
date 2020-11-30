@@ -38,10 +38,10 @@ export default new Router({
                 import ('./views/Business.vue')
         },
         {
-            path: '/edit',
-            name: 'EditBusiness',
+            path: '/claim',
+            name: 'Claim',
             component: () =>
-                import ('./views/EditBusiness.vue')
+                import ('./views/Claim.vue')
         },
         {
             path: '/account',

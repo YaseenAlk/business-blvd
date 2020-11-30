@@ -44,10 +44,16 @@ export default {
     color: black;
     box-shadow: 0 0 20px -1px rgba(0, 0, 0, 0.4);
     border-radius: 12px;
+    transition: all 0.15s ease-in-out;
+}
+
+.card-item:hover{
+    box-shadow: 0 0 10px 5px rgba(16, 45, 143, 0.4);
 }
 
 .card-title {
     margin-top: 12px;
     font-size: 1.25rem;
+   
 }
 </style>

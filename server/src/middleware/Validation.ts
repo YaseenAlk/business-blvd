@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import UserRepository from '../repositories/UserRepository';
 import BusinessController from '../controllers/business/BusinessController'; // hopefully we transition this to a repository
 import InquiryRepository from '../repositories/InquiryRepository';
-import BusinessJSON from '../models/business/Business';
+import { BusinessJSON } from '../models/business/Business';
 
 export class Validation {
   // auth
@@ -198,9 +198,19 @@ export class Validation {
   static ownsBusiness(req: Request, res: Response, next: NextFunction): void {
     // we will need to change this once BusinessRepository exists
     const business: BusinessJSON = BusinessController.getBusiness(req.params.businessId || req.body.businessId).data;
-    const user = req.session.userID;
-    if (business?.ownerId !== user) {
+    const userID = req.session.userID;
+    if (business?.ownerId !== userID) {
       res.status(409).json({ message: 'Not authorized to manage this business inquiry' }).end();
+      return;
+    }
+    next();
+  }
+
+  static businessIdUnclaimed(req: Request, res: Response, next: NextFunction): void {
+    // we will need to change this once BusinessRepository exists
+    const business: BusinessJSON = BusinessController.getBusiness(req.params.businessId || req.body.businessId).data;
+    if (business?.ownerId) {
+      res.status(409).json({ message: 'Business already claimed' }).end();
       return;
     }
     next();
@@ -255,6 +265,7 @@ export class Validation {
     Validation.businessIdValid,
     Validation.answerDefined,
     Validation.answerValid,
+    Validation.businessIdExists,
     Validation.inquiryIdExists,
     Validation.ownsBusiness,
   ];
@@ -262,7 +273,22 @@ export class Validation {
   static publicityToggleMiddleware = [
     Validation.businessIdDefined,
     Validation.businessIdValid,
+    Validation.businessIdExists,
     Validation.inquiryIdExists,
+    Validation.ownsBusiness,
+  ];
+
+  static claimBusinessMiddleware = [
+    Validation.businessIdDefined,
+    Validation.businessIdValid,
+    Validation.businessIdExists,
+    Validation.businessIdUnclaimed,
+  ];
+
+  static unclaimBusinessMiddleware = [
+    Validation.businessIdDefined,
+    Validation.businessIdValid,
+    Validation.businessIdExists,
     Validation.ownsBusiness,
   ];
 }

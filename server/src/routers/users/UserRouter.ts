@@ -19,6 +19,14 @@ class UserRouter {
   constructor() {
     this._account();
     this._authentication();
+    this._router.get('/businesses', Auth.enforceSignedIn, async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const resp = await UserController.getClaimedBusinesses(req.session.userID);
+        res.status(resp.status).json(resp.data).end();
+      } catch (error) {
+        next(error);
+      }
+    });
   }
 
   private _account() {

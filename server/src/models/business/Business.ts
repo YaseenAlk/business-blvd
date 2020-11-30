@@ -7,7 +7,7 @@ import BusinessSocialMedia from './BusinessSocialMedia';
 import { Days, BusinessHours } from './BusinessHours';
 import { Inquiry } from '../Inquiry';
 
-interface BusinessJSON {
+export interface BusinessJSON {
   name: string;
   position: BusinessPosition;
   description: string;
@@ -18,7 +18,7 @@ interface BusinessJSON {
   followers: string[];
   tags: BusinessTags[];
   inquiries: Inquiry[];
-  ownerId: string;
+  ownerId: string | undefined;
   internalURL: string;
   externalURL: string;
   phone: string;
@@ -35,7 +35,7 @@ export default class Business {
   private _followers: Set<string> = new Set();
   private _tags: Set<BusinessTags>;
   private _inquiries: Inquiry[];
-  private _ownerId: string;
+  private _ownerId: string | undefined;
   private _internalURL: string;
   private _externalURL: string;
   private _phone: string;
@@ -120,21 +120,17 @@ export default class Business {
     return this._tags.has(tag);
   }
 
-  get ownerId(): string {
+  get ownerId(): string | undefined {
     return this._ownerId;
   }
-  set ownerId(userId: string) {
+  set ownerId(userId: string | undefined) {
     this._ownerId = userId;
   }
   public hasOwner(): boolean {
-    if (this._ownerId) {
-      return true;
-    } else {
-      return false;
-    }
+    return this._ownerId !== undefined;
   }
   public isOwner(ownerId: string): boolean {
-    return this._ownerId == ownerId;
+    return this._ownerId !== undefined && this._ownerId === ownerId;
   }
 
   get externalURL(): string {
