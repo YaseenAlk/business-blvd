@@ -2,6 +2,7 @@ import { TSMap } from 'typescript-map';
 
 import Business from '../../models/business/Business';
 import { Days, Time } from '../../models/business/BusinessHours';
+import { BusinessTags } from '../../models/business/BusinessTags';
 import UserRepository from '../../repositories/UserRepository';
 
 import { ReturnObj } from '../Common';
@@ -18,7 +19,7 @@ class BusinessController {
   }
 
   /***************
-  GET BUSINESSES METHODS
+  BUSINESSES METHODS
   ****************/
   businessExists(businessId: string): boolean {
     return data.has(businessId);
@@ -37,7 +38,7 @@ class BusinessController {
       if (businessExists) {
         return { status: 200, data: data.get(businessId).toJSON() };
       } else {
-        return { status: 404, data: `No business found with id ${businessId}` };
+        return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
       }
     }
   }
@@ -58,7 +59,7 @@ class BusinessController {
         },
       };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -68,9 +69,9 @@ class BusinessController {
       business.position.setAddress(address);
       business.position.setLat(lat);
       business.position.setLng(lng);
-      return { status: 201, data: `Updated address successfully` };
+      return { status: 200, data: `Updated address successfully` };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -82,32 +83,22 @@ class BusinessController {
     if (businessExists) {
       return { status: 200, data: data.get(businessId)?.hours.getHours() };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   setHours(businessId: string, day: Days, openTime: Time, closeTime: Time): ReturnObj {
     const businessExists = this.businessExists(businessId);
     if (businessExists) {
-      return { status: 201, data: data.get(businessId)?.hours.setHours(day, openTime, closeTime) };
+      return { status: 200, data: data.get(businessId)?.hours.setHours(day, openTime, closeTime) };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   /***************
   RATINGS METHODS
   ****************/
-  // deprecated?
-  getBothRatings(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId)?.ratings };
-    } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
-    }
-  }
-
   getBothRatingsAndAverages(businessId: string): ReturnObj {
     const businessExists = this.businessExists(businessId);
     if (businessExists) {
@@ -119,7 +110,7 @@ class BusinessController {
         },
       };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -135,7 +126,7 @@ class BusinessController {
         },
       };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -149,9 +140,9 @@ class BusinessController {
       if (serviceRating) {
         business.updateServiceRating(userId, serviceRating);
       }
-      return { status: 201, data: 'Updated ratings!' };
+      return { status: 200, data: 'Updated ratings!' };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -165,7 +156,7 @@ class BusinessController {
       const businessSocialMedia = data.get(businessId)?.socialMedia.getSocialUrls();
       return { status: 200, data: businessSocialMedia };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -187,9 +178,9 @@ class BusinessController {
       if (instagram) {
         business.instagram = instagram;
       }
-      return { status: 201, data: 'Updated social media!' };
+      return { status: 200, data: 'Updated social media!' };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -219,7 +210,7 @@ class BusinessController {
     if (businessExists) {
       return { status: 200, data: data.get(businessId).getFollowers() };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -228,7 +219,7 @@ class BusinessController {
     if (businessExists) {
       return { status: 200, data: data.get(businessId).isFollowedBy(userId) };
     } else {
-      return { status: 404, data: `No business found with id ${businessId}` };
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
@@ -244,7 +235,7 @@ class BusinessController {
         };
       });
     } else {
-      return Promise.resolve({ status: 404, data: `No business found with id ${businessId}` });
+      return Promise.resolve({ status: 404, data: `Whoops! Unable to find that business in our datastore.` });
     }
   }
 
@@ -260,7 +251,156 @@ class BusinessController {
         };
       });
     } else {
-      return Promise.resolve({ status: 404, data: `No business found with id ${businessId}` });
+      return Promise.resolve({ status: 404, data: `Whoops! Unable to find that business in our datastore.` });
+    }
+  }
+
+  /***************
+  TAG METHODS
+  ****************/
+  getTags(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).tags };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  hasTag(businessId: string, tagId: BusinessTags): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).hasTag(tagId) };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  addTag(businessId: string, tagId: BusinessTags): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).addTag(tagId) };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  removeTag(businessId: string, tagId: BusinessTags): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).removeTag(tagId) };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  /***************
+  NAME METHODS
+  ****************/
+  getName(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).name };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  setName(businessId: string, name: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      data.get(businessId).name = name;
+      return { status: 200, data: `Changed business name.` };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  /***************
+  DESCRIPTION METHODS
+  ****************/
+  getDescription(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).description };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  setDescription(businessId: string, description: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      data.get(businessId).description = description;
+      return { status: 200, data: `Changed business description.` };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  /***************
+  OWNER METHODS
+  ****************/
+  getOwner(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).ownerId };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  setOwner(businessId: string, ownerId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      data.get(businessId).ownerId = ownerId;
+      return { status: 200, data: `Changed business ownerId.` };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  /***************
+  URL METHODS
+  ****************/
+  getExternalURL(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).externalURL };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  setExternalURL(businessId: string, url: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      data.get(businessId).externalURL = url;
+      return { status: 200, data: `Changed business external url.` };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  /***************
+  PHONE METHODS
+  ****************/
+  getPhoneNumber(businessId: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      return { status: 200, data: data.get(businessId).phone };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+    }
+  }
+
+  setPhoneNumber(businessId: string, phone: string): ReturnObj {
+    const businessExists = this.businessExists(businessId);
+    if (businessExists) {
+      data.get(businessId).phone = phone;
+      return { status: 200, data: `Changed business external url.` };
+    } else {
+      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 }

@@ -57,6 +57,126 @@ class BusinessRouter {
     });
 
     /***************
+    SET/GET NAME ROUTES
+    ****************/
+    this._router.get('/name', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getName(businessId);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    this._router.put('/name', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { name } = req.body;
+        const { status, data } = this._controller.setName(businessId, name);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    /***************
+    SET/GET DESCRIPTION ROUTES
+    ****************/
+    this._router.get('/description', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getDescription(businessId);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    this._router.put('/description', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { description } = req.body;
+        const { status, data } = this._controller.setDescription(businessId, description);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    /***************
+    SET/GET OWNER ROUTES
+    ****************/
+    this._router.get('/owner', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getOwner(businessId);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    this._router.put('/owner', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { ownerId } = req.body;
+        const { status, data } = this._controller.setOwner(businessId, ownerId);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    /***************
+    SET/GET URL ROUTES
+    ****************/
+    this._router.get('/url', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getExternalURL(businessId);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    this._router.put('/url', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { url } = req.body;
+        const { status, data } = this._controller.setExternalURL(businessId, url);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    /***************
+    SET/GET PHONE ROUTES
+    ****************/
+    this._router.get('/phone', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { status, data } = this._controller.getPhoneNumber(businessId);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    this._router.put('/phone', (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const { phone } = req.body;
+        const { status, data } = this._controller.setPhoneNumber(businessId, phone);
+        res.status(status).json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    /***************
     CLAIM BUSINESS ROUTES
     ****************/
     this._router.post(
