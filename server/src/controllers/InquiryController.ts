@@ -1,12 +1,12 @@
 import InquiryRepository from '../repositories/InquiryRepository';
-import BusinessController from './business/BusinessController';
+import BusinessRepository from '../repositories/BusinessRepository';
 import { v4 as uuidv4 } from 'uuid';
-import { BusinessJSON } from '../models/business/Business';
+import Business from '../models/business/Business';
 
 class InquiryController {
   getInquiriesFromBusiness(id: string, userId?: string) {
     const inquiries = InquiryRepository.getPublicInquiriesFromBusiness(id);
-    const business: BusinessJSON = BusinessController.getBusiness(id).data;
+    const business: Business | undefined = BusinessRepository.findOneById(id);
     if (userId) {
       if (business?.ownerId === userId) {
         inquiries.push(...InquiryRepository.getPrivateInquiriesFromBusiness(id));
