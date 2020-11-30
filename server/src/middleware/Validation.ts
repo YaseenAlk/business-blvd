@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import UserRepository from '../repositories/UserRepository';
-import BusinessController from '../controllers/business/BusinessController'; // hopefully we transition this to a repository
 import InquiryRepository from '../repositories/InquiryRepository';
-import BusinessJSON from '../models/business/Business';
+import Business from '../models/business/Business';
+import BusinessRepository from '../repositories/BusinessRepository';
 
 export class Validation {
   // auth
@@ -156,7 +156,7 @@ export class Validation {
   }
 
   static businessIdExists(req: Request, res: Response, next: NextFunction): void {
-    const exists = BusinessController.businessExists(req.params.businessId || req.body.businessId);
+    const exists = BusinessRepository.businessExists(req.params.businessId || req.body.businessId);
     if (!exists) {
       res.status(404).json({ message: 'Business does not exist' }).end();
       return;
@@ -196,10 +196,9 @@ export class Validation {
   }
 
   static ownsBusiness(req: Request, res: Response, next: NextFunction): void {
-    // we will need to change this once BusinessRepository exists
-    const business: BusinessJSON = BusinessController.getBusiness(req.params.businessId || req.body.businessId).data;
+    const business: Business | undefined = BusinessRepository.findOneById(req.params.businessId || req.body.businessId);
     const user = req.session.userID;
-    if (business?.ownerId !== user) {
+    if (!business || !business.isOwner(user)) {
       res.status(409).json({ message: 'Not authorized to manage this business inquiry' }).end();
       return;
     }

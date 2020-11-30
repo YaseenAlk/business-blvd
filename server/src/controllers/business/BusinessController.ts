@@ -1,40 +1,26 @@
-import { TSMap } from 'typescript-map';
-
-import Business from '../../models/business/Business';
 import { Days, Time } from '../../models/business/BusinessHours';
 
 import { ReturnObj } from '../Common';
 
-const data: TSMap<string, Business> = new TSMap();
+import BusinessRepository from '../../repositories/BusinessRepository';
 
 class BusinessController {
-  constructor() {
-    const b1: Business = Business.generateExample();
-    const b2: Business = Business.generateExample();
-
-    data.set(b1.businessId, b1);
-    data.set(b2.businessId, b2);
-  }
-
   /***************
   GET BUSINESSES METHODS
   ****************/
-  businessExists(businessId: string): boolean {
-    return data.has(businessId);
-  }
 
   getBusiness(businessId: string): ReturnObj {
     if (businessId == 'all') {
       return {
         status: 200,
-        data: data.values().map((business) => {
+        data: BusinessRepository.getAllBusinesses().map((business) => {
           return business.toJSON();
         }),
       };
     } else {
-      const businessExists = this.businessExists(businessId);
-      if (businessExists) {
-        return { status: 200, data: data.get(businessId).toJSON() };
+      const business = BusinessRepository.findOneById(businessId);
+      if (business) {
+        return { status: 200, data: business.toJSON() };
       } else {
         return { status: 404, data: `No business found with id ${businessId}` };
       }
@@ -45,9 +31,9 @@ class BusinessController {
   POSITION METHODS
   ****************/
   getPosition(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      const position = data.get(businessId)?.position;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      const position = business.position;
       return {
         status: 200,
         data: {
@@ -62,7 +48,7 @@ class BusinessController {
   }
 
   setPosition(businessId: string, address: string, lat: number, lng: number): ReturnObj {
-    const business = data.get(businessId);
+    const business = BusinessRepository.findOneById(businessId);
     if (business) {
       business.position.setAddress(address);
       business.position.setLat(lat);
@@ -77,18 +63,18 @@ class BusinessController {
   HOURS METHODS
   ****************/
   getHours(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId)?.hours.getHours() };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.hours.getHours() };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
 
   setHours(businessId: string, day: Days, openTime: Time, closeTime: Time): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 201, data: data.get(businessId)?.hours.setHours(day, openTime, closeTime) };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 201, data: business.hours.setHours(day, openTime, closeTime) };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
     }
@@ -98,18 +84,18 @@ class BusinessController {
   RATINGS METHODS
   ****************/
   getBothRatings(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId)?.ratings };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.ratings };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
 
   getBothRatingsByUser(businessId: string, userId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      const businessRatings = data.get(businessId)?.ratings;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      const businessRatings = business.ratings;
       return {
         status: 200,
         data: {
@@ -123,14 +109,14 @@ class BusinessController {
   }
 
   setRatings(businessId: string, userId: string, safetyRating: number, serviceRating: number): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      const business = data.get(businessId)?.ratings;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      const rating = business.ratings;
       if (safetyRating) {
-        business.updateSafetyRating(userId, safetyRating);
+        rating.updateSafetyRating(userId, safetyRating);
       }
       if (serviceRating) {
-        business.updateServiceRating(userId, serviceRating);
+        rating.updateServiceRating(userId, serviceRating);
       }
       return { status: 201, data: 'Updated ratings!' };
     } else {
@@ -143,9 +129,9 @@ class BusinessController {
   ****************/
 
   getSocialMedia(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      const businessSocialMedia = data.get(businessId)?.socialMedia.getSocialUrls();
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      const businessSocialMedia = business.socialMedia.getSocialUrls();
       return { status: 201, data: businessSocialMedia };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
@@ -158,17 +144,17 @@ class BusinessController {
     facebook: string | undefined,
     instagram: string | undefined,
   ): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      const business = data.get(businessId)?.socialMedia;
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      const socials = business.socialMedia;
       if (twitter) {
-        business.twitter = twitter;
+        socials.twitter = twitter;
       }
       if (facebook) {
-        business.facebook = facebook;
+        socials.facebook = facebook;
       }
       if (instagram) {
-        business.instagram = instagram;
+        socials.instagram = instagram;
       }
       return { status: 201, data: 'Updated social media!' };
     } else {
