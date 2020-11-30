@@ -3,11 +3,7 @@ import { TSMap } from 'typescript-map';
 import Business from '../../models/business/Business';
 import { Days, Time } from '../../models/business/BusinessHours';
 
-type ReturnObj = {
-  status: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
-};
+import { ReturnObj } from '../Common';
 
 const data: TSMap<string, Business> = new TSMap();
 

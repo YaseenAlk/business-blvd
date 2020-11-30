@@ -1,13 +1,16 @@
 import UserRepository from '../repositories/UserRepository';
+import { ReturnObj } from './Common';
 
 class UserController {
-  async signIn(username: string) {
-    const account = await UserRepository.findOneByUsername(username);
-    return {
-      message: `Successfully logged in! Welcome ${username}.`,
-      userId: account?.id,
-      username: account?.username,
-    };
+  signIn(username: string): Promise<ReturnObj & { userId?: string; username?: string }> {
+    return UserRepository.findOneByUsername(username).then((account) => {
+      return {
+        status: 200,
+        message: `Successfully logged in! Welcome ${username}.`,
+        userId: account?.id,
+        username: account?.username,
+      };
+    });
   }
 
   signOut() {
@@ -15,29 +18,32 @@ class UserController {
     return { message: 'Successfully logged out.' };
   }
 
-  async getLoginStatus(sessionId?: string) {
-    const account = sessionId ? await UserRepository.findOneByID(sessionId) : undefined;
-    const response: { message: string; signedIn: boolean; userId?: string; username?: string } = {
-      message: `You are ${sessionId ? '' : 'not'} signed in ${sessionId ? `as ${account?.username}.` : '.'}`,
-      signedIn: sessionId ? true : false,
-      userId: account?.id,
-      username: account?.username,
-    };
-    if (sessionId) {
-      response.userId = account?.id;
-      response.username = account?.username;
-    }
-    return response;
+  getLoginStatus(sessionId?: string): Promise<ReturnObj & { userId?: string; username?: string }> {
+    const promise = sessionId ? UserRepository.findOneByID(sessionId) : Promise.resolve(undefined);
+    return promise.then((account) => {
+      const response: ReturnObj & { signedIn: boolean; userId?: string; username?: string } = {
+        status: 200,
+        message: `You are ${sessionId ? '' : 'not'} signed in ${sessionId ? `as ${account?.username}.` : '.'}`,
+        signedIn: sessionId ? true : false,
+      };
+      if (account) {
+        response.userId = account?.id;
+        response.username = account?.username;
+      }
+      return response;
+    });
   }
 
-  async createAccount(email: string, username: string, password: string) {
-    const user = await UserRepository.addOne(email, username, password);
-    return { message: 'Account created succesfully!', userId: user.id };
+  createAccount(email: string, username: string, password: string): Promise<ReturnObj & { userId: string }> {
+    return UserRepository.addOne(email, username, password).then((user) => {
+      return { status: 200, message: 'Account created succesfully!', userId: user.id };
+    });
   }
 
-  async deleteAccount(sessionID: string) {
-    await UserRepository.deleteOneById(sessionID);
-    return { message: 'Account deleted.' };
+  deleteAccount(sessionID: string): Promise<ReturnObj> {
+    return UserRepository.deleteOneById(sessionID).then(() => {
+      return { status: 200, message: 'Account deleted.' };
+    });
   }
 }
 
