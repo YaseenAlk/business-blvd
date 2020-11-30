@@ -207,8 +207,8 @@ export class Validation {
 
   static businessIdUnclaimed(req: Request, res: Response, next: NextFunction): void {
     // we will need to change this once BusinessRepository exists
-    const business: BusinessJSON = BusinessController.getBusiness(req.params.businessId || req.body.businessId).data;
-    if (business?.ownerId) {
+    const business = BusinessRepository.findOneById(req.params.businessId || req.body.businessId);
+    if (business?.hasOwner()) {
       res.status(409).json({ message: 'Business already claimed' }).end();
       return;
     }

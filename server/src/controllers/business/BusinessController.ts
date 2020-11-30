@@ -95,13 +95,13 @@ class BusinessController {
   }
 
   getBothRatingsAndAverages(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
       return {
         status: 200,
         data: {
-          safety: data.get(businessId)?.ratings.getSafetyRatings(),
-          service: data.get(businessId)?.ratings.getServiceRatings(),
+          safety: business.ratings.getSafetyRatings(),
+          service: business.ratings.getServiceRatings(),
         },
       };
     } else {
@@ -181,8 +181,9 @@ class BusinessController {
 
   claimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
-    const business = data.get(businessId);
-    business.ownerId = userId;
+    const business = BusinessRepository.findOneById(businessId);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    business!.ownerId = userId;
     return UserRepository.addBusinessOwned(userId, businessId).then(() => {
       return { status: 200, message: 'Business successfully claimed!' };
     });
@@ -190,8 +191,9 @@ class BusinessController {
 
   unclaimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
-    const business = data.get(businessId);
-    business.ownerId = undefined;
+    const business = BusinessRepository.findOneById(businessId);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    business!.ownerId = undefined;
     return UserRepository.removeBusinessOwned(userId, businessId).then(() => {
       return { status: 200, message: 'Business successfully unclaimed!' };
     });
@@ -201,27 +203,27 @@ class BusinessController {
   FOLLOWERS METHODS
   ****************/
   getFollowers(businessId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).getFollowers() };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.getFollowers() };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
 
   isFollowedBy(businessId: string, userId: string): ReturnObj {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      return { status: 200, data: data.get(businessId).isFollowedBy(userId) };
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      return { status: 200, data: business.isFollowedBy(userId) };
     } else {
       return { status: 404, data: `No business found with id ${businessId}` };
     }
   }
 
   unfollow(businessId: string, userId: string): Promise<ReturnObj> {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      data.get(businessId).removeFollower(userId);
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      business.removeFollower(userId);
       return UserRepository.findOneByID(userId).then((account) => {
         account?.unfollowBusiness(businessId);
         return {
@@ -235,9 +237,9 @@ class BusinessController {
   }
 
   follow(businessId: string, userId: string): Promise<ReturnObj> {
-    const businessExists = this.businessExists(businessId);
-    if (businessExists) {
-      data.get(businessId).addFollower(userId);
+    const business = BusinessRepository.findOneById(businessId);
+    if (business) {
+      business.addFollower(userId);
       return UserRepository.findOneByID(userId).then((account) => {
         account?.followBusiness(businessId);
         return {
