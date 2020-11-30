@@ -5,15 +5,23 @@
       <div class="card">
         <div class="card-preview">
           <h6>Coffee Shop</h6>
-          <h2>Darwin's Story</h2>
+          <h2>{{ this.business.name}}'s Story</h2>
         </div>
         <div class="card-info">
-          <h4>Rooted in Cambridge for over 27 years, Darwin’s four locations are locally-owned and independently authentic, serving award-winning sandwiches and carefully curated coffees in a vibrant atmosphere that is homegrown and unique.</h4>
+          <h4>{{ this.business.description }} </h4>
         </div>
       </div>
     </div>
   </div>
 </template>
+<script>
+export default {
+  name: 'About',
+  props: {
+    business: Object
+  }
+}
+</script>
 <style scoped>
 
 .card {
