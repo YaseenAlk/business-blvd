@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h3>Submit a review</h3>
+    <h3>Rate a Business</h3>
     <b-form id="review-form" @submit.prevent="onSubmit" class="form-content">
       <div>
         Select a business: <b-form-select v-model="form.selected" :options="options"></b-form-select>
