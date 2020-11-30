@@ -1,5 +1,5 @@
 import InquiryRepository from '../repositories/InquiryRepository';
-import BusinessRepository from '../repositories/BusinessRepository';
+import BusinessRepository from '../repositories/business/BusinessRepository';
 import { v4 as uuidv4 } from 'uuid';
 import Business from '../models/business/Business';
 

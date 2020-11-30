@@ -37,7 +37,7 @@ class BusinessRepository {
 
     const businessJSON: BusinessJSON = {
       name: "Poppa's Workshop",
-      position: new BusinessPosition('123 Seasame Street', 42.362541, -71.09845),
+      position: new BusinessPosition(businessId, '123 Seasame Street', 42.362541, -71.09845),
       description: 'Where the elbow grease is used.',
       businessId: businessId,
       ratings: new BusinessRatings(),

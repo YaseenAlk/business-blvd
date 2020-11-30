@@ -1,32 +1,23 @@
+//import { Entity, PrimaryColumn, Column } from 'typeorm';
+
+//@Entity()
 export default class BusinessPosition {
-  private address: string;
-  private lat: number;
-  private lng: number;
+  //@PrimaryColumn({ type: 'uuid' })
+  businessId: string;
 
-  constructor(address: string, lat: number, lng: number) {
+  //@Column()
+  address: string;
+
+  //@Column()
+  lat: number;
+
+  //@Column()
+  lng: number;
+
+  constructor(businessId: string, address: string, lat: number, lng: number) {
+    this.businessId = businessId;
     this.address = address;
     this.lat = lat;
     this.lng = lng;
-  }
-
-  getAddress(): string {
-    return this.address;
-  }
-  setAddress(address: string) {
-    this.address = address;
-  }
-
-  setLng(lng: number) {
-    this.lng = lng;
-  }
-  getLng(): number {
-    return this.lng;
-  }
-
-  setLat(lat: number) {
-    this.lat = lat;
-  }
-  getLat(): number {
-    return this.lat;
   }
 }

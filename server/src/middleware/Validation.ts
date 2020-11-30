@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import UserRepository from '../repositories/UserRepository';
 import InquiryRepository from '../repositories/InquiryRepository';
 import Business from '../models/business/Business';
-import BusinessRepository from '../repositories/BusinessRepository';
+import BusinessRepository from '../repositories/business/BusinessRepository';
 
 export class Validation {
   // auth

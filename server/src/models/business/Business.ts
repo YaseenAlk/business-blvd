@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import BusinessPosition from './BusinessPosition';
 import { BusinessTags } from './BusinessTags';
 import BusinessRatings from './BusinessRatings';
@@ -167,47 +165,5 @@ export default class Business {
       externalURL: this._externalURL,
       phone: this._phone,
     };
-  }
-
-  static generateExample(): Business {
-    const businessId = uuidv4();
-
-    const businessJSON: BusinessJSON = {
-      name: "Poppa's Workshop",
-      position: new BusinessPosition('123 Seasame Street', 42.362541, -71.09845),
-      description: 'Where the elbow grease is used.',
-      businessId: businessId,
-      ratings: new BusinessRatings(),
-      hours: new BusinessHours(),
-      socialMedia: new BusinessSocialMedia(
-        'https://www.facebook.com',
-        'https://www.twitter.com',
-        'https://www.instagram.com',
-      ),
-      tags: [BusinessTags.DELIVERY],
-      // inquiries: [uuidv4(), uuidv4(), uuidv4()],
-      ownerId: undefined,
-      followers: ['33', '13'],
-      internalURL: 'business/' + businessId,
-      externalURL: 'https://www.poppasworkshop.com',
-      phone: '867-5309',
-    };
-
-    const exampleBusiness = new Business(businessJSON);
-
-    // extra augmentations
-    exampleBusiness.hours.setHours(Days.SUNDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' });
-    exampleBusiness.hours.setHours(Days.MONDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.TUESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.WEDNESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.FRIDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.SATURDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' });
-
-    exampleBusiness.ratings.updateSafetyRating('22', 4);
-    exampleBusiness.ratings.updateSafetyRating('13', 4);
-    exampleBusiness.ratings.updateServiceRating('22', 5);
-    exampleBusiness.ratings.updateServiceRating('12', 5);
-
-    return exampleBusiness;
   }
 }

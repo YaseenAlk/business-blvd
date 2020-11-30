@@ -4,7 +4,8 @@ import UserRepository from '../../repositories/UserRepository';
 
 import { ReturnObj } from '../Common';
 
-import BusinessRepository from '../../repositories/BusinessRepository';
+import BusinessRepository from '../../repositories/business/BusinessRepository';
+import PositionRepository from '../../repositories/business/PositionRepository';
 
 class BusinessController {
   /***************
@@ -33,15 +34,14 @@ class BusinessController {
   POSITION METHODS
   ****************/
   getPosition(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
-    if (business) {
-      const position = business.position;
+    const position = PositionRepository.findOneById(businessId);
+    if (position) {
       return {
         status: 200,
         data: {
-          address: position?.getAddress(),
-          lat: position?.getLat(),
-          lng: position?.getLng(),
+          address: position?.address,
+          lat: position?.lat,
+          lng: position?.lng,
         },
       };
     } else {
@@ -52,9 +52,7 @@ class BusinessController {
   setPosition(businessId: string, address: string, lat: number, lng: number): ReturnObj {
     const business = BusinessRepository.findOneById(businessId);
     if (business) {
-      business.position.setAddress(address);
-      business.position.setLat(lat);
-      business.position.setLng(lng);
+      PositionRepository.update(businessId, address, lat, lng);
       return { status: 200, data: `Updated address successfully` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
