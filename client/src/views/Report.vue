@@ -6,10 +6,10 @@
         Select a business: <b-form-select v-model="form.selected" :options="options"></b-form-select>
       </div>
       <b-form-group label="Safety Score: " label-for="safetyScore" label-align="left" label-cols-sm="4">
-          <b-form-input id="safetyScore" type="number" v-model="form.safetyScore" size="sm" required/>
+          <b-form-input id="safetyScore" type="number" :min="0" :max="5" v-model="form.safetyScore" size="sm" required/>
       </b-form-group>
       <b-form-group label="Service Score: " label-for="serviceScore" label-align="left" label-cols-sm="4">
-          <b-form-input id="serviceScore" type="number" v-model="form.serviceScore" size="sm" required/>
+          <b-form-input id="serviceScore" type="number" :min="0" :max="5" v-model="form.serviceScore" size="sm" required/>
       </b-form-group>
       <b-form-group label="Review: " label-for="review" label-align="left" label-cols-sm="4">
           <b-form-input id="review" type="text" v-model="form.review" size="sm" required/>
