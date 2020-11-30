@@ -1,6 +1,11 @@
 <template>
     <router-link class="card" v-bind:to="internalURL">
         <h2>{{name}}</h2>
+        <div v-if="business.ownerId !== undefined">
+            <h6 class="verified-line">
+                <b-icon-patch-check-fll variant="primary" class="verified-icon" /><b>Verified Business Owner</b>
+            </h6>
+        </div>
         <p>{{address}}</p>
         <div class="card-bottom">
             <div>
@@ -20,7 +25,7 @@
 </template>
 
 <script>
-import { BIconQuestionCircle, BIconStarHalf } from 'bootstrap-vue';
+import { BIconQuestionCircle, BIconStarHalf, BIconPatchCheckFll } from 'bootstrap-vue';
 
 export default {
     name: 'MapCard',
@@ -30,6 +35,7 @@ export default {
     components: {
         BIconQuestionCircle,
         BIconStarHalf,
+        BIconPatchCheckFll
     },
     data(){
         return {
@@ -93,6 +99,15 @@ a, a:hover {
 .covid-score-subtitle {
     font-style: italic;
     font-size: 0.9rem;
+}
+
+.verified-icon {
+    margin-right: 4px;
+}
+
+.verified-line {
+    color: #007bff;
+    text-align: left;
 }
 
 </style>

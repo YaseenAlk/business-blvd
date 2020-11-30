@@ -195,7 +195,7 @@ export default class Business {
       ),
       tags: [BusinessTags.DELIVERY],
       inquiries: [inquiry, inquiry, inquiry],
-      ownerId: uuidv4(),
+      ownerId: undefined,
       followers: ['33', '13'],
       internalURL: 'business/' + businessId,
       externalURL: 'https://www.poppasworkshop.com',

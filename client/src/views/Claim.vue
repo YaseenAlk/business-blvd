@@ -58,7 +58,7 @@ export default {
       this.claimForm.successMessage = undefined;
       this.claimForm.errorMessage = undefined;
       axios.post('/api/business/' + this.claimForm.businessID + '/claim').then((res) => {
-        this.claimForm.successMessage = res.data;
+        this.claimForm.successMessage = res.data.message;
       }).catch((err) => {
         this.claimForm.errorMessage = err.response.data.message || err;
       });
@@ -67,7 +67,7 @@ export default {
       this.unclaimForm.successMessage = undefined;
       this.unclaimForm.errorMessage = undefined;
       axios.delete('/api/business/' + this.unclaimForm.businessID + '/claim').then((res) => {
-        this.unclaimForm.successMessage = res.data;
+        this.unclaimForm.successMessage = res.data.message;
       }).catch((err) => { 
         this.unclaimForm.errorMessage = err.response.data.message || err;
       });
