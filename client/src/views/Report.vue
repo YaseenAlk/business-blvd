@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h3>Rate a Business</h3>
-    <b-form id="review-form" @submit.prevent="onSubmit" class="form-content">
+    <b-form id="review-form" @submit.prevent="onSubmit" class="report-page form-content">
       <div>
         Select a business: <b-form-select v-model="form.selected" :options="options"></b-form-select>
       </div>
@@ -22,6 +22,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { BForm, BFormGroup, BAlert } from 'bootstrap-vue';
 
 export default {
   name: 'Report',
@@ -80,8 +81,16 @@ export default {
           this.error = err.response.data.message;
         });
     }
+  },
+  components: {
+    BForm, BFormGroup, BAlert
   }
 }
 </script>
 <style scoped>
+.report-page {
+  max-width: 85%;
+  margin: auto;
+
+}
 </style>
