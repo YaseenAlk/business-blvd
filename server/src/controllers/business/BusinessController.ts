@@ -20,9 +20,7 @@ class BusinessController {
     if (businessId == 'all') {
       return {
         status: 200,
-        data: /* await */ BusinessRepository.getAllBusinesses().map((business) => {
-          return business.toJSON();
-        }),
+        data: BusinessRepository.getAllBusinesses().map((business) => business.toJSON()),
       };
     } else {
       const business = /* await */ BusinessRepository.findOneById(businessId);
@@ -169,21 +167,27 @@ class BusinessController {
   claimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
     const business = /* await */ BusinessRepository.findOneById(businessId);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    business!.ownerId = userId;
-    return UserRepository.addBusinessOwned(userId, businessId).then(() => {
-      return { status: 200, message: 'Business successfully claimed!' };
-    });
+    if (business) {
+      business.ownerId = userId;
+      return UserRepository.addBusinessOwned(userId, businessId).then(() => {
+        return { status: 200, message: 'Business successfully claimed!' };
+      });
+    } else {
+      return Promise.resolve({ status: 404, message: 'Business not found' });
+    }
   }
 
   unclaimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
     const business = /* await */ BusinessRepository.findOneById(businessId);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    business!.ownerId = undefined;
-    return UserRepository.removeBusinessOwned(userId, businessId).then(() => {
-      return { status: 200, message: 'Business successfully unclaimed!' };
-    });
+    if (business) {
+      business.ownerId = undefined;
+      return UserRepository.removeBusinessOwned(userId, businessId).then(() => {
+        return { status: 200, message: 'Business successfully unclaimed!' };
+      });
+    } else {
+      return Promise.resolve({ status: 404, message: 'Business not found' });
+    }
   }
 
   /***************
@@ -332,7 +336,8 @@ class BusinessController {
   getOwner(businessId: string): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      return { status: 200, data: business.ownerId };
+      if (business.ownerId) return { status: 200, data: business.ownerId };
+      else return { status: 404, message: 'Business not currently claimed' };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }

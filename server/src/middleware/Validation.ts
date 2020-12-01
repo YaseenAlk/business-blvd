@@ -198,8 +198,12 @@ export class Validation {
   static ownsBusiness(req: Request, res: Response, next: NextFunction): void {
     const business: Business | undefined = BusinessRepository.findOneById(req.params.businessId || req.body.businessId);
     const user = req.session.userID;
-    if (!business || !business.isOwner(user)) {
-      res.status(409).json({ message: 'Not authorized to manage this business inquiry' }).end();
+    if (!business) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (!business.isOwner(user)) {
+      res.status(403).json({ message: 'Not authorized to manage this business inquiry' }).end();
       return;
     }
     next();
