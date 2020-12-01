@@ -8,6 +8,11 @@ class HoursRepository {
     return this.data.filter((hours) => hours.businessId === businessId)[0];
   }
 
+  getHoursOnDay(businessId: string, day: Days): { open: Time; close: Time } | undefined {
+    const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
+    return businessHours?.entries.get(day);
+  }
+
   clearEntries(businessId: string) {
     const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
     businessHours.entries = new TSMap<Days, { open: Time; close: Time }>();
