@@ -9,6 +9,7 @@ import PositionRepository from '../../repositories/business/PositionRepository';
 import HoursRepository from '../../repositories/business/HoursRepository';
 import RatingsRepository from '../../repositories/business/RatingsRepository';
 import SocialsRepository from '../../repositories/business/SocialsRepository';
+import TagsRepository from '../../repositories/business/TagsRepository';
 
 class BusinessController {
   /***************
@@ -244,7 +245,8 @@ class BusinessController {
   getTags(businessId: string): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      return { status: 200, data: business.tags };
+      const tags = TagsRepository.findTagsById(businessId);
+      return { status: 200, data: tags };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
@@ -253,7 +255,8 @@ class BusinessController {
   hasTag(businessId: string, tagId: BusinessTags): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      return { status: 200, data: business.hasTag(tagId) };
+      const hasTag = /* await */ TagsRepository.hasTag(businessId, tagId);
+      return { status: 200, data: hasTag };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
@@ -262,7 +265,8 @@ class BusinessController {
   addTag(businessId: string, tagId: BusinessTags): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      return { status: 200, data: business.addTag(tagId) };
+      /* await */ TagsRepository.addTagsToId(businessId, tagId);
+      return { status: 200, message: `Succesfully added tag ${tagId}` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
@@ -271,7 +275,8 @@ class BusinessController {
   removeTag(businessId: string, tagId: BusinessTags): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      return { status: 200, data: business.removeTag(tagId) };
+      /* await */ TagsRepository.removeTagsFromId(businessId, tagId);
+      return { status: 200, data: `Successfully removed tag ${tagId}` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }

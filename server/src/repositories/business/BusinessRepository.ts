@@ -5,7 +5,7 @@ import { TSMap } from 'typescript-map';
 import Business, { BusinessJSON } from '../../models/business/Business';
 
 import BusinessPosition from '../../models/business/BusinessPosition';
-import { BusinessTags } from '../../models/business/BusinessTags';
+import TagsList, { BusinessTags } from '../../models/business/BusinessTags';
 import BusinessRatings from '../../models/business/BusinessRatings';
 import BusinessSocialMedia from '../../models/business/BusinessSocialMedia';
 import { Days, BusinessHours, Time } from '../../models/business/BusinessHours';
@@ -65,7 +65,7 @@ class BusinessRepository {
         twitter: 'https://www.twitter.com',
         instagram: 'https://www.instagram.com',
       }),
-      tags: [BusinessTags.DELIVERY],
+      tags: new TagsList(businessId, [BusinessTags.DELIVERY]).tags,
       // inquiries: [uuidv4(), uuidv4(), uuidv4()],
       ownerId: undefined,
       followers: ['33', '13'],

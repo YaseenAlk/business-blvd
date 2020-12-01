@@ -104,19 +104,6 @@ export default class Business {
     return this._followers.has(userId);
   }
 
-  get tags(): BusinessTags[] {
-    return Array.from(this._tags);
-  }
-  public addTag(tag: BusinessTags): void {
-    this._tags.add(tag);
-  }
-  public removeTag(tag: BusinessTags): void {
-    this._tags.delete(tag);
-  }
-  public hasTag(tag: BusinessTags): boolean {
-    return this._tags.has(tag);
-  }
-
   get ownerId(): string | undefined {
     return this._ownerId;
   }
