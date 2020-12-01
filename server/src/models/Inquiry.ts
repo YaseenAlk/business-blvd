@@ -8,12 +8,29 @@ Inquiry:
     - string? answer  
 */
 
+export enum Publicity {
+  PUBLIC,
+  PRIVATE,
+}
+
+// @Entity()
 export class Inquiry {
+  // @PrimaryColumn("uuid")
   private _id: string;
+
+  // @Column()
   private _authorId: string;
+
+  // @Column()
   private _businessId: string;
+
+  // @Column()
   private _question: string;
-  private _privacy: 'public' | 'private';
+
+  // @Column()
+  private _privacy: Publicity;
+
+  // @Column({ type: "enum", enum: Publicity, default: Publicity.PRIVATE })
   private _answer?: string;
 
   constructor(
@@ -21,14 +38,14 @@ export class Inquiry {
     authorId: string,
     businessId: string,
     question: string,
-    privacy?: 'public' | 'private',
+    privacy?: Publicity,
     answer?: string,
   ) {
     this._id = id;
     this._authorId = authorId;
     this._businessId = businessId;
     this._question = question;
-    this._privacy = privacy || 'private';
+    this._privacy = privacy || Publicity.PRIVATE;
     if (answer) this._answer = answer;
   }
 
@@ -51,10 +68,10 @@ export class Inquiry {
     this._question = newQuestion;
   }
 
-  get privacy(): 'public' | 'private' {
+  get privacy(): Publicity {
     return this._privacy;
   }
-  set privacy(newPrivacy: 'public' | 'private') {
+  set privacy(newPrivacy: Publicity) {
     this._privacy = newPrivacy;
   }
 

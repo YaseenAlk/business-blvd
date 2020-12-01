@@ -1,4 +1,4 @@
-import { Inquiry } from '../models/Inquiry';
+import { Inquiry, Publicity } from '../models/Inquiry';
 
 // this is a temporary class until we switch to data persistence
 // once we switch to a DB, might not be necessary because we can use typeorm repositories
@@ -13,35 +13,41 @@ class InquiryRepository {
   }
 
   getPublicInquiriesFromBusiness(id: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.privacy === 'public');
+    return this.data.filter((inq) => inq.businessId === id && inq.privacy === Publicity.PUBLIC);
   }
 
   getPrivateInquiriesFromBusiness(id: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.privacy === 'private');
+    return this.data.filter((inq) => inq.businessId === id && inq.privacy === Publicity.PRIVATE);
   }
 
   getPrivateInquiriesOfBusinessFromAuthor(id: string, userId: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.authorId === userId && inq.privacy === 'private');
+    return this.data.filter(
+      (inq) => inq.businessId === id && inq.authorId === userId && inq.privacy === Publicity.PRIVATE,
+    );
   }
 
   createOne(id: string, businessId: string, question: string, userId: string) {
     const newInquiry = new Inquiry(id, userId, businessId, question);
     this.data.push(newInquiry);
+    // await inquiry.save();
   }
 
   postAnswer(id: string, answer: string) {
     const inquiry = this.data.filter((inq) => inq.id === id)[0];
     inquiry.answer = answer;
+    // await inquiry.save();
   }
 
   makePublic(id: string) {
     const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.privacy = 'public';
+    inquiry.privacy = Publicity.PUBLIC;
+    // await inquiry.save();
   }
 
   makePrivate(id: string) {
     const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.privacy = 'private';
+    inquiry.privacy = Publicity.PRIVATE;
+    // await inquiry.save();
   }
 }
 
