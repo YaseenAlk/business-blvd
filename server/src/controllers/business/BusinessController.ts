@@ -117,7 +117,7 @@ class BusinessController {
     }
   }
 
-  setRatings(businessId: string, userId: string, safetyRating: number, serviceRating: number): ReturnObj {
+  setRatings(businessId: string, userId: string, safetyRating?: number, serviceRating?: number): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       if (safetyRating) {
