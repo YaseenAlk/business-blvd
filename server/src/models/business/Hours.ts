@@ -16,9 +16,14 @@ export type Time = {
 };
 
 type InputEntries = {
-  asMap?: TSMap<Days, { open: Time; close: Time }>;
-  asList?: [Days, { open: Time; close: Time }][];
+  asMap?: TSMap<Days, TimeBlock>;
+  asList?: [Days, TimeBlock][];
   asListFlat?: [Days, Time, Time][];
+};
+
+export type TimeBlock = {
+  open: Time;
+  close: Time;
 };
 
 // @Entity()
@@ -27,7 +32,7 @@ export class BusinessHours {
   businessId: string;
 
   // @Column("jsonb")
-  entries: TSMap<Days, { open: Time; close: Time }>;
+  entries: TSMap<Days, TimeBlock>;
 
   // allows input entries to be an existing TSMap or a list of tuples
   constructor(businessId: string, inputEntries: InputEntries) {

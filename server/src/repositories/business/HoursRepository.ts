@@ -1,5 +1,5 @@
 import { TSMap } from 'typescript-map';
-import { BusinessHours, Days, Time } from '../../models/business/Hours';
+import { BusinessHours, Days, Time, TimeBlock } from '../../models/business/Hours';
 
 class HoursRepository {
   private data: BusinessHours[] = [];
@@ -8,14 +8,14 @@ class HoursRepository {
     return this.data.filter((hours) => hours.businessId === businessId)[0];
   }
 
-  getHoursOnDay(businessId: string, day: Days): { open: Time; close: Time } | undefined {
+  getHoursOnDay(businessId: string, day: Days): TimeBlock | undefined {
     const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
     return businessHours?.entries.get(day);
   }
 
   clearEntries(businessId: string) {
     const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
-    businessHours.entries = new TSMap<Days, { open: Time; close: Time }>();
+    businessHours.entries = new TSMap<Days, TimeBlock>();
     // await businessHours.save();
   }
 
@@ -26,7 +26,7 @@ class HoursRepository {
     return businessHours;
   }
 
-  updateMultipleEntries(businessId: string, incoming: TSMap<Days, { open: Time; close: Time }>) {
+  updateMultipleEntries(businessId: string, incoming: TSMap<Days, TimeBlock>) {
     const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
     incoming.forEach((value, key) => {
       if (key) businessHours.entries.set(key, value);
