@@ -56,11 +56,16 @@ export default new Router({
               import('./views/Report.vue')
         },
         {
+            path: '/manage',
+            name: 'Manage',
+            component: () => 
+              import('./views/Manage.vue')
+        },
+        {
             path: '*',
             name: 'NotFound',
             component: () =>
                 import ('./views/NotFound.vue')
         },
-
     ]
 })
