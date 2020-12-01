@@ -386,7 +386,7 @@ class BusinessController {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       business.phone = phone;
-      return { status: 200, data: `Changed business external url.` };
+      return { status: 200, data: `Changed business phone number.` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
