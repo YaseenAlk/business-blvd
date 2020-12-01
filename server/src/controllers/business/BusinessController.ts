@@ -7,6 +7,7 @@ import { ReturnObj } from '../Common';
 import BusinessRepository from '../../repositories/business/BusinessRepository';
 import PositionRepository from '../../repositories/business/PositionRepository';
 import HoursRepository from '../../repositories/business/HoursRepository';
+import RatingsRepository from '../../repositories/business/RatingsRepository';
 
 class BusinessController {
   /***************
@@ -101,14 +102,14 @@ class BusinessController {
   }
 
   getBothRatingsByUser(businessId: string, userId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      const businessRatings = business.ratings;
+    const safetyRating = /* await */ RatingsRepository.getSingleSafetyRating(businessId, userId);
+    const serviceRating = /* await */ RatingsRepository.getSingleServiceRating(businessId, userId);
+    if (safetyRating && serviceRating) {
       return {
         status: 200,
         data: {
-          safety: businessRatings.getSafetyRating(userId),
-          service: businessRatings.getServiceRating(userId),
+          safety: safetyRating,
+          service: serviceRating,
         },
       };
     } else {
@@ -119,12 +120,11 @@ class BusinessController {
   setRatings(businessId: string, userId: string, safetyRating: number, serviceRating: number): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      const rating = business.ratings;
       if (safetyRating) {
-        rating.updateSafetyRating(userId, safetyRating);
+        RatingsRepository.updateSafetyRating(businessId, userId, safetyRating);
       }
       if (serviceRating) {
-        rating.updateServiceRating(userId, serviceRating);
+        RatingsRepository.updateServiceRating(businessId, userId, serviceRating);
       }
       return { status: 200, data: 'Updated ratings!' };
     } else {

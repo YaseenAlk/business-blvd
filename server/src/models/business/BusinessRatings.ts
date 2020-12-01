@@ -1,38 +1,35 @@
 import { TSMap } from 'typescript-map';
 
+type InputEntries = {
+  asMap?: TSMap<string, number>;
+  asList?: [string, number][];
+};
+
+// @Entity()
 export default class BusinessRatings {
-  private _serviceRatingsMap: TSMap<string, number> = new TSMap();
-  private _safetyRatingsMap: TSMap<string, number> = new TSMap();
+  // @PrimaryColumn("uuid")
+  businessId: string;
 
-  //   constructor() {}
+  // @Column("jsonb")
+  serviceRatings: TSMap<string, number>;
 
-  static fromData(serviceRatingsMap: TSMap<string, number>, safetyRatingsMap: TSMap<string, number>): BusinessRatings {
-    const ratings = new BusinessRatings();
-    ratings._serviceRatingsMap = serviceRatingsMap.clone();
-    ratings._safetyRatingsMap = safetyRatingsMap.clone();
-    return ratings;
-  }
+  // @Column("jsonb")
+  safetyRatings: TSMap<string, number>;
 
-  get serviceRatingsMap(): TSMap<string, number> {
-    return this._serviceRatingsMap.clone();
-  }
+  constructor(businessId: string, serviceRatings: InputEntries, safetyRatings: InputEntries) {
+    this.businessId = businessId;
+    this.serviceRatings = new TSMap();
+    this.safetyRatings = new TSMap();
 
-  get safetyRatingsMap(): TSMap<string, number> {
-    return this._safetyRatingsMap.clone();
-  }
+    serviceRatings.asMap?.forEach((value, key) => {
+      if (key) this.serviceRatings.set(key, value);
+    });
+    serviceRatings.asList?.forEach((entry) => this.serviceRatings.set(entry[0], entry[1]));
 
-  public updateServiceRating(userId: string, rating: number): void {
-    this._serviceRatingsMap.set(userId, rating);
-  }
-  public getServiceRating(userId: string): number | undefined {
-    return this._serviceRatingsMap.get(userId);
-  }
-
-  public updateSafetyRating(userId: string, rating: number): void {
-    this._safetyRatingsMap.set(userId, rating);
-  }
-  public getSafetyRating(userId: string): number | undefined {
-    return this._safetyRatingsMap.get(userId);
+    safetyRatings.asMap?.forEach((value, key) => {
+      if (key) this.safetyRatings.set(key, value);
+    });
+    safetyRatings.asList?.forEach((entry) => this.safetyRatings.set(entry[0], entry[1]));
   }
 
   private getAverage(map: TSMap<string, number>) {
@@ -44,14 +41,14 @@ export default class BusinessRatings {
 
   public getSafetyRatings(): { average: number; ratings: Array<number> } {
     return {
-      average: this.getAverage(this._safetyRatingsMap),
-      ratings: this._safetyRatingsMap.values(),
+      average: this.getAverage(this.safetyRatings),
+      ratings: this.safetyRatings.values(),
     };
   }
   public getServiceRatings(): { average: number; ratings: Array<number> } {
     return {
-      average: this.getAverage(this._serviceRatingsMap),
-      ratings: this._serviceRatingsMap.values(),
+      average: this.getAverage(this.serviceRatings),
+      ratings: this.serviceRatings.values(),
     };
   }
 }

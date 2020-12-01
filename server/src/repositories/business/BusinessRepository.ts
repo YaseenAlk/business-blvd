@@ -44,12 +44,21 @@ class BusinessRepository {
       [Days.SATURDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' }],
     ];
 
+    const exampleSafetyRatings: [string, number][] = [
+      ['22', 4],
+      ['13', 4],
+    ];
+    const exampleServiceRatings: [string, number][] = [
+      ['22', 5],
+      ['12', 5],
+    ];
+
     const businessJSON: BusinessJSON = {
       name: "Poppa's Workshop",
       position: new BusinessPosition(businessId, '123 Seasame Street', 42.362541, -71.09845),
       description: 'Where the elbow grease is used.',
       businessId: businessId,
-      ratings: new BusinessRatings(),
+      ratings: new BusinessRatings(businessId, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings }),
       hours: new BusinessHours(businessId, { asListFlat: exampleHours }),
       socialMedia: new BusinessSocialMedia(
         'https://www.facebook.com',
@@ -66,13 +75,6 @@ class BusinessRepository {
     };
 
     const exampleBusiness = new Business(businessJSON);
-
-    // extra augmentations
-
-    exampleBusiness.ratings.updateSafetyRating('22', 4);
-    exampleBusiness.ratings.updateSafetyRating('13', 4);
-    exampleBusiness.ratings.updateServiceRating('22', 5);
-    exampleBusiness.ratings.updateServiceRating('12', 5);
 
     return exampleBusiness;
   }
