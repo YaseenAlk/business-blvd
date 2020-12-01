@@ -4,13 +4,13 @@ export default class BusinessSocialMedia {
   // @PrimaryColumn("uuid")
   businessId: string;
 
-  // @Column()
+  // @Column({nullable: true})
   facebook?: string;
 
-  // @Column()
+  // @Column({nullable: true})
   twitter?: string;
 
-  // @Column()
+  // @Column({nullable: true})
   instagram?: string;
 
   constructor(businessId: string, socials: Socials) {
