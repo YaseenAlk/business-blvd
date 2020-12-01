@@ -29,11 +29,10 @@ export default class BusinessRatings {
     safetyRatings.asMap?.forEach((value, key) => {
       if (key) this.safetyRatings.set(key, value);
     });
-    safetyRatings.asList?.forEach((entry) => this.safetyRatings.set(entry[0], entry[1]));
+    safetyRatings.asList?.forEach(([id, rating]) => this.safetyRatings.set(id, rating));
   }
 
-  private getAverage(map: TSMap<string, number>) {
-    const values = map.values();
+  private getAverage(values: number[]) {
     const sum = values.reduce((a, b) => a + b, 0);
     const avg = sum / values.length || 0;
     return avg;
@@ -41,13 +40,13 @@ export default class BusinessRatings {
 
   public getSafetyRatings(): { average: number; ratings: Array<number> } {
     return {
-      average: this.getAverage(this.safetyRatings),
+      average: this.getAverage(this.safetyRatings.values()),
       ratings: this.safetyRatings.values(),
     };
   }
   public getServiceRatings(): { average: number; ratings: Array<number> } {
     return {
-      average: this.getAverage(this.serviceRatings),
+      average: this.getAverage(this.serviceRatings.values()),
       ratings: this.serviceRatings.values(),
     };
   }

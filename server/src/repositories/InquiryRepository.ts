@@ -13,16 +13,16 @@ class InquiryRepository {
   }
 
   getPublicInquiriesFromBusiness(id: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.privacy === Publicity.PUBLIC);
+    return this.data.filter((inq) => inq.businessId === id && inq.publicity === Publicity.PUBLIC);
   }
 
   getPrivateInquiriesFromBusiness(id: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.privacy === Publicity.PRIVATE);
+    return this.data.filter((inq) => inq.businessId === id && inq.publicity === Publicity.PRIVATE);
   }
 
   getPrivateInquiriesOfBusinessFromAuthor(id: string, userId: string): Inquiry[] {
     return this.data.filter(
-      (inq) => inq.businessId === id && inq.authorId === userId && inq.privacy === Publicity.PRIVATE,
+      (inq) => inq.businessId === id && inq.authorId === userId && inq.publicity === Publicity.PRIVATE,
     );
   }
 
@@ -40,13 +40,13 @@ class InquiryRepository {
 
   makePublic(id: string) {
     const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.privacy = Publicity.PUBLIC;
+    inquiry.publicity = Publicity.PUBLIC;
     // await inquiry.save();
   }
 
   makePrivate(id: string) {
     const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.privacy = Publicity.PRIVATE;
+    inquiry.publicity = Publicity.PRIVATE;
     // await inquiry.save();
   }
 }

@@ -20,7 +20,7 @@ export default class BusinessSocialMedia {
     this.instagram = socials.instagram;
   }
 
-  public getSocialUrls(): Socials {
+  public getSocialURLs(): Socials {
     return {
       facebook: this.facebook,
       twitter: this.twitter,

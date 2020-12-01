@@ -4,7 +4,7 @@ class SocialsRepository {
   private data: BusinessSocialMedia[] = [];
 
   findSocialsById(businessId: string): { facebook?: string; twitter?: string; instagram?: string } {
-    return this.data.filter((socials) => socials.businessId === businessId)[0].getSocialUrls();
+    return this.data.filter((socials) => socials.businessId === businessId)[0].getSocialURLs();
   }
 
   updateFacebook(businessId: string, facebookURL: string): void {

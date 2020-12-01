@@ -1,6 +1,7 @@
 export enum BusinessTags {
   DELIVERY,
   PICKUP,
+  HANDSANITIZER,
 }
 
 // accepting suggestions for a better name for this class lol

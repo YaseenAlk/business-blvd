@@ -28,7 +28,7 @@ export class Inquiry {
   private _question: string;
 
   // @Column()
-  private _privacy: Publicity;
+  private _publicity: Publicity;
 
   // @Column({ type: "enum", enum: Publicity, default: Publicity.PRIVATE })
   private _answer?: string;
@@ -38,14 +38,14 @@ export class Inquiry {
     authorId: string,
     businessId: string,
     question: string,
-    privacy?: Publicity,
+    publicity?: Publicity,
     answer?: string,
   ) {
     this._id = id;
     this._authorId = authorId;
     this._businessId = businessId;
     this._question = question;
-    this._privacy = privacy || Publicity.PRIVATE;
+    this._publicity = publicity || Publicity.PRIVATE;
     if (answer) this._answer = answer;
   }
 
@@ -68,11 +68,11 @@ export class Inquiry {
     this._question = newQuestion;
   }
 
-  get privacy(): Publicity {
-    return this._privacy;
+  get publicity(): Publicity {
+    return this._publicity;
   }
-  set privacy(newPrivacy: Publicity) {
-    this._privacy = newPrivacy;
+  set publicity(newPublicity: Publicity) {
+    this._publicity = newPublicity;
   }
 
   get answer(): string | undefined {
