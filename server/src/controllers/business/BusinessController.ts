@@ -1,4 +1,4 @@
-import { Days, Time } from '../../models/business/Hours';
+import { Day, Time } from '../../models/business/Hours';
 import { BusinessTags } from '../../models/business/TagsList';
 import UserRepository from '../../repositories/UserRepository';
 
@@ -73,7 +73,7 @@ class BusinessController {
     }
   }
 
-  setHours(businessId: string, day: Days, openTime: Time, closeTime: Time): ReturnObj {
+  setHours(businessId: string, day: Day, openTime: Time, closeTime: Time): ReturnObj {
     const hours = /* await */ HoursRepository.findHoursById(businessId);
     if (hours) {
       const updatedHours = /* await */ HoursRepository.updateSingleEntry(businessId, day, openTime, closeTime);

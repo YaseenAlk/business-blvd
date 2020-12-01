@@ -1,6 +1,6 @@
 import { TSMap } from 'typescript-map';
 
-export enum Days {
+export enum Day {
   SUNDAY,
   MONDAY,
   TUESDAY,
@@ -16,9 +16,9 @@ export type Time = {
 };
 
 type InputEntries = {
-  asMap?: TSMap<Days, TimeBlock>;
-  asList?: [Days, TimeBlock][];
-  asListFlat?: [Days, Time, Time][];
+  asMap?: TSMap<Day, TimeBlock>;
+  asList?: [Day, TimeBlock][];
+  asListFlat?: [Day, Time, Time][];
 };
 
 export type TimeBlock = {
@@ -32,7 +32,7 @@ export class BusinessHours {
   businessId: string;
 
   // @Column("jsonb")
-  entries: TSMap<Days, TimeBlock>;
+  entries: TSMap<Day, TimeBlock>;
 
   // allows input entries to be an existing TSMap or a list of tuples
   constructor(businessId: string, inputEntries: InputEntries) {

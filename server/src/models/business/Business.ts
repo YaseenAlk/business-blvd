@@ -2,7 +2,7 @@ import BusinessPosition from './Position';
 import { BusinessTags } from './TagsList';
 import BusinessRatings from './Ratings';
 import BusinessSocialMedia from './Socials';
-import { Days, BusinessHours } from './Hours';
+import { BusinessHours } from './Hours';
 
 export interface BusinessJSON {
   name: string;
