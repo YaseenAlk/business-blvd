@@ -15,22 +15,28 @@ export type Time = {
   minute: string;
 };
 
+type InputEntries = {
+  asMap?: TSMap<Days, { open: Time; close: Time }>;
+  asList?: [Days, { open: Time; close: Time }][];
+  asListFlat?: [Days, Time, Time][];
+};
+
+// @Entity()
 export class BusinessHours {
-  private _businessHours: TSMap<Days, { open: Time; close: Time }> = new TSMap();
+  // @PrimaryColumn("uuid")
+  businessId: string;
 
-  //   constructor() {}
+  // @Column("jsonb")
+  entries: TSMap<Days, { open: Time; close: Time }>;
 
-  static fromData(businessHours: TSMap<Days, { open: Time; close: Time }>): BusinessHours {
-    const hours = new BusinessHours();
-    hours._businessHours = businessHours.clone();
-    return hours;
-  }
-
-  public setHours(day: Days, openTime: Time, closeTime: Time): void {
-    this._businessHours.set(day, { open: openTime, close: closeTime });
-  }
-
-  public getHours(): TSMap<Days, { open: Time; close: Time }> {
-    return this._businessHours.clone();
+  // allows input entries to be an existing TSMap or a list of tuples
+  constructor(businessId: string, inputEntries: InputEntries) {
+    this.businessId = businessId;
+    this.entries = new TSMap();
+    inputEntries.asMap?.forEach((value, key) => {
+      if (key) this.entries.set(key, value);
+    });
+    inputEntries.asList?.forEach((entry) => this.entries.set(entry[0], entry[1]));
+    inputEntries.asListFlat?.forEach((entry) => this.entries.set(entry[0], { open: entry[1], close: entry[2] }));
   }
 }

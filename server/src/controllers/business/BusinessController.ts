@@ -6,6 +6,7 @@ import { ReturnObj } from '../Common';
 
 import BusinessRepository from '../../repositories/business/BusinessRepository';
 import PositionRepository from '../../repositories/business/PositionRepository';
+import HoursRepository from '../../repositories/business/HoursRepository';
 
 class BusinessController {
   /***************
@@ -16,12 +17,12 @@ class BusinessController {
     if (businessId == 'all') {
       return {
         status: 200,
-        data: BusinessRepository.getAllBusinesses().map((business) => {
+        data: /* await */ BusinessRepository.getAllBusinesses().map((business) => {
           return business.toJSON();
         }),
       };
     } else {
-      const business = BusinessRepository.findOneById(businessId);
+      const business = /* await */ BusinessRepository.findOneById(businessId);
       if (business) {
         return { status: 200, data: business.toJSON() };
       } else {
@@ -34,7 +35,7 @@ class BusinessController {
   POSITION METHODS
   ****************/
   getPosition(businessId: string): ReturnObj {
-    const position = PositionRepository.findOneById(businessId);
+    const position = /* await */ PositionRepository.findOneById(businessId);
     if (position) {
       return {
         status: 200,
@@ -50,9 +51,9 @@ class BusinessController {
   }
 
   setPosition(businessId: string, address: string, lat: number, lng: number): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      PositionRepository.update(businessId, address, lat, lng);
+      /* await */ PositionRepository.update(businessId, address, lat, lng);
       return { status: 200, data: `Updated address successfully` };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
@@ -63,18 +64,19 @@ class BusinessController {
   HOURS METHODS
   ****************/
   getHours(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
-    if (business) {
-      return { status: 200, data: business.hours.getHours() };
+    const hours = /* await */ HoursRepository.findHoursById(businessId);
+    if (hours) {
+      return { status: 200, data: hours };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
   setHours(businessId: string, day: Days, openTime: Time, closeTime: Time): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
-    if (business) {
-      return { status: 201, data: business.hours.setHours(day, openTime, closeTime) };
+    const hours = /* await */ HoursRepository.findHoursById(businessId);
+    if (hours) {
+      const updatedHours = /* await */ HoursRepository.updateSingleEntry(businessId, day, openTime, closeTime);
+      return { status: 201, data: updatedHours };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
@@ -84,7 +86,7 @@ class BusinessController {
   RATINGS METHODS
   ****************/
   getBothRatingsAndAverages(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return {
         status: 200,
@@ -99,7 +101,7 @@ class BusinessController {
   }
 
   getBothRatingsByUser(businessId: string, userId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       const businessRatings = business.ratings;
       return {
@@ -115,7 +117,7 @@ class BusinessController {
   }
 
   setRatings(businessId: string, userId: string, safetyRating: number, serviceRating: number): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       const rating = business.ratings;
       if (safetyRating) {
@@ -135,7 +137,7 @@ class BusinessController {
   ****************/
 
   getSocialMedia(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       const businessSocialMedia = business.socialMedia.getSocialUrls();
       return { status: 201, data: businessSocialMedia };
@@ -150,7 +152,7 @@ class BusinessController {
     facebook: string | undefined,
     instagram: string | undefined,
   ): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       const socials = business.socialMedia;
       if (twitter) {
@@ -170,7 +172,7 @@ class BusinessController {
 
   claimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     business!.ownerId = userId;
     return UserRepository.addBusinessOwned(userId, businessId).then(() => {
@@ -180,7 +182,7 @@ class BusinessController {
 
   unclaimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     business!.ownerId = undefined;
     return UserRepository.removeBusinessOwned(userId, businessId).then(() => {
@@ -192,7 +194,7 @@ class BusinessController {
   FOLLOWERS METHODS
   ****************/
   getFollowers(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.getFollowers() };
     } else {
@@ -201,7 +203,7 @@ class BusinessController {
   }
 
   isFollowedBy(businessId: string, userId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.isFollowedBy(userId) };
     } else {
@@ -210,7 +212,7 @@ class BusinessController {
   }
 
   unfollow(businessId: string, userId: string): Promise<ReturnObj> {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       business.removeFollower(userId);
       return UserRepository.findOneByID(userId).then((account) => {
@@ -226,7 +228,7 @@ class BusinessController {
   }
 
   follow(businessId: string, userId: string): Promise<ReturnObj> {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       business.addFollower(userId);
       return UserRepository.findOneByID(userId).then((account) => {
@@ -245,7 +247,7 @@ class BusinessController {
   TAG METHODS
   ****************/
   getTags(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.tags };
     } else {
@@ -254,7 +256,7 @@ class BusinessController {
   }
 
   hasTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.hasTag(tagId) };
     } else {
@@ -263,7 +265,7 @@ class BusinessController {
   }
 
   addTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.addTag(tagId) };
     } else {
@@ -272,7 +274,7 @@ class BusinessController {
   }
 
   removeTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.removeTag(tagId) };
     } else {
@@ -284,7 +286,7 @@ class BusinessController {
   NAME METHODS
   ****************/
   getName(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.name };
     } else {
@@ -293,7 +295,7 @@ class BusinessController {
   }
 
   setName(businessId: string, name: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       business.name = name;
       return { status: 200, data: `Changed business name.` };
@@ -306,7 +308,7 @@ class BusinessController {
   DESCRIPTION METHODS
   ****************/
   getDescription(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.description };
     } else {
@@ -315,7 +317,7 @@ class BusinessController {
   }
 
   setDescription(businessId: string, description: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       business.description = description;
       return { status: 200, data: `Changed business description.` };
@@ -328,7 +330,7 @@ class BusinessController {
   OWNER METHODS
   ****************/
   getOwner(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.ownerId };
     } else {
@@ -337,7 +339,7 @@ class BusinessController {
   }
 
   setOwner(businessId: string, ownerId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       business.ownerId = ownerId;
       return { status: 200, data: `Changed business ownerId.` };
@@ -350,7 +352,7 @@ class BusinessController {
   URL METHODS
   ****************/
   getExternalURL(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.externalURL };
     } else {
@@ -359,7 +361,7 @@ class BusinessController {
   }
 
   setExternalURL(businessId: string, url: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       business.externalURL = url;
       return { status: 200, data: `Changed business external url.` };
@@ -372,7 +374,7 @@ class BusinessController {
   PHONE METHODS
   ****************/
   getPhoneNumber(businessId: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       return { status: 200, data: business.phone };
     } else {
@@ -381,7 +383,7 @@ class BusinessController {
   }
 
   setPhoneNumber(businessId: string, phone: string): ReturnObj {
-    const business = BusinessRepository.findOneById(businessId);
+    const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       business.phone = phone;
       return { status: 200, data: `Changed business external url.` };

@@ -8,7 +8,7 @@ import BusinessPosition from '../../models/business/BusinessPosition';
 import { BusinessTags } from '../../models/business/BusinessTags';
 import BusinessRatings from '../../models/business/BusinessRatings';
 import BusinessSocialMedia from '../../models/business/BusinessSocialMedia';
-import { Days, BusinessHours } from '../../models/business/BusinessHours';
+import { Days, BusinessHours, Time } from '../../models/business/BusinessHours';
 
 class BusinessRepository {
   data: TSMap<string, Business> = new TSMap();
@@ -35,13 +35,22 @@ class BusinessRepository {
   private generateExample(): Business {
     const businessId = uuidv4();
 
+    const exampleHours: [Days, Time, Time][] = [
+      [Days.SUNDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' }],
+      [Days.MONDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
+      [Days.TUESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
+      [Days.WEDNESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
+      [Days.FRIDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
+      [Days.SATURDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' }],
+    ];
+
     const businessJSON: BusinessJSON = {
       name: "Poppa's Workshop",
       position: new BusinessPosition(businessId, '123 Seasame Street', 42.362541, -71.09845),
       description: 'Where the elbow grease is used.',
       businessId: businessId,
       ratings: new BusinessRatings(),
-      hours: new BusinessHours(),
+      hours: new BusinessHours(businessId, { asListFlat: exampleHours }),
       socialMedia: new BusinessSocialMedia(
         'https://www.facebook.com',
         'https://www.twitter.com',
@@ -59,12 +68,6 @@ class BusinessRepository {
     const exampleBusiness = new Business(businessJSON);
 
     // extra augmentations
-    exampleBusiness.hours.setHours(Days.SUNDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' });
-    exampleBusiness.hours.setHours(Days.MONDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.TUESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.WEDNESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.FRIDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.SATURDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' });
 
     exampleBusiness.ratings.updateSafetyRating('22', 4);
     exampleBusiness.ratings.updateSafetyRating('13', 4);
