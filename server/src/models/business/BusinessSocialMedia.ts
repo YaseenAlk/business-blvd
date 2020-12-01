@@ -1,31 +1,30 @@
+type Socials = { facebook?: string; twitter?: string; instagram?: string };
+// @Entity()
 export default class BusinessSocialMedia {
-  private _facebook?: string;
-  private _twitter?: string;
-  private _instagram?: string;
+  // @PrimaryColumn("uuid")
+  businessId: string;
 
-  constructor(facebook?: string, twitter?: string, instagram?: string) {
-    this._facebook = facebook;
-    this._twitter = twitter;
-    this._instagram = instagram;
+  // @Column()
+  facebook?: string;
+
+  // @Column()
+  twitter?: string;
+
+  // @Column()
+  instagram?: string;
+
+  constructor(businessId: string, socials: Socials) {
+    this.businessId = businessId;
+    this.facebook = socials.facebook;
+    this.twitter = socials.twitter;
+    this.instagram = socials.instagram;
   }
 
-  public getSocialUrls(): { facebook?: string; twitter?: string; instagram?: string } {
+  public getSocialUrls(): Socials {
     return {
-      facebook: this._facebook,
-      twitter: this._twitter,
-      instagram: this._instagram,
+      facebook: this.facebook,
+      twitter: this.twitter,
+      instagram: this.instagram,
     };
-  }
-
-  set twitter(twitter: string) {
-    this._twitter = twitter;
-  }
-
-  set facebook(facebook: string) {
-    this._facebook = facebook;
-  }
-
-  set instagram(instagram: string) {
-    this._instagram = instagram;
   }
 }

@@ -60,11 +60,11 @@ class BusinessRepository {
       businessId: businessId,
       ratings: new BusinessRatings(businessId, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings }),
       hours: new BusinessHours(businessId, { asListFlat: exampleHours }),
-      socialMedia: new BusinessSocialMedia(
-        'https://www.facebook.com',
-        'https://www.twitter.com',
-        'https://www.instagram.com',
-      ),
+      socialMedia: new BusinessSocialMedia(businessId, {
+        facebook: 'https://www.facebook.com',
+        twitter: 'https://www.twitter.com',
+        instagram: 'https://www.instagram.com',
+      }),
       tags: [BusinessTags.DELIVERY],
       // inquiries: [uuidv4(), uuidv4(), uuidv4()],
       ownerId: undefined,

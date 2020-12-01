@@ -8,6 +8,7 @@ import BusinessRepository from '../../repositories/business/BusinessRepository';
 import PositionRepository from '../../repositories/business/PositionRepository';
 import HoursRepository from '../../repositories/business/HoursRepository';
 import RatingsRepository from '../../repositories/business/RatingsRepository';
+import SocialsRepository from '../../repositories/business/SocialsRepository';
 
 class BusinessController {
   /***************
@@ -139,30 +140,24 @@ class BusinessController {
   getSocialMedia(businessId: string): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      const businessSocialMedia = business.socialMedia.getSocialUrls();
+      const businessSocialMedia = /* await */ SocialsRepository.findSocialsById(businessId);
       return { status: 201, data: businessSocialMedia };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }
   }
 
-  setSocialMedia(
-    businessId: string,
-    twitter: string | undefined,
-    facebook: string | undefined,
-    instagram: string | undefined,
-  ): ReturnObj {
+  setSocialMedia(businessId: string, twitter?: string, facebook?: string, instagram?: string): ReturnObj {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
-      const socials = business.socialMedia;
       if (twitter) {
-        socials.twitter = twitter;
+        /* await */ SocialsRepository.updateTwitter(businessId, twitter);
       }
       if (facebook) {
-        socials.facebook = facebook;
+        /* await */ SocialsRepository.updateFacebook(businessId, facebook);
       }
       if (instagram) {
-        socials.instagram = instagram;
+        /* await */ SocialsRepository.updateInstagram(businessId, instagram);
       }
       return { status: 200, data: 'Updated social media!' };
     } else {
