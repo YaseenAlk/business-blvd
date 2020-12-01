@@ -1,4 +1,4 @@
-import TagsList, { BusinessTags } from '../../models/business/BusinessTags';
+import TagsList, { BusinessTags } from '../../models/business/TagsList';
 
 class TagsRepository {
   private data: TagsList[] = [];

@@ -1,4 +1,4 @@
-import BusinessPosition from '../../models/business/BusinessPosition';
+import BusinessPosition from '../../models/business/Position';
 
 class PositionRepository {
   private data: BusinessPosition[] = [];

@@ -1,8 +1,8 @@
-import BusinessPosition from './BusinessPosition';
-import { BusinessTags } from './BusinessTags';
-import BusinessRatings from './BusinessRatings';
-import BusinessSocialMedia from './BusinessSocialMedia';
-import { Days, BusinessHours } from './BusinessHours';
+import BusinessPosition from './Position';
+import { BusinessTags } from './TagsList';
+import BusinessRatings from './Ratings';
+import BusinessSocialMedia from './Socials';
+import { Days, BusinessHours } from './Hours';
 
 export interface BusinessJSON {
   name: string;

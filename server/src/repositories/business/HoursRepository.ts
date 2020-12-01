@@ -1,5 +1,5 @@
 import { TSMap } from 'typescript-map';
-import { BusinessHours, Days, Time } from '../../models/business/BusinessHours';
+import { BusinessHours, Days, Time } from '../../models/business/Hours';
 
 class HoursRepository {
   private data: BusinessHours[] = [];

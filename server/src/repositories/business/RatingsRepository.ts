@@ -1,5 +1,5 @@
 import { TSMap } from 'typescript-map';
-import BusinessRatings from '../../models/business/BusinessRatings';
+import BusinessRatings from '../../models/business/Ratings';
 
 class RatingsRepository {
   private data: BusinessRatings[] = [];

@@ -1,4 +1,4 @@
-import BusinessSocialMedia from '../../models/business/BusinessSocialMedia';
+import BusinessSocialMedia from '../../models/business/Socials';
 
 class SocialsRepository {
   private data: BusinessSocialMedia[] = [];

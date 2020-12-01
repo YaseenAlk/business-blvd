@@ -4,11 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { TSMap } from 'typescript-map';
 import Business, { BusinessJSON } from '../../models/business/Business';
 
-import BusinessPosition from '../../models/business/BusinessPosition';
-import TagsList, { BusinessTags } from '../../models/business/BusinessTags';
-import BusinessRatings from '../../models/business/BusinessRatings';
-import BusinessSocialMedia from '../../models/business/BusinessSocialMedia';
-import { Days, BusinessHours, Time } from '../../models/business/BusinessHours';
+import BusinessPosition from '../../models/business/Position';
+import TagsList, { BusinessTags } from '../../models/business/TagsList';
+import BusinessRatings from '../../models/business/Ratings';
+import BusinessSocialMedia from '../../models/business/Socials';
+import { Days, BusinessHours, Time } from '../../models/business/Hours';
 
 class BusinessRepository {
   data: TSMap<string, Business> = new TSMap();

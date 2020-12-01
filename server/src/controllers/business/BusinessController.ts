@@ -1,5 +1,5 @@
-import { Days, Time } from '../../models/business/BusinessHours';
-import { BusinessTags } from '../../models/business/BusinessTags';
+import { Days, Time } from '../../models/business/Hours';
+import { BusinessTags } from '../../models/business/TagsList';
 import UserRepository from '../../repositories/UserRepository';
 
 import { ReturnObj } from '../Common';
