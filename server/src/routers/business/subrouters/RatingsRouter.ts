@@ -21,11 +21,15 @@ class RatingsRouter {
     /***************
     GET ALL RATINGS
     ****************/
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: validation middleware
+    this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getBothRatingsAndAverages(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getBothRatingsAndAverages(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -34,13 +38,17 @@ class RatingsRouter {
     /***************
     SET USER RATINGS
     ****************/
-    this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: validation middleware
+    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { safetyRating, serviceRating } = req.body;
         const { userId } = req.session;
-        const { status, data } = this._controller.setRatings(businessId, userId, safetyRating, serviceRating);
-        res.status(status).json(data);
+        const result = await this._controller.setRatings(businessId, userId, safetyRating, serviceRating);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -49,11 +57,15 @@ class RatingsRouter {
     /***************
     GET RATINGS BY USER
     ****************/
-    this._router.get('/:userId', (req: Request, res: Response, next: NextFunction) => {
+    // todo: validation middleware
+    this._router.get('/:userId', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId, userId } = req.params;
-        const { status, data } = this._controller.getBothRatingsByUser(businessId, userId);
-        res.status(status).json(data);
+        const result = await this._controller.getBothRatingsByUser(businessId, userId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }

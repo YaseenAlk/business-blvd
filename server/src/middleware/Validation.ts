@@ -2,7 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import UserRepository from '../repositories/UserRepository';
 import InquiryRepository from '../repositories/InquiryRepository';
 import Business from '../models/business/Business';
-import BusinessRepository from '../repositories/BusinessRepository';
+import BusinessRepository from '../repositories/business/BusinessRepository';
+import { Inquiry } from '../models/Inquiry';
+import { User } from '../models/User';
 
 export class Validation {
   // auth
@@ -147,7 +149,7 @@ export class Validation {
 
   // db-dependent auth middleware (TODO for future iterations: make more efficient by only making one DB call?)
   static async usernameExists(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const user = await UserRepository.findOneByUsername(req.params.username || req.body.username);
+    const user: User | undefined = await UserRepository.findOneByUsername(req.params.username || req.body.username);
     if (user === undefined) {
       res.status(404).json({ message: 'Username not found' }).end();
       return;
@@ -155,8 +157,10 @@ export class Validation {
     next();
   }
 
-  static businessIdExists(req: Request, res: Response, next: NextFunction): void {
-    const exists = BusinessRepository.businessExists(req.params.businessId || req.body.businessId);
+  static async businessIdExists(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const exists: boolean | undefined = await BusinessRepository.businessExists(
+      req.params.businessId || req.body.businessId,
+    );
     if (!exists) {
       res.status(404).json({ message: 'Business does not exist' }).end();
       return;
@@ -167,7 +171,7 @@ export class Validation {
   static async passwordCorrect(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.body.username;
     const password = req.body.password;
-    const account = await UserRepository.findOneByUsername(username);
+    const account: User | undefined = await UserRepository.findOneByUsername(username);
     if (password !== account?.password) {
       // we keep it intentionally vague for security reasons
       res.status(401).json({ message: 'Incorrect username/password combination' }).end();
@@ -178,7 +182,7 @@ export class Validation {
   }
 
   static async usernameNotTaken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const user = await UserRepository.findOneByUsername(req.params.username || req.body.username);
+    const user: User | undefined = await UserRepository.findOneByUsername(req.params.username || req.body.username);
     if (user !== undefined) {
       res.status(409).json({ message: 'Username already in use' }).end();
       return;
@@ -187,7 +191,7 @@ export class Validation {
   }
 
   static async emailNotTaken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const user = await UserRepository.findOneByEmail(req.params.email || req.body.email);
+    const user: User | undefined = await UserRepository.findOneByEmail(req.params.email || req.body.email);
     if (user !== undefined) {
       res.status(409).json({ message: 'Email already in use' }).end();
       return;
@@ -195,8 +199,15 @@ export class Validation {
     next();
   }
 
-  static ownsBusiness(req: Request, res: Response, next: NextFunction): void {
-    const business: Business | undefined = BusinessRepository.findOneById(req.params.businessId || req.body.businessId);
+  static async ownsBusinessInquiry(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const inquiry: Inquiry | undefined = await InquiryRepository.findOneById(req.params.inquiryId);
+    const businessId = inquiry?.businessId;
+    if (!businessId) {
+      console.log('c', inquiry, businessId);
+      res.status(404).json({ message: 'Inquiry does not exist' }).end();
+      return;
+    }
+    const business: Business | undefined = await BusinessRepository.findOneById(businessId);
     const user = req.session.userID;
     if (!business) {
       res.status(404).json({ message: 'Business does not exist' }).end();
@@ -209,9 +220,27 @@ export class Validation {
     next();
   }
 
-  static businessIdUnclaimed(req: Request, res: Response, next: NextFunction): void {
+  static async ownsBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const business: Business | undefined = await BusinessRepository.findOneById(
+      req.params.businessId || req.body.businessId,
+    );
+    const user = req.session.userID;
+    if (!business) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (!business.isOwner(user)) {
+      res.status(403).json({ message: 'Not authorized to manage this business inquiry' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async businessIdUnclaimed(req: Request, res: Response, next: NextFunction): Promise<void> {
     // we will need to change this once BusinessRepository exists
-    const business = BusinessRepository.findOneById(req.params.businessId || req.body.businessId);
+    const business: Business | undefined = await BusinessRepository.findOneById(
+      req.params.businessId || req.body.businessId,
+    );
     if (business?.hasOwner()) {
       res.status(409).json({ message: 'Business already claimed' }).end();
       return;
@@ -219,8 +248,16 @@ export class Validation {
     next();
   }
 
-  static inquiryIdExists(req: Request, res: Response, next: NextFunction): void {
-    const inquiry = InquiryRepository.findOneById(req.params.inquiryId || req.body.inquiryId);
+  static async inquiryIdExists(req: Request, res: Response, next: NextFunction): Promise<void> {
+    console.log('a', req.params.inquiryId);
+    console.log('b', req.body.inquiryId);
+
+    const inquiry: Inquiry | undefined = await InquiryRepository.findOneById(
+      req.params.inquiryId || req.body.inquiryId,
+    );
+
+    console.log('d', inquiry);
+
     if (inquiry === undefined) {
       res.status(404).json({ message: 'Inquiry does not exist' }).end();
       return;
@@ -264,21 +301,19 @@ export class Validation {
   ];
 
   static postAnswerMiddleware = [
-    Validation.businessIdDefined,
-    Validation.businessIdValid,
+    Validation.inquiryIdDefined,
+    Validation.inquiryIdValid,
     Validation.answerDefined,
     Validation.answerValid,
-    Validation.businessIdExists,
     Validation.inquiryIdExists,
-    Validation.ownsBusiness,
+    Validation.ownsBusinessInquiry,
   ];
 
   static publicityToggleMiddleware = [
-    Validation.businessIdDefined,
-    Validation.businessIdValid,
-    Validation.businessIdExists,
+    Validation.inquiryIdDefined,
+    Validation.inquiryIdValid,
     Validation.inquiryIdExists,
-    Validation.ownsBusiness,
+    Validation.ownsBusinessInquiry,
   ];
 
   static claimBusinessMiddleware = [

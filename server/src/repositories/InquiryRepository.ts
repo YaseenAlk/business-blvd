@@ -1,47 +1,47 @@
-import { Inquiry } from '../models/Inquiry';
-
-// this is a temporary class until we switch to data persistence
-// once we switch to a DB, might not be necessary because we can use typeorm repositories
-
-// however we could still use it to generalize more advanced DB operations
+import { Inquiry, Publicity } from '../models/Inquiry';
 
 class InquiryRepository {
-  private data: Inquiry[] = [];
-
-  findOneById(id: string): Inquiry {
-    return this.data.filter((inq) => inq.id === id)[0];
+  findOneById(id: string): Promise<Inquiry | undefined> {
+    return Inquiry.findOne({ id });
   }
 
-  getPublicInquiriesFromBusiness(id: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.privacy === 'public');
+  // note that these will return empty lists if the business doesn't exist
+  getPublicInquiriesFromBusiness(id: string): Promise<Inquiry[]> {
+    return Inquiry.find({ businessId: id, publicity: Publicity.PUBLIC });
   }
 
-  getPrivateInquiriesFromBusiness(id: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.privacy === 'private');
+  getPrivateInquiriesFromBusiness(businessId: string): Promise<Inquiry[]> {
+    return Inquiry.find({ businessId, publicity: Publicity.PRIVATE });
   }
 
-  getPrivateInquiriesOfBusinessFromAuthor(id: string, userId: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.authorId === userId && inq.privacy === 'private');
+  getPrivateInquiriesOfBusinessFromAuthor(businessId: string, userId: string): Promise<Inquiry[]> {
+    return Inquiry.find({ businessId, authorId: userId, publicity: Publicity.PRIVATE });
   }
 
-  createOne(id: string, businessId: string, question: string, userId: string) {
-    const newInquiry = new Inquiry(id, userId, businessId, question);
-    this.data.push(newInquiry);
+  createOne(businessId: string, question: string, userId: string): Promise<Inquiry> {
+    const newInquiry = new Inquiry(userId, businessId, question);
+    return newInquiry.save();
   }
 
-  postAnswer(id: string, answer: string) {
-    const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.answer = answer;
+  postAnswer(id: string, answer: string): Promise<Inquiry | undefined> {
+    return Inquiry.findOne({ id }).then((inquiry) => {
+      if (inquiry) inquiry.answer = answer;
+      return inquiry?.save();
+    });
   }
 
-  makePublic(id: string) {
-    const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.privacy = 'public';
+  makePublic(id: string): Promise<Inquiry | undefined> {
+    return Inquiry.findOne({ id }).then((inquiry) => {
+      if (inquiry) inquiry.publicity = Publicity.PUBLIC;
+      return inquiry?.save();
+    });
   }
 
-  makePrivate(id: string) {
-    const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.privacy = 'private';
+  makePrivate(id: string): Promise<Inquiry | undefined> {
+    return Inquiry.findOne({ id }).then((inquiry) => {
+      if (inquiry) inquiry.publicity = Publicity.PRIVATE;
+      return inquiry?.save();
+    });
   }
 }
 

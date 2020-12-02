@@ -1,6 +1,6 @@
 <template>
     <div v-if="selectedBusiness !== undefined">
-        <MapCard v-bind:business="selectedBusiness" />
+        <MapCard v-bind:key="selectedBusiness.businessId" v-bind:business="selectedBusiness" />
     </div>
 </template>
 

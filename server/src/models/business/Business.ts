@@ -1,213 +1,72 @@
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-
-import BusinessPosition from './BusinessPosition';
-import { BusinessTags } from './BusinessTags';
-import BusinessRatings from './BusinessRatings';
-import BusinessSocialMedia from './BusinessSocialMedia';
-import { Days, BusinessHours } from './BusinessHours';
 
 export interface BusinessJSON {
   name: string;
-  position: BusinessPosition;
   description: string;
   businessId: string;
-  ratings: BusinessRatings;
-  hours: BusinessHours;
-  socialMedia: BusinessSocialMedia;
   followers: string[];
-  tags: BusinessTags[];
-  // inquiries: string[];
   ownerId: string | undefined;
   internalURL: string;
   externalURL: string;
   phone: string;
 }
 
-export default class Business {
-  private _name: string;
-  private _position: BusinessPosition;
-  private _description: string;
-  private _businessId: string;
-  private _ratings: BusinessRatings;
-  private _hours: BusinessHours;
-  private _socialMedia: BusinessSocialMedia;
-  private _followers: Set<string> = new Set();
-  private _tags: Set<BusinessTags>;
-  // private _inquiries: string[];
-  private _ownerId: string | undefined;
-  private _internalURL: string;
-  private _externalURL: string;
-  private _phone: string;
-  constructor(entry: BusinessJSON) {
-    this._name = entry.name;
-    this._position = entry.position;
-    this._description = entry.description;
-    this._businessId = entry.businessId;
-    this._ratings = entry.ratings;
-    this._hours = entry.hours;
-    this._socialMedia = entry.socialMedia;
-    this._followers = new Set(entry.followers);
-    this._tags = new Set(entry.tags);
-    // this._inquiries = Array.from(entry.inquiries);
-    this._ownerId = entry.ownerId;
-    this._internalURL = entry.internalURL;
-    this._externalURL = entry.externalURL;
-    this._phone = entry.phone;
-  }
+@Entity()
+export default class Business extends BaseEntity {
+  @PrimaryColumn('uuid')
+  businessId: string;
 
-  get name(): string {
-    return this._name;
-  }
-  set name(name: string) {
-    this._name = name;
-  }
+  @Column()
+  name: string;
 
-  // get inquiries(): string[] {
-  //   return Array.from(this._inquiries);
-  // }
+  @Column()
+  description: string;
 
-  get position(): BusinessPosition {
-    return this._position;
-  }
+  @Column({ type: 'text', array: true })
+  followers: string[];
 
-  get description(): string {
-    return this._description;
-  }
-  set description(description: string) {
-    this._description = description;
-  }
+  @Column({ nullable: true, type: 'uuid' })
+  ownerId: string | undefined;
 
-  get businessId(): string {
-    return this._businessId;
-  }
+  @Column()
+  internalURL: string;
 
-  get ratings(): BusinessRatings {
-    return this._ratings;
-  }
+  @Column()
+  externalURL: string;
 
-  get hours(): BusinessHours {
-    return this._hours;
-  }
+  @Column()
+  phone: string;
 
-  get socialMedia(): BusinessSocialMedia {
-    return this._socialMedia;
+  constructor(entry?: BusinessJSON) {
+    super();
+    this.name = entry?.name || '';
+    this.description = entry?.description || '';
+    this.businessId = entry?.businessId || uuidv4();
+    this.followers = Array.from(entry?.followers || []);
+    this.ownerId = entry?.ownerId;
+    this.internalURL = entry?.internalURL || '';
+    this.externalURL = entry?.externalURL || '';
+    this.phone = entry?.phone || '';
   }
 
   public addFollower(id: string): void {
-    this._followers.add(id);
+    this.followers.push(id);
   }
   public removeFollower(id: string): void {
-    this._followers.delete(id);
+    this.followers = this.followers.filter((follower) => follower !== id);
   }
   public getFollowers(): string[] {
-    return Array.from(this._followers);
+    return Array.from(this.followers);
   }
   public isFollowedBy(userId: string): boolean {
-    return this._followers.has(userId);
+    return this.followers.includes(userId);
   }
 
-  get tags(): BusinessTags[] {
-    return Array.from(this._tags);
-  }
-  public addTag(tag: BusinessTags): void {
-    this._tags.add(tag);
-  }
-  public removeTag(tag: BusinessTags): void {
-    this._tags.delete(tag);
-  }
-  public hasTag(tag: BusinessTags): boolean {
-    return this._tags.has(tag);
-  }
-
-  get ownerId(): string | undefined {
-    return this._ownerId;
-  }
-  set ownerId(userId: string | undefined) {
-    this._ownerId = userId;
-  }
   public hasOwner(): boolean {
-    return this._ownerId !== undefined;
+    return this.ownerId !== null && this.ownerId !== undefined;
   }
   public isOwner(ownerId: string): boolean {
-    return this._ownerId !== undefined && this._ownerId === ownerId;
-  }
-
-  get externalURL(): string {
-    return this._externalURL;
-  }
-  set externalURL(newUrl: string) {
-    this._externalURL = newUrl;
-  }
-
-  get internalURL(): string {
-    return this._internalURL;
-  }
-
-  get phone(): string {
-    return this._phone;
-  }
-  set phone(newPhone: string) {
-    this._phone = newPhone;
-  }
-
-  public toJSON(): BusinessJSON {
-    return {
-      name: this._name,
-      position: this._position,
-      description: this._description,
-      businessId: this._businessId,
-      ratings: this._ratings,
-      hours: this._hours,
-      socialMedia: this._socialMedia,
-      followers: Array.from(this._followers),
-      tags: Array.from(this._tags),
-      // inquiries: Array.from(this._inquiries),
-      ownerId: this._ownerId,
-      internalURL: this._internalURL,
-      externalURL: this._externalURL,
-      phone: this._phone,
-    };
-  }
-
-  static generateExample(): Business {
-    const businessId = uuidv4();
-
-    const businessJSON: BusinessJSON = {
-      name: "Poppa's Workshop",
-      position: new BusinessPosition('123 Seasame Street', 42.362541, -71.09845),
-      description: 'Where the elbow grease is used.',
-      businessId: businessId,
-      ratings: new BusinessRatings(),
-      hours: new BusinessHours(),
-      socialMedia: new BusinessSocialMedia(
-        'https://www.facebook.com',
-        'https://www.twitter.com',
-        'https://www.instagram.com',
-      ),
-      tags: [BusinessTags.DELIVERY],
-      // inquiries: [uuidv4(), uuidv4(), uuidv4()],
-      ownerId: undefined,
-      followers: ['33', '13'],
-      internalURL: 'business/' + businessId,
-      externalURL: 'https://www.poppasworkshop.com',
-      phone: '867-5309',
-    };
-
-    const exampleBusiness = new Business(businessJSON);
-
-    // extra augmentations
-    exampleBusiness.hours.setHours(Days.SUNDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' });
-    exampleBusiness.hours.setHours(Days.MONDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.TUESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.WEDNESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.FRIDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' });
-    exampleBusiness.hours.setHours(Days.SATURDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' });
-
-    exampleBusiness.ratings.updateSafetyRating('22', 4);
-    exampleBusiness.ratings.updateSafetyRating('13', 4);
-    exampleBusiness.ratings.updateServiceRating('22', 5);
-    exampleBusiness.ratings.updateServiceRating('12', 5);
-
-    return exampleBusiness;
+    return this.ownerId !== undefined && this.ownerId === ownerId;
   }
 }

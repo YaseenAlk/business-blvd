@@ -21,11 +21,14 @@ class FollowersRouter {
     /***************
     GET FOLLOWERS ROUTE
     ****************/
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getFollowers(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getFollowers(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -34,11 +37,14 @@ class FollowersRouter {
     /***************
     IS FOLLOWER ROUTE
     ****************/
-    this._router.get('/:userId', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/:userId', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId, userId } = req.params;
-        const { status, data } = this._controller.isFollowedBy(businessId, userId);
-        res.status(status).json(data);
+        const result = await this._controller.isFollowedBy(businessId, userId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -51,8 +57,11 @@ class FollowersRouter {
       try {
         const { businessId } = req.params;
         const { userId } = req.session;
-        const { status, data } = await this._controller.unfollow(businessId, userId);
-        res.status(status).json(data);
+        const result = await this._controller.unfollow(businessId, userId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -65,8 +74,11 @@ class FollowersRouter {
       try {
         const { businessId } = req.params;
         const { userId } = req.session;
-        const { status, data } = await this._controller.follow(businessId, userId);
-        res.status(status).json(data);
+        const result = await this._controller.follow(businessId, userId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }

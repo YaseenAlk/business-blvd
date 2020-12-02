@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
 
-class SocialMediaRouter {
+class SocialsRouter {
   private _router = Router({ mergeParams: true });
 
   private _controller = BusinessController;
@@ -21,11 +21,15 @@ class SocialMediaRouter {
     /***************
     GET SOCIAL ROUTE
     ****************/
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: add validation
+    this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getSocialMedia(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getSocialMedia(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -34,12 +38,16 @@ class SocialMediaRouter {
     /***************
     SET SOCIAL ROUTE
     ****************/
-    this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: add validation
+    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { twitter, facebook, instagram } = req.body;
-        const { status, data } = this._controller.setSocialMedia(businessId, twitter, facebook, instagram);
-        res.status(status).json(data);
+        const result = await this._controller.setSocialMedia(businessId, twitter, facebook, instagram);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -47,4 +55,4 @@ class SocialMediaRouter {
   }
 }
 
-export = new SocialMediaRouter().router;
+export = new SocialsRouter().router;
