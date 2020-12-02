@@ -9,8 +9,8 @@ class BusinessRepository {
   private b2: Business;
 
   constructor() {
-    this.b1 = this.generateExample();
-    this.b2 = this.generateExample();
+    this.b1 = this.generateExample(true);
+    this.b2 = this.generateExample(false);
     this.exampleIds = [this.b1.businessId, this.b2.businessId];
   }
 
@@ -114,8 +114,8 @@ class BusinessRepository {
     });
   }
 
-  private generateExample(): Business {
-    const businessId = uuidv4();
+  private generateExample(a: boolean): Business {
+    const businessId = a ? 'bb0cdddf-fb80-42c8-9be2-1560e96adeb5' : '2bd3cc40-937d-4c1a-87f5-0e9568132ed5';
 
     const businessJSON: BusinessJSON = {
       name: "Poppa's Workshop",
