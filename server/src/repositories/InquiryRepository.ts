@@ -2,7 +2,7 @@ import { Inquiry, Publicity } from '../models/Inquiry';
 
 class InquiryRepository {
   findOneById(id: string): Promise<Inquiry | undefined> {
-    return Inquiry.findOne({ businessId: id });
+    return Inquiry.findOne({ id });
   }
 
   // note that these will return empty lists if the business doesn't exist

@@ -21,10 +21,10 @@ export class Inquiry extends BaseEntity {
   @Column()
   question: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: Publicity, default: Publicity.PRIVATE })
   publicity: Publicity;
 
-  @Column({ nullable: true, type: 'enum', enum: Publicity, default: Publicity.PRIVATE })
+  @Column({ nullable: true })
   answer?: string;
 
   constructor(authorId?: string, businessId?: string, question?: string, publicity?: Publicity, answer?: string) {

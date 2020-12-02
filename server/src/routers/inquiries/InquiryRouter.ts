@@ -189,12 +189,12 @@ class InquiryRouter {
         POST /api/inquiries/:id/publicity
         */
     this._router.post(
-      '/:id/publicity',
+      '/:inquiryId/publicity',
       Validation.publicityToggleMiddleware,
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const id: string = req.params.id;
-          const result = await this._controller.makePublic(id);
+          const inquiryId: string = req.params.inquiryId;
+          const result = await this._controller.makePublic(inquiryId);
           res
             .status(result.status)
             .json(result.message || result.data)
@@ -210,12 +210,12 @@ class InquiryRouter {
         DELETE /api/inquiries/:id/publicity
         */
     this._router.delete(
-      '/:id/publicity',
+      '/:inquiryId/publicity',
       Validation.publicityToggleMiddleware,
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const id: string = req.params.id;
-          const result = await this._controller.makePrivate(id);
+          const inquiryId: string = req.params.inquiryId;
+          const result = await this._controller.makePrivate(inquiryId);
           res
             .status(result.status)
             .json(result.message || result.data)
