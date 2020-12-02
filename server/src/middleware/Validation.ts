@@ -199,6 +199,26 @@ export class Validation {
     next();
   }
 
+  static async ownsBusinessInquiry(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const inquiry: Inquiry | undefined = await InquiryRepository.findOneById(req.params.inquiryId);
+    const businessId = inquiry?.businessId;
+    if (!businessId) {
+      res.status(404).json({ message: 'Inquiry does not exist' }).end();
+      return;
+    }
+    const business: Business | undefined = await BusinessRepository.findOneById(businessId);
+    const user = req.session.userID;
+    if (!business) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (!business.isOwner(user)) {
+      res.status(403).json({ message: 'Not authorized to manage this business inquiry' }).end();
+      return;
+    }
+    next();
+  }
+
   static async ownsBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
     const business: Business | undefined = await BusinessRepository.findOneById(
       req.params.businessId || req.body.businessId,
@@ -274,13 +294,12 @@ export class Validation {
   ];
 
   static postAnswerMiddleware = [
-    Validation.businessIdDefined,
-    Validation.businessIdValid,
+    Validation.inquiryIdDefined,
+    Validation.inquiryIdValid,
     Validation.answerDefined,
     Validation.answerValid,
-    Validation.businessIdExists,
     Validation.inquiryIdExists,
-    Validation.ownsBusiness,
+    Validation.ownsBusinessInquiry,
   ];
 
   static publicityToggleMiddleware = [
@@ -288,7 +307,7 @@ export class Validation {
     Validation.businessIdValid,
     Validation.businessIdExists,
     Validation.inquiryIdExists,
-    Validation.ownsBusiness,
+    Validation.ownsBusinessInquiry,
   ];
 
   static claimBusinessMiddleware = [

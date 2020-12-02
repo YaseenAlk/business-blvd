@@ -56,12 +56,20 @@ const router = new Router({
                 import ('./views/Report.vue')
         },
         {
+            path: '/manage/:id',
+            props: {
+              id: String,
+            },
+            name: 'Manage',
+            component: () => 
+              import('./views/Manage.vue')
+        },
+        {
             path: '*',
             name: 'NotFound',
             component: () =>
                 import ('./views/NotFound.vue')
         },
-
     ]
 });
 

@@ -22,6 +22,9 @@ import axios from 'axios';
 
 export default {
     name: 'Ask',
+    props: {
+      business: Object,
+    },
     components: {
         BForm, 
         BFormTextarea,
@@ -37,10 +40,10 @@ export default {
         },
         onSubmit: function(){
             this.clearAlerts(); 
-            let fields = JSON.parse(JSON.stringify(this.form));
-
-            axios.post('/api/inquiries', fields).then(() => {
-              this.$bvModal.hide('question');
+            console.log(this.form);
+            axios.post('/api/inquiries', this.form).then((res) => {
+              this.success = res.data.message;
+              //this.$bvModal.hide('question');
             }).catch((err) => {
               this.error = err.response.data.message || err;
             });
@@ -52,6 +55,7 @@ export default {
     data() {
       return {
         form: {
+            businessId: this.business.businessId,
             question: undefined,
         },
         success: undefined,

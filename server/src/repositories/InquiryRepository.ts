@@ -10,12 +10,12 @@ class InquiryRepository {
     return Inquiry.find({ businessId: id, publicity: Publicity.PUBLIC });
   }
 
-  getPrivateInquiriesFromBusiness(id: string): Promise<Inquiry[]> {
-    return Inquiry.find({ businessId: id, publicity: Publicity.PRIVATE });
+  getPrivateInquiriesFromBusiness(businessId: string): Promise<Inquiry[]> {
+    return Inquiry.find({ businessId, publicity: Publicity.PRIVATE });
   }
 
-  getPrivateInquiriesOfBusinessFromAuthor(id: string, userId: string): Promise<Inquiry[]> {
-    return Inquiry.find({ businessId: id, authorId: userId, publicity: Publicity.PRIVATE });
+  getPrivateInquiriesOfBusinessFromAuthor(businessId: string, userId: string): Promise<Inquiry[]> {
+    return Inquiry.find({ businessId, authorId: userId, publicity: Publicity.PRIVATE });
   }
 
   createOne(businessId: string, question: string, userId: string): Promise<Inquiry> {

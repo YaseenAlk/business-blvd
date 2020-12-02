@@ -33,11 +33,11 @@ class InquiryRouter {
       Validation.getInquiriesMiddleware,
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const id: string = req.params.id;
+          const businessId: string = req.params.businessId;
 
           // sign in optional
           const userId: string | undefined = req.session.userID;
-          const result = await this._controller.getInquiriesFromBusiness(id, userId);
+          const result = await this._controller.getInquiriesFromBusiness(businessId, userId);
 
           res
             .status(result.status)
@@ -133,13 +133,13 @@ class InquiryRouter {
         }
         */
     this._router.post(
-      '/:id/answer',
+      '/:inquiryId/answer',
       Validation.postAnswerMiddleware,
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const id: string = req.params.id;
+          const inquiryId: string = req.params.inquiryId;
           const answer: string = req.body.answer;
-          const result = await this._controller.postAnswer(id, answer);
+          const result = await this._controller.postAnswer(inquiryId, answer);
           res
             .status(result.status)
             .json(result.message || result.data)

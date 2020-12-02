@@ -1,5 +1,5 @@
 <template>
-  <b-link v-bind:to="business.internalURL" class="business-owner-card">
+  <b-link v-bind:to="'/manage/'+business.businessId" class="business-owner-card">
     <h4>{{business.name}}</h4>
     <span>{{business.position.address}}</span>
   </b-link>

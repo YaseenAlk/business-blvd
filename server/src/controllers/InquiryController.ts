@@ -5,21 +5,21 @@ import { ReturnObj } from './Common';
 
 class InquiryController {
   getInquiriesFromBusiness(
-    id: string,
+    businessId: string,
     userId?: string,
   ): Promise<ReturnObj & ({ data: Inquiry[] } | { message: string })> {
     const returnedInquiries: Inquiry[] = [];
 
-    return BusinessRepository.findOneById(id).then((business) => {
+    return BusinessRepository.findOneById(businessId).then((business) => {
       if (!business) return { status: 404, message: 'Business not found' };
       else
-        return InquiryRepository.getPublicInquiriesFromBusiness(id).then((inquiries) => {
+        return InquiryRepository.getPublicInquiriesFromBusiness(businessId).then((inquiries) => {
           returnedInquiries.push(...inquiries);
           if (!userId) return { status: 200, data: returnedInquiries };
 
           return (business.ownerId === userId
-            ? InquiryRepository.getPrivateInquiriesFromBusiness(id)
-            : InquiryRepository.getPrivateInquiriesOfBusinessFromAuthor(id, userId)
+            ? InquiryRepository.getPrivateInquiriesFromBusiness(businessId)
+            : InquiryRepository.getPrivateInquiriesOfBusinessFromAuthor(businessId, userId)
           ).then((extraInquiries) => {
             returnedInquiries.push(...extraInquiries);
             return { status: 200, data: returnedInquiries };
