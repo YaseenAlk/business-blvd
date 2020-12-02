@@ -1,8 +1,6 @@
 <template>
-    <div class="info-page">
-        <div v-if="selectedBusiness !== undefined">
-            <MapCard v-bind:business="selectedBusiness" />
-        </div>
+    <div v-if="selectedBusiness !== undefined">
+        <MapCard v-bind:business="selectedBusiness" />
     </div>
 </template>
 
@@ -29,10 +27,6 @@ export default {
 </script>
 
 <style>
-.info-page {
-    padding: 32px;
-}
-
 .card-section {
     transition: all 0.5s ease-in-out;
 }
