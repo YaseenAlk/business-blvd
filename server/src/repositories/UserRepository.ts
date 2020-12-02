@@ -1,5 +1,4 @@
 import { User } from '../models/User';
-import Business from '../models/business/Business';
 
 class UserRepository {
   findOneByID(uuid: string): Promise<User | undefined> {
