@@ -64,12 +64,6 @@ export default new Router({
             component: () => 
               import('./views/Manage.vue')
         },
-        { 
-            path: '/admin',
-            name: 'Admin',
-            component: () => 
-                import('./views/Admin.vue')    
-        },
         {
             path: '*',
             name: 'NotFound',
