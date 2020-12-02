@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
@@ -52,8 +52,8 @@ export default new Router({
         {
             path: '/report',
             name: 'Report',
-            component: () => 
-              import('./views/Report.vue')
+            component: () =>
+                import ('./views/Report.vue')
         },
         {
             path: '/manage/:id',
@@ -71,4 +71,19 @@ export default new Router({
                 import ('./views/NotFound.vue')
         },
     ]
+});
+
+const authRoutes = new Set(['Report', 'Claim', 'Account'])
+
+router.beforeEach((from, to, next) => {
+
+    const cookieID = Vue.cookie.get('business-blvd-userId');
+
+    const isLoggedIn = cookieID !== 'undefined' && cookieID !== '';
+    const requiresAuth = authRoutes.has(from.name);
+
+    if (!isLoggedIn && requiresAuth) next({ name: 'LogIn' });
+    else next();
 })
+
+export default router;

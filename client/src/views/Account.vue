@@ -15,24 +15,13 @@
 import AccountHeader from '../components/account/AccountHeader.vue';
 import AccountOwner from '../components/account/AccountOwner.vue';
 import AccountEditProfile from '../components/account/AccountEditProfile.vue';
-
 import { eventBus } from '../main.js';
-import axios from 'axios';
 
 export default {
     name: 'Account',
     created(){
         eventBus.$on('successful-logout', () => {
             this.user = undefined;
-        });
-
-        axios.get('/api/users/loginStatus').then((res) => {
-            if (!res.data.signedIn) {
-              this.$router.push('/login');
-            }
-            this.user = res.data;
-        }).catch((err) => {
-            console.error(err.responses.data || err);
         });
     },
     data(){
