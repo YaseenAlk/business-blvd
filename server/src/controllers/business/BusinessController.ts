@@ -12,6 +12,7 @@ import SocialsRepository from '../../repositories/business/SocialsRepository';
 import TagsRepository from '../../repositories/business/TagsRepository';
 import Business from '../../models/business/Business';
 import { Platforms } from '../../models/business/Socials';
+import Ratings from '../../models/business/Ratings';
 
 class BusinessController {
   /***************
@@ -30,7 +31,7 @@ class BusinessController {
         if (business) {
           return { status: 200, data: business };
         } else {
-          return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+          return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
         }
       });
   }
@@ -72,7 +73,7 @@ class BusinessController {
       if (hours) {
         return { status: 200, data: hours };
       } else {
-        return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
       }
     });
   }
@@ -87,7 +88,7 @@ class BusinessController {
       if (updatedHours) {
         return { status: 201, data: updatedHours };
       } else {
-        return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
       }
     });
   }
@@ -95,52 +96,64 @@ class BusinessController {
   /***************
   RATINGS METHODS
   ****************/
-  getBothRatingsAndAverages(businessId: string): ReturnObj {
-    const avgSafetyRating = /* await */ RatingsRepository.findAverageSafetyRatingsById(businessId);
-    const avgServiceRating = /* await */ RatingsRepository.findAverageServiceRatingsById(businessId);
-
-    if (avgSafetyRating !== undefined && avgServiceRating !== undefined) {
-      return {
-        status: 200,
-        data: {
-          safety: avgSafetyRating,
-          service: avgServiceRating,
-        },
-      };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getBothRatingsAndAverages(
+    businessId: string,
+  ): Promise<
+    ReturnObj &
+      (
+        | { data: { safety: { average: number; ratings: number[] }; service: { average: number; ratings: number[] } } }
+        | { message: string }
+      )
+  > {
+    return RatingsRepository.findAverageSafetyRatingsById(businessId).then((avgSafetyRating) => {
+      return RatingsRepository.findAverageServiceRatingsById(businessId).then((avgServiceRating) => {
+        if (avgSafetyRating !== undefined && avgServiceRating !== undefined) {
+          return {
+            status: 200,
+            data: {
+              safety: avgSafetyRating,
+              service: avgServiceRating,
+            },
+          };
+        } else {
+          return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+        }
+      });
+    });
   }
 
-  getBothRatingsByUser(businessId: string, userId: string): ReturnObj {
-    const safetyRating = /* await */ RatingsRepository.getSingleSafetyRating(businessId, userId);
-    const serviceRating = /* await */ RatingsRepository.getSingleServiceRating(businessId, userId);
-    if (safetyRating && serviceRating) {
-      return {
-        status: 200,
-        data: {
-          safety: safetyRating,
-          service: serviceRating,
-        },
-      };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getBothRatingsByUser(
+    businessId: string,
+    userId: string,
+  ): Promise<ReturnObj & ({ data: { safety: number; service: number } } | { message: string })> {
+    return RatingsRepository.getSingleSafetyRating(businessId, userId).then((safetyRating) => {
+      return RatingsRepository.getSingleServiceRating(businessId, userId).then((serviceRating) => {
+        if (safetyRating && serviceRating) {
+          return {
+            status: 200,
+            data: {
+              safety: safetyRating,
+              service: serviceRating,
+            },
+          };
+        } else {
+          return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+        }
+      });
+    });
   }
 
-  setRatings(businessId: string, userId: string, safetyRating?: number, serviceRating?: number): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      if (safetyRating) {
-        /* await */ RatingsRepository.updateSafetyRating(businessId, userId, safetyRating);
+  setRatings(businessId: string, userId: string, safetyRating?: number, serviceRating?: number): Promise<ReturnObj> {
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        const promises: Promise<Ratings | undefined>[] = [];
+        if (safetyRating) promises.push(RatingsRepository.updateSafetyRating(businessId, userId, safetyRating));
+        if (serviceRating) promises.push(RatingsRepository.updateServiceRating(businessId, userId, serviceRating));
+        return { status: 200, message: 'Updated ratings!' };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
       }
-      if (serviceRating) {
-        /* await */ RatingsRepository.updateServiceRating(businessId, userId, serviceRating);
-      }
-      return { status: 200, data: 'Updated ratings!' };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+    });
   }
 
   /***************
@@ -152,7 +165,7 @@ class BusinessController {
       if (platforms) {
         return { status: 201, data: platforms };
       } else {
-        return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
       }
     });
   }

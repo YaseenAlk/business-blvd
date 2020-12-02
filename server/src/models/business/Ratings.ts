@@ -1,22 +1,25 @@
 import { TSMap } from 'typescript-map';
 
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+
 type InputEntries = {
   asMap?: TSMap<string, number>;
   asList?: [string, number][];
 };
 
-// @Entity()
-export default class Ratings {
-  // @PrimaryColumn("uuid")
+@Entity()
+export default class Ratings extends BaseEntity {
+  @PrimaryColumn('uuid')
   businessId: string;
 
-  // @Column("jsonb")
+  @Column('jsonb')
   serviceRatings: TSMap<string, number>;
 
-  // @Column("jsonb")
+  @Column('jsonb')
   safetyRatings: TSMap<string, number>;
 
   constructor(businessId: string, serviceRatings: InputEntries, safetyRatings: InputEntries) {
+    super();
     this.businessId = businessId;
     this.serviceRatings = new TSMap();
     this.safetyRatings = new TSMap();
