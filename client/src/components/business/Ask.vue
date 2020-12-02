@@ -10,7 +10,12 @@
             <b-form-textarea id="question" v-model="form.question" size="sm" required rows="3" placeholder="Enter a question for this business" />
             <b-alert class="alert" variant="success" v-bind:show="success !== undefined">{{success}}</b-alert>
             <b-alert class="alert" variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
-            <b-button type="submit" class="modal-button" variant="primary">Send question</b-button>
+            <b-button type="submit" class="modal-button">
+              <div class="d-flex align-items-center">
+                <span v-if="!loading">Submit Question</span>
+                <b-spinner v-else small />
+              </div>
+            </b-button>
         </b-form>
       </b-modal>
     </b-toast>
@@ -40,12 +45,14 @@ export default {
         },
         onSubmit: function(){
             this.clearAlerts(); 
-            console.log(this.form);
+            this.loading = true;
             axios.post('/api/inquiries', this.form).then((res) => {
               this.success = res.data.message;
-              //this.$bvModal.hide('question');
+              this.$bvModal.hide('question');
+              this.loading = false;
             }).catch((err) => {
               this.error = err.response.data.message || err;
+              this.loading = false;
             });
         },
         handleSubmit: () => { 
@@ -60,6 +67,7 @@ export default {
         },
         success: undefined,
         error: undefined,
+        loading: false,
       };
     }
 }

@@ -42,6 +42,7 @@ export default {
       axios.get(`/api/business/${this.business.businessId}/ratings`)
       .then((resp) => resp.data)
       .then((ratings) => {
+        console.log(ratings);
         this.rating = ratings;
       })
       .then(() => axios.get(`/api/business/${this.business.businessId}/position`))
