@@ -15,13 +15,13 @@ class HoursRepository {
 
   clearEntries(businessId: string) {
     const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
-    businessHours.entries = new TSMap<Day, TimeBlock>();
+    if (businessHours) businessHours.entries = new TSMap<Day, TimeBlock>();
     // await businessHours.save();
   }
 
   updateSingleEntry(businessId: string, day: Day, openingTime: Time, closingTime: Time): Hours | undefined {
     const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
-    businessHours.entries.set(day, { open: openingTime, close: closingTime });
+    businessHours?.entries.set(day, { open: openingTime, close: closingTime });
     // await businessHours.save();
     return businessHours;
   }
@@ -29,7 +29,7 @@ class HoursRepository {
   updateMultipleEntries(businessId: string, incoming: TSMap<Day, TimeBlock>) {
     const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
     incoming.forEach((value, key) => {
-      if (key) businessHours.entries.set(key, value);
+      if (key) businessHours?.entries.set(key, value);
     });
     // await businessHours.save();
   }

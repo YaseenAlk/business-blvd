@@ -3,25 +3,25 @@ import Socials from '../../models/business/Socials';
 class SocialsRepository {
   private data: Socials[] = [];
 
-  findSocialsById(businessId: string): { facebook?: string; twitter?: string; instagram?: string } {
-    return this.data.filter((socials) => socials.businessId === businessId)[0].getSocialURLs();
+  findSocialsById(businessId: string): { facebook?: string; twitter?: string; instagram?: string } | undefined {
+    return this.data.filter((socials) => socials.businessId === businessId)[0]?.getSocialURLs();
   }
 
   updateFacebook(businessId: string, facebookURL: string): void {
     const socials = this.data.filter((socials) => socials.businessId === businessId)[0];
-    socials.facebook = facebookURL;
+    if (socials) socials.facebook = facebookURL;
     // await socials.save();
   }
 
   updateTwitter(businessId: string, twitterURL: string): void {
     const socials = this.data.filter((socials) => socials.businessId === businessId)[0];
-    socials.twitter = twitterURL;
+    if (socials) socials.twitter = twitterURL;
     // await socials.save();
   }
 
   updateInstagram(businessId: string, instagramURL: string): void {
     const socials = this.data.filter((socials) => socials.businessId === businessId)[0];
-    socials.instagram = instagramURL;
+    if (socials) socials.instagram = instagramURL;
     // await socials.save();
   }
 }

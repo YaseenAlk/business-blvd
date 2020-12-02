@@ -34,19 +34,19 @@ class InquiryRepository {
 
   postAnswer(id: string, answer: string) {
     const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.answer = answer;
+    if (inquiry) inquiry.answer = answer;
     // await inquiry.save();
   }
 
   makePublic(id: string) {
     const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.publicity = Publicity.PUBLIC;
+    if (inquiry) inquiry.publicity = Publicity.PUBLIC;
     // await inquiry.save();
   }
 
   makePrivate(id: string) {
     const inquiry = this.data.filter((inq) => inq.id === id)[0];
-    inquiry.publicity = Publicity.PRIVATE;
+    if (inquiry) inquiry.publicity = Publicity.PRIVATE;
     // await inquiry.save();
   }
 }

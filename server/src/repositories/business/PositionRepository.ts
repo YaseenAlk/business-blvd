@@ -9,9 +9,11 @@ class PositionRepository {
 
   update(businessId: string, address: string, lat: number, lng: number) {
     const position = this.data.filter((position) => position.businessId === businessId)[0];
-    position.address = address;
-    position.lat = lat;
-    position.lng = lng;
+    if (position) {
+      position.address = address;
+      position.lat = lat;
+      position.lng = lng;
+    }
   }
 }
 

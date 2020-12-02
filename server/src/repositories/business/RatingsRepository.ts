@@ -5,19 +5,19 @@ class RatingsRepository {
   private data: Ratings[] = [];
 
   findSafetyRatingsMapById(businessId: string): TSMap<string, number> | undefined {
-    return this.data.filter((ratings) => ratings.businessId === businessId)[0].safetyRatings;
+    return this.data.filter((ratings) => ratings.businessId === businessId)[0]?.safetyRatings;
   }
 
   findServiceRatingsMapById(businessId: string): TSMap<string, number> | undefined {
-    return this.data.filter((ratings) => ratings.businessId === businessId)[0].serviceRatings;
+    return this.data.filter((ratings) => ratings.businessId === businessId)[0]?.serviceRatings;
   }
 
   findAverageSafetyRatingsById(businessId: string): { average: number; ratings: Array<number> } | undefined {
-    return this.data.filter((ratings) => ratings.businessId === businessId)[0].getSafetyRatings();
+    return this.data.filter((ratings) => ratings.businessId === businessId)[0]?.getSafetyRatings();
   }
 
   findAverageServiceRatingsById(businessId: string): { average: number; ratings: Array<number> } | undefined {
-    return this.data.filter((ratings) => ratings.businessId === businessId)[0].getServiceRatings();
+    return this.data.filter((ratings) => ratings.businessId === businessId)[0]?.getServiceRatings();
   }
 
   getSingleServiceRating(businessId: string, userId: string): number | undefined {
@@ -32,12 +32,12 @@ class RatingsRepository {
 
   updateServiceRating(businessId: string, userId: string, rating: number): void {
     const ratings = this.data.filter((ratings) => ratings.businessId === businessId)[0];
-    ratings.serviceRatings.set(userId, rating);
+    ratings?.serviceRatings.set(userId, rating);
   }
 
   updateSafetyRating(businessId: string, userId: string, rating: number): void {
     const ratings = this.data.filter((ratings) => ratings.businessId === businessId)[0];
-    ratings.safetyRatings.set(userId, rating);
+    ratings?.safetyRatings.set(userId, rating);
   }
 }
 export = new RatingsRepository();
