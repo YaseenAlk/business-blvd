@@ -5,7 +5,7 @@ class PositionRepository {
   generateExamples(): Promise<Position> {
     const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
     const p1 = new Position(b1, '123 Seasame Street', 42.362541, -71.09845);
-    const p2 = new Position(b2, '123 Seasame Street', 42.362541, -71.09845);
+    const p2 = new Position(b2, '124 Seasame Street', 42.362545, -71.09855);
     return p1.save().then(() => {
       return p2.save();
     });
