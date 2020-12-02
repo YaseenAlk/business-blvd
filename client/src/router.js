@@ -56,10 +56,19 @@ export default new Router({
               import('./views/Report.vue')
         },
         {
-            path: '/manage',
+            path: '/manage/:id',
+            props: {
+              id: String,
+            },
             name: 'Manage',
             component: () => 
               import('./views/Manage.vue')
+        },
+        { 
+            path: '/admin',
+            name: 'Admin',
+            component: () => 
+                import('./views/Admin.vue')    
         },
         {
             path: '*',
