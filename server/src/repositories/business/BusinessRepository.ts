@@ -5,17 +5,18 @@ import Business, { BusinessJSON } from '../../models/business/Business';
 
 class BusinessRepository {
   private exampleIds: [string, string];
+  private b1: Business;
+  private b2: Business;
+
   constructor() {
-    const b1: Business = this.generateExample();
-    const b2: Business = this.generateExample();
-    this.exampleIds = [b1.businessId, b2.businessId];
+    this.b1 = this.generateExample();
+    this.b2 = this.generateExample();
+    this.exampleIds = [this.b1.businessId, this.b2.businessId];
   }
 
   generateExamples(): Promise<Business> {
-    const b1: Business = this.generateExample();
-    const b2: Business = this.generateExample();
-    return b1.save().then(() => {
-      return b2.save();
+    return this.b1.save().then(() => {
+      return this.b2.save();
     });
   }
 
