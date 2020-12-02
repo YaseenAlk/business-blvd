@@ -25,7 +25,7 @@ export default class Business extends BaseEntity {
   @Column()
   followers: string[];
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'uuid' })
   ownerId: string | undefined;
 
   @Column()

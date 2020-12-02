@@ -3,7 +3,7 @@ import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
 export enum BusinessTags {
   DELIVERY,
   PICKUP,
-  HANDSANITIZER,
+  HAND_SANITIZER,
 }
 
 @Entity()
