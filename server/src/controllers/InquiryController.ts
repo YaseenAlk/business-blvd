@@ -1,42 +1,55 @@
 import InquiryRepository from '../repositories/InquiryRepository';
-import BusinessRepository from '../repositories/BusinessRepository';
-import { v4 as uuidv4 } from 'uuid';
-import Business from '../models/business/Business';
+import BusinessRepository from '../repositories/business/BusinessRepository';
+import { Inquiry } from '../models/Inquiry';
+import { ReturnObj } from './Common';
 
 class InquiryController {
-  getInquiriesFromBusiness(id: string, userId?: string) {
-    const inquiries = InquiryRepository.getPublicInquiriesFromBusiness(id);
-    const business: Business | undefined = BusinessRepository.findOneById(id);
-    if (userId) {
-      if (business?.ownerId === userId) {
-        inquiries.push(...InquiryRepository.getPrivateInquiriesFromBusiness(id));
-      } else {
-        inquiries.push(...InquiryRepository.getPrivateInquiriesOfBusinessFromAuthor(id, userId));
-      }
-    }
-    return inquiries;
+  getInquiriesFromBusiness(
+    businessId: string,
+    userId?: string,
+  ): Promise<ReturnObj & ({ data: Inquiry[] } | { message: string })> {
+    const returnedInquiries: Inquiry[] = [];
+
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (!business) return { status: 404, message: 'Business not found' };
+      else
+        return InquiryRepository.getPublicInquiriesFromBusiness(businessId).then((inquiries) => {
+          returnedInquiries.push(...inquiries);
+          if (!userId) return { status: 200, data: returnedInquiries };
+
+          return (business.ownerId === userId
+            ? InquiryRepository.getPrivateInquiriesFromBusiness(businessId)
+            : InquiryRepository.getPrivateInquiriesOfBusinessFromAuthor(businessId, userId)
+          ).then((extraInquiries) => {
+            returnedInquiries.push(...extraInquiries);
+            return { status: 200, data: returnedInquiries };
+          });
+        });
+    });
   }
 
-  createInquiry(businessId: string, question: string, userId: string) {
-    const inqID = uuidv4(); // this ID is internal so it's okay for it to be a long string
-
-    InquiryRepository.createOne(inqID, businessId, question, userId);
-    return { message: 'Successfully created inquiry!' };
+  createInquiry(businessId: string, question: string, userId: string): Promise<ReturnObj> {
+    return InquiryRepository.createOne(businessId, question, userId).then(() => {
+      return { status: 200, message: 'Successfully created inquiry!' };
+    });
   }
 
-  postAnswer(id: string, answer: string) {
-    InquiryRepository.postAnswer(id, answer);
-    return { message: 'Successfully posted answer!' };
+  postAnswer(id: string, answer: string): Promise<ReturnObj> {
+    return InquiryRepository.postAnswer(id, answer).then(() => {
+      return { status: 200, message: 'Successfully posted answer!' };
+    });
   }
 
-  makePublic(id: string) {
-    InquiryRepository.makePublic(id);
-    return { message: 'Successfully made inquiry public.' };
+  makePublic(id: string): Promise<ReturnObj> {
+    return InquiryRepository.makePublic(id).then(() => {
+      return { status: 200, message: 'Successfully made inquiry public.' };
+    });
   }
 
-  makePrivate(id: string) {
-    InquiryRepository.makePrivate(id);
-    return { message: 'Successfully made inquiry private.' };
+  makePrivate(id: string): Promise<ReturnObj> {
+    return InquiryRepository.makePrivate(id).then(() => {
+      return { status: 200, message: 'Successfully made inquiry private.' };
+    });
   }
 }
 

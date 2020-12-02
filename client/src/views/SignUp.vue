@@ -43,8 +43,8 @@ export default {
         onSubmit: function(){
             this.clearAlerts(); 
             this.loading = true;
-            axios.post('/api/users', this.form).then(() => {
-                let user = { username: this.form.username };
+            axios.post('/api/users', this.form).then((res) => {
+                let user = { username: this.form.username, userId: res.data.userId };
                 eventBus.$emit('successful-login', user);
                 this.$router.push('/map');
                 this.loading = false;

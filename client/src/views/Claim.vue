@@ -25,7 +25,7 @@
           <b-form-group label="Business ID:" label-for="businessID" label-align="left" label-cols-sm="4">
             <b-form-input required id="businessID" type="text" v-model="unclaimForm.businessID" />
           </b-form-group>
-          <b-alert variant="success" v-bind:show="unclaimForm.successMessage !== undefined">{{unclaimForm.successMessage}}</b-alert>
+          <b-alert variant="success" v-bind:show="claimForm.successMessage !== undefined">{{unclaimForm.successMessage}}</b-alert>
           <b-alert variant="danger" v-bind:show="unclaimForm.errorMessage !== undefined">{{unclaimForm.errorMessage}}</b-alert>
           <b-button variant="success" type="submit">
             <span class="d-flex align-items-center">

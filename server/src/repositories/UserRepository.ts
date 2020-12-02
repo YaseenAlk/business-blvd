@@ -1,7 +1,7 @@
 import { User } from '../models/User';
-import Business from '../models/business/Business';
 
 class UserRepository {
+  // getters
   findOneByID(uuid: string): Promise<User | undefined> {
     return User.findOne({ id: uuid });
   }
@@ -14,6 +14,11 @@ class UserRepository {
     return User.findOne({ _email: email });
   }
 
+  verifyId(id: string): Promise<boolean> {
+    return User.findOne({ id }).then((user) => user !== undefined);
+  }
+
+  // updaters
   addOne(email: string, username: string, password: string): Promise<User> {
     const newUser: User = new User(email, username, password);
     return newUser.save();
@@ -45,8 +50,18 @@ class UserRepository {
     });
   }
 
-  verifyId(id: string): Promise<boolean> {
-    return User.findOne({ id }).then((user) => user !== undefined);
+  followBusiness(userId: string, businessId: string): Promise<User | undefined> {
+    return User.findOne({ id: userId }).then((user) => {
+      user?.followBusiness(businessId);
+      return user?.save();
+    });
+  }
+
+  unfollowBusiness(userId: string, businessId: string): Promise<User | undefined> {
+    return User.findOne({ id: userId }).then((user) => {
+      user?.unfollowBusiness(businessId);
+      return user?.save();
+    });
   }
 }
 

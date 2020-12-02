@@ -10,7 +10,12 @@
             <b-form-textarea id="question" v-model="form.question" size="sm" required rows="3" placeholder="Enter a question for this business" />
             <b-alert class="alert" variant="success" v-bind:show="success !== undefined">{{success}}</b-alert>
             <b-alert class="alert" variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
-            <b-button type="submit" class="modal-button" variant="primary">Send question</b-button>
+            <b-button type="submit" class="modal-button">
+              <div class="d-flex align-items-center">
+                <span v-if="!loading">Submit Question</span>
+                <b-spinner v-else small />
+              </div>
+            </b-button>
         </b-form>
       </b-modal>
     </b-toast>
@@ -22,6 +27,9 @@ import axios from 'axios';
 
 export default {
     name: 'Ask',
+    props: {
+      business: Object,
+    },
     components: {
         BForm, 
         BFormTextarea,
@@ -37,12 +45,14 @@ export default {
         },
         onSubmit: function(){
             this.clearAlerts(); 
-            let fields = JSON.parse(JSON.stringify(this.form));
-
-            axios.post('/api/inquiries', fields).then(() => {
+            this.loading = true;
+            axios.post('/api/inquiries', this.form).then((res) => {
+              this.success = res.data.message;
               this.$bvModal.hide('question');
+              this.loading = false;
             }).catch((err) => {
               this.error = err.response.data.message || err;
+              this.loading = false;
             });
         },
         handleSubmit: () => { 
@@ -52,10 +62,12 @@ export default {
     data() {
       return {
         form: {
+            businessId: this.business.businessId,
             question: undefined,
         },
         success: undefined,
         error: undefined,
+        loading: false,
       };
     }
 }

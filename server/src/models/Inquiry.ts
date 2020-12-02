@@ -1,67 +1,39 @@
-/*
-Inquiry:
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
 
-    - int id
-    - int authorId
-    - int businessId
-    - string question
-    - string? answer  
-*/
+import { v4 as uuidv4 } from 'uuid';
 
-export class Inquiry {
-  private _id: string;
-  private _authorId: string;
-  private _businessId: string;
-  private _question: string;
-  private _privacy: 'public' | 'private';
-  private _answer?: string;
+export enum Publicity {
+  PRIVATE = 'private',
+  PUBLIC = 'public',
+}
 
-  constructor(
-    id: string,
-    authorId: string,
-    businessId: string,
-    question: string,
-    privacy?: 'public' | 'private',
-    answer?: string,
-  ) {
-    this._id = id;
-    this._authorId = authorId;
-    this._businessId = businessId;
-    this._question = question;
-    this._privacy = privacy || 'private';
-    if (answer) this._answer = answer;
-  }
+@Entity()
+export class Inquiry extends BaseEntity {
+  @PrimaryColumn('uuid')
+  id: string;
 
-  get id(): string {
-    return this._id;
-  }
+  @Column('uuid')
+  authorId: string;
 
-  get authorId(): string {
-    return this._authorId;
-  }
+  @Column('uuid')
+  businessId: string;
 
-  get businessId(): string {
-    return this._businessId;
-  }
+  @Column()
+  question: string;
 
-  get question(): string {
-    return this._question;
-  }
-  set question(newQuestion: string) {
-    this._question = newQuestion;
-  }
+  @Column({ type: 'enum', enum: Publicity, default: Publicity.PRIVATE })
+  publicity: Publicity;
 
-  get privacy(): 'public' | 'private' {
-    return this._privacy;
-  }
-  set privacy(newPrivacy: 'public' | 'private') {
-    this._privacy = newPrivacy;
-  }
+  @Column({ nullable: true })
+  answer?: string;
 
-  get answer(): string | undefined {
-    return this._answer;
-  }
-  set answer(newAnswer: string | undefined) {
-    this._answer = newAnswer;
+  constructor(authorId?: string, businessId?: string, question?: string, publicity?: Publicity, answer?: string) {
+    super();
+    this.id = uuidv4();
+    this.authorId = authorId || uuidv4();
+    this.businessId = businessId || uuidv4();
+    this.question = question || '';
+    this.publicity = publicity || Publicity.PRIVATE;
+    if (answer) this.answer = answer;
   }
 }
