@@ -54,6 +54,7 @@ export default {
     .then((res) => res.data)
     .then((business) => {
       this.business = business;
+      console.log(business);
     })
     .then(() => axios.get(`api/business/${businessId}/position`))
     .then((res) => res.data)

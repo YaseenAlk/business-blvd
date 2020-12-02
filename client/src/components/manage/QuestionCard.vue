@@ -60,9 +60,18 @@ export default {
     onSubmit() {
       this.errorMessage = undefined;
       this.answerLoading = true;
+      
       axios.post('/api/inquiries/' + this.id + '/answer', this.form).then((res) =>{
         this.successMessage = res.data.message;
-      }).catch((err) => {
+      })
+      .then(() => {
+        if (this.form.publicity) {
+          return axios.post('/api/inquiries/' + this.id + '/publicity' )
+        } else {
+          return axios.delete('/api/inquiries/' + this.id + '/publicity' )
+        }
+      })
+      .catch((err) => {
         this.errorMessage = err.response.data.message || err;
       }).then(() => this.answerLoading = false);
     },

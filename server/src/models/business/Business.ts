@@ -44,7 +44,7 @@ export default class Business extends BaseEntity {
     this.description = entry?.description || '';
     this.businessId = entry?.businessId || uuidv4();
     this.followers = Array.from(entry?.followers || []);
-    this.ownerId = entry?.ownerId || uuidv4();
+    this.ownerId = entry?.ownerId;
     this.internalURL = entry?.internalURL || '';
     this.externalURL = entry?.externalURL || '';
     this.phone = entry?.phone || '';
