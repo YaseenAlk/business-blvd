@@ -1,7 +1,7 @@
 //import { Entity, PrimaryColumn, Column } from 'typeorm';
 
 //@Entity()
-export default class BusinessPosition {
+export default class Position {
   //@PrimaryColumn({ type: 'uuid' })
   businessId: string;
 

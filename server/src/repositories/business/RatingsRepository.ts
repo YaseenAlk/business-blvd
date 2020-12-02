@@ -1,8 +1,8 @@
 import { TSMap } from 'typescript-map';
-import BusinessRatings from '../../models/business/Ratings';
+import Ratings from '../../models/business/Ratings';
 
 class RatingsRepository {
-  private data: BusinessRatings[] = [];
+  private data: Ratings[] = [];
 
   findSafetyRatingsMapById(businessId: string): TSMap<string, number> | undefined {
     return this.data.filter((ratings) => ratings.businessId === businessId)[0].safetyRatings;

@@ -1,9 +1,9 @@
-import BusinessPosition from '../../models/business/Position';
+import Position from '../../models/business/Position';
 
 class PositionRepository {
-  private data: BusinessPosition[] = [];
+  private data: Position[] = [];
 
-  findOneById(businessId: string): BusinessPosition | undefined {
+  findOneById(businessId: string): Position | undefined {
     return this.data.filter((position) => position.businessId === businessId)[0];
   }
 

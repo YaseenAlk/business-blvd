@@ -1,10 +1,10 @@
 import { TSMap } from 'typescript-map';
-import { BusinessHours, Day, Time, TimeBlock } from '../../models/business/Hours';
+import { Hours, Day, Time, TimeBlock } from '../../models/business/Hours';
 
 class HoursRepository {
-  private data: BusinessHours[] = [];
+  private data: Hours[] = [];
 
-  findHoursById(businessId: string): BusinessHours | undefined {
+  findHoursById(businessId: string): Hours | undefined {
     return this.data.filter((hours) => hours.businessId === businessId)[0];
   }
 
@@ -19,7 +19,7 @@ class HoursRepository {
     // await businessHours.save();
   }
 
-  updateSingleEntry(businessId: string, day: Day, openingTime: Time, closingTime: Time): BusinessHours | undefined {
+  updateSingleEntry(businessId: string, day: Day, openingTime: Time, closingTime: Time): Hours | undefined {
     const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
     businessHours.entries.set(day, { open: openingTime, close: closingTime });
     // await businessHours.save();

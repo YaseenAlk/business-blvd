@@ -9,8 +9,8 @@ Inquiry:
 */
 
 export enum Publicity {
-  PUBLIC,
-  PRIVATE,
+  PRIVATE = 'private',
+  PUBLIC = 'public',
 }
 
 // @Entity()
@@ -18,10 +18,10 @@ export class Inquiry {
   // @PrimaryColumn("uuid")
   private _id: string;
 
-  // @Column()
+  // @Column("uuid")
   private _authorId: string;
 
-  // @Column()
+  // @Column("uuid")
   private _businessId: string;
 
   // @Column()

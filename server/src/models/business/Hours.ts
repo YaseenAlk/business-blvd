@@ -27,7 +27,7 @@ export type TimeBlock = {
 };
 
 // @Entity()
-export class BusinessHours {
+export class Hours {
   // @PrimaryColumn("uuid")
   businessId: string;
 

@@ -6,7 +6,7 @@ type InputEntries = {
 };
 
 // @Entity()
-export default class BusinessRatings {
+export default class Ratings {
   // @PrimaryColumn("uuid")
   businessId: string;
 

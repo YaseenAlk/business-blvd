@@ -4,11 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { TSMap } from 'typescript-map';
 import Business, { BusinessJSON } from '../../models/business/Business';
 
-import BusinessPosition from '../../models/business/Position';
+import Position from '../../models/business/Position';
 import TagsList, { BusinessTags } from '../../models/business/TagsList';
-import BusinessRatings from '../../models/business/Ratings';
-import BusinessSocialMedia from '../../models/business/Socials';
-import { Day, BusinessHours, Time } from '../../models/business/Hours';
+import Ratings from '../../models/business/Ratings';
+import Socials from '../../models/business/Socials';
+import { Day, Hours, Time } from '../../models/business/Hours';
 
 class BusinessRepository {
   data: TSMap<string, Business> = new TSMap();
@@ -55,12 +55,12 @@ class BusinessRepository {
 
     const businessJSON: BusinessJSON = {
       name: "Poppa's Workshop",
-      position: new BusinessPosition(businessId, '123 Seasame Street', 42.362541, -71.09845),
+      position: new Position(businessId, '123 Seasame Street', 42.362541, -71.09845),
       description: 'Where the elbow grease is used.',
       businessId: businessId,
-      ratings: new BusinessRatings(businessId, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings }),
-      hours: new BusinessHours(businessId, { asListFlat: exampleHours }),
-      socialMedia: new BusinessSocialMedia(businessId, {
+      ratings: new Ratings(businessId, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings }),
+      hours: new Hours(businessId, { asListFlat: exampleHours }),
+      socialMedia: new Socials(businessId, {
         facebook: 'https://www.facebook.com',
         twitter: 'https://www.twitter.com',
         instagram: 'https://www.instagram.com',

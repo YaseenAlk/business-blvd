@@ -87,13 +87,15 @@ class BusinessController {
   RATINGS METHODS
   ****************/
   getBothRatingsAndAverages(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
+    const avgSafetyRating = /* await */ RatingsRepository.findAverageSafetyRatingsById(businessId);
+    const avgServiceRating = /* await */ RatingsRepository.findAverageServiceRatingsById(businessId);
+
+    if (avgSafetyRating !== undefined && avgServiceRating !== undefined) {
       return {
         status: 200,
         data: {
-          safety: business.ratings.getSafetyRatings(),
-          service: business.ratings.getServiceRatings(),
+          safety: avgSafetyRating,
+          service: avgServiceRating,
         },
       };
     } else {
@@ -121,10 +123,10 @@ class BusinessController {
     const business = /* await */ BusinessRepository.findOneById(businessId);
     if (business) {
       if (safetyRating) {
-        RatingsRepository.updateSafetyRating(businessId, userId, safetyRating);
+        /* await */ RatingsRepository.updateSafetyRating(businessId, userId, safetyRating);
       }
       if (serviceRating) {
-        RatingsRepository.updateServiceRating(businessId, userId, serviceRating);
+        /* await */ RatingsRepository.updateServiceRating(businessId, userId, serviceRating);
       }
       return { status: 200, data: 'Updated ratings!' };
     } else {
@@ -137,10 +139,9 @@ class BusinessController {
   ****************/
 
   getSocialMedia(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      const businessSocialMedia = /* await */ SocialsRepository.findSocialsById(businessId);
-      return { status: 201, data: businessSocialMedia };
+    const socials = /* await */ SocialsRepository.findSocialsById(businessId);
+    if (socials) {
+      return { status: 201, data: socials };
     } else {
       return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
     }

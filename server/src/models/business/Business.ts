@@ -1,17 +1,17 @@
-import BusinessPosition from './Position';
+import Position from './Position';
 import { BusinessTags } from './TagsList';
-import BusinessRatings from './Ratings';
-import BusinessSocialMedia from './Socials';
-import { BusinessHours } from './Hours';
+import Ratings from './Ratings';
+import Socials from './Socials';
+import { Hours } from './Hours';
 
 export interface BusinessJSON {
   name: string;
-  position: BusinessPosition;
+  position: Position;
   description: string;
   businessId: string;
-  ratings: BusinessRatings;
-  hours: BusinessHours;
-  socialMedia: BusinessSocialMedia;
+  ratings: Ratings;
+  hours: Hours;
+  socialMedia: Socials;
   followers: string[];
   tags: BusinessTags[];
   // inquiries: string[];
@@ -23,12 +23,12 @@ export interface BusinessJSON {
 
 export default class Business {
   private _name: string;
-  private _position: BusinessPosition;
+  private _position: Position;
   private _description: string;
   private _businessId: string;
-  private _ratings: BusinessRatings;
-  private _hours: BusinessHours;
-  private _socialMedia: BusinessSocialMedia;
+  private _ratings: Ratings;
+  private _hours: Hours;
+  private _socialMedia: Socials;
   private _followers: Set<string> = new Set();
   private _tags: Set<BusinessTags>;
   // private _inquiries: string[];
@@ -64,7 +64,7 @@ export default class Business {
   //   return Array.from(this._inquiries);
   // }
 
-  get position(): BusinessPosition {
+  get position(): Position {
     return this._position;
   }
 
@@ -79,15 +79,15 @@ export default class Business {
     return this._businessId;
   }
 
-  get ratings(): BusinessRatings {
+  get ratings(): Ratings {
     return this._ratings;
   }
 
-  get hours(): BusinessHours {
+  get hours(): Hours {
     return this._hours;
   }
 
-  get socialMedia(): BusinessSocialMedia {
+  get socialMedia(): Socials {
     return this._socialMedia;
   }
 

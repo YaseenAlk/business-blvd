@@ -1,7 +1,7 @@
-import BusinessSocialMedia from '../../models/business/Socials';
+import Socials from '../../models/business/Socials';
 
 class SocialsRepository {
-  private data: BusinessSocialMedia[] = [];
+  private data: Socials[] = [];
 
   findSocialsById(businessId: string): { facebook?: string; twitter?: string; instagram?: string } {
     return this.data.filter((socials) => socials.businessId === businessId)[0].getSocialURLs();
