@@ -1,14 +1,23 @@
 <template>
   <b-link v-bind:to="'/manage/'+business.businessId" class="business-owner-card">
     <h4>{{business.name}}</h4>
-    <span>{{business.position.address}}</span>
+    <span v-if="business.position !== undefined">{{business.position.address}}</span>
   </b-link>
 </template>
 
 <script>
 import { BLink } from 'bootstrap-vue';
+import axios from 'axios';
+
 export default {
   name: 'AccountBusinessOwnerCard',
+  created(){
+    axios.get('/api/business/' + this.business.businessId + '/position').then((res) => {
+      this.business.position = res.data;
+    }).catch((err) =>{
+      console.error(err.response.data || err);
+    });
+  },
   props: {
     business: Object
   },

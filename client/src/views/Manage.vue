@@ -1,6 +1,7 @@
 <template>
     <div  class="manage-page" v-if="business">
       <h1> {{ business.name }} </h1>
+      {{business.position}}
       <b-container v-if="show" class="manage-form">
         <b-row>
           <b-form class="col-md-8" @submit.prevent="onSubmit" @reset.prevent="onReset">
@@ -35,7 +36,6 @@
               <b-form-input
                 type="text"
                 v-model="form.position.address"
-                :placeholder="business.position.address"
                 ></b-form-input>
             </b-form-group>
             <b-form-group
@@ -72,8 +72,8 @@
               <b-alert variant="danger">{{inquiryFetchError}}</b-alert>
             </div>
             <div v-else> 
-              <section v-for="q in inquiries" :key="q._id">
-                <QuestionCard :question="q._question" :id="q._id" :businessId="business.businessId"/>
+              <section v-for="q in inquiries" :key="q.id">
+                <QuestionCard :q="q" :question="q.question" :id="q.id" :businessId="business.businessId"/>
               </section>
             </div>
           </div>
@@ -100,9 +100,14 @@ export default {
 
     axios.get('/api/inquiries/business/' + this.$route.params.id).then((res) => {
       this.inquiries = res.data;
-      console.log(res.data);
     }).catch((err) => {
       this.inquiryFetchError = err.response.data.message || err;
+    });
+
+    axios.get('/api/business/' + this.$route.params.id + '/position').then((res) => {
+      this.form.position = res.data;
+    }).catch((err) =>{
+      console.error(err.response.data || err);
     })
   },
   components: {
