@@ -1,10 +1,9 @@
 <template>
-  <div>
     <div v-if="business">
-      <b-container v-if="show" class="flex-col align-items-center">
-        <Header v-bind:business="business"/>
-        <div class="manage" style="font-size: 2rem;" v-if="business !== undefined">
-          <b-form @submit="onSubmit" @reset="onReset">
+      <h1> {{this.business.name}} </h1>
+      <b-container v-if="show">
+        <b-row style="font-size: 2rem;">
+          <b-form class="col-md-8" @submit="onSubmit" @reset="onReset">
             <b-form-group
               id="name-group"
               label="Business Name:"
@@ -63,10 +62,13 @@
             </b-form-group>
             <b-button type="submit" variant="primary">Submit</b-button>
             <b-button type="reset" variant="danger">Reset</b-button>
-          </b-form>    
-        </div> 
+          </b-form>
+          <div class="col-md-4 questions">
+            Community Questions:
+            <QuestionCard v-for="q in inquiries" :key="q" :question="q" :businessId="business.businessId"/>
+          </div>
+        </b-row>
       </b-container>
-    </div>
     <div v-else>
       Loading
     </div>  
@@ -74,6 +76,7 @@
 </template>
 <script>
 import axios from 'axios';
+import QuestionCard from '../components/manage/QuestionCard.vue';
 
 export default {
   name: 'Manage',
@@ -84,9 +87,13 @@ export default {
       console.error(err.response.data || err);
     });
   },
+  components: {
+    QuestionCard,
+  },
 	data(){
 		return {
       business: undefined,
+      inquiries: ['Is it open on weekends?'],
       form: {
         name: undefined,
         description: undefined,
@@ -123,5 +130,9 @@ export default {
 	width: 85%;
   
 }
-
+.questions {
+  text-align: center;
+  font-size: 1em;
+  justify-content: center;
+}
 </style>
