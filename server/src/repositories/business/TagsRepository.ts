@@ -1,7 +1,15 @@
 import TagsList, { BusinessTags } from '../../models/business/TagsList';
+import BusinessRepository from './BusinessRepository';
 
 class TagsRepository {
   private data: TagsList[] = [];
+
+  constructor() {
+    const exampleList = [BusinessTags.DELIVERY, BusinessTags.HANDSANITIZER];
+    const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
+    this.data.push(new TagsList(b1, exampleList));
+    this.data.push(new TagsList(b2, exampleList));
+  }
 
   findTagsById(businessId: string): BusinessTags[] | undefined {
     return this.data.filter((tagsList) => tagsList.businessId === businessId)[0]?.tags;

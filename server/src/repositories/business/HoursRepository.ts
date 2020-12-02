@@ -1,8 +1,26 @@
 import { TSMap } from 'typescript-map';
 import { Hours, Day, Time, TimeBlock } from '../../models/business/Hours';
 
+import BusinessRepository from './BusinessRepository';
+
 class HoursRepository {
   private data: Hours[] = [];
+
+  constructor() {
+    const exampleHours: [Day, Time, Time][] = [
+      [Day.SUNDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' }],
+      [Day.MONDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
+      [Day.TUESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
+      [Day.WEDNESDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
+      [Day.FRIDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
+      [Day.SATURDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' }],
+    ];
+
+    const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
+
+    this.data.push(new Hours(b1, { asListFlat: exampleHours }));
+    this.data.push(new Hours(b2, { asListFlat: exampleHours }));
+  }
 
   findHoursById(businessId: string): Hours | undefined {
     return this.data.filter((hours) => hours.businessId === businessId)[0];
