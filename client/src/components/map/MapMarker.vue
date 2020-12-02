@@ -27,8 +27,6 @@ export default {
       axios.get(`/api/business/${businessId}/position`)
         .then((resp) => resp.data)
         .then((position) => {
-          console.log('here');
-          console.log(position);
           position.lat = Number(position.lat);
           position.lng = Number(position.lng);
           this.optionData = {

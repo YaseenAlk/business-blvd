@@ -1,24 +1,29 @@
 <template>
     <router-link v-if="rating !== undefined" class="card" v-bind:to="business.internalURL">
-        <h2>{{business.name}}</h2>
-        <div v-if="business.ownerId !== undefined">
-            <h6 class="verified-line">
-                <b-icon-patch-check-fll variant="primary" class="verified-icon" /><b>Verified Business Owner</b>
-            </h6>
+        <div v-if="isLoading" class="spinner-container">
+            <b-spinner variant="primary"></b-spinner>
         </div>
-        <p v-if="position">{{ position.address}}</p>
-        <div class="card-bottom">
-            <div>
-                <b-icon-question-circle class="card-bottom-icon" />
-                <span>0 questions</span>
+        <div v-else>
+            <h2>{{business.name}}</h2>
+            <div v-if="business.ownerId !== undefined">
+                <h6 class="verified-line">
+                    <b-icon-patch-check-fll variant="primary" class="verified-icon" /><b>Verified Business Owner</b>
+                </h6>
             </div>
-            <div>
-                <b-icon-star-half size="20" class="card-bottom-icon" />
-                <span>{{rating.service.average}}/5 rating</span>
-            </div>
-            <div class="covid-score">
-                <div class="covid-score-number">{{rating.safety.average}}/5</div>
-                <span class="covid-score-subtitle">Covid Safety Score</span>
+            <p v-if="position">{{ position.address}}</p>
+            <div class="card-bottom">
+                <div>
+                    <b-icon-question-circle class="card-bottom-icon" />
+                    <span>0 questions</span>
+                </div>
+                <div>
+                    <b-icon-star-half size="20" class="card-bottom-icon" />
+                    <span>{{rating.service.average}}/5 rating</span>
+                </div>
+                <div class="covid-score">
+                    <div class="covid-score-number">{{rating.safety.average}}/5</div>
+                    <span class="covid-score-subtitle">Covid Safety Score</span>
+                </div>
             </div>
         </div>
     </router-link>
@@ -39,10 +44,10 @@ export default {
         BIconPatchCheckFll
     },
     created() {
+      this.isLoading = true;
       axios.get(`/api/business/${this.business.businessId}/ratings`)
       .then((resp) => resp.data)
       .then((ratings) => {
-        console.log(ratings);
         this.rating = ratings;
       })
       .then(() => axios.get(`/api/business/${this.business.businessId}/position`))
@@ -50,11 +55,14 @@ export default {
       .then((position) => {
         this.position = position;
       })
+      .then(() => this.isLoading = false)
+      .catch(() => this.isLoading = false);
     },
     data() {
       return {
         position: undefined,
         rating: undefined,
+        isLoading: false,
       }
     },
 }
@@ -73,6 +81,8 @@ a, a:hover {
     margin-bottom: 1em;
     transition: all 0.2s ease-in-out;
     text-align: left;
+
+/*animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;*/
 }
 
 .card:hover{
@@ -108,6 +118,10 @@ a, a:hover {
 .covid-score-subtitle {
     font-style: italic;
     font-size: 0.9rem;
+}
+
+.spinner-container {
+    margin: 16px auto;
 }
 
 .verified-icon {
