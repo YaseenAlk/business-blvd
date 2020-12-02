@@ -37,30 +37,30 @@ class BusinessController {
   /***************
   POSITION METHODS
   ****************/
-  getPosition(businessId: string): ReturnObj {
-    const position = /* await */ PositionRepository.findOneById(businessId);
-    if (position) {
-      return {
-        status: 200,
-        data: {
-          address: position?.address,
-          lat: position?.lat,
-          lng: position?.lng,
-        },
-      };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getPosition(
+    businessId: string,
+  ): Promise<ReturnObj & ({ data: { address: string; lat: number; lng: number } } | { message: string })> {
+    return PositionRepository.findOneById(businessId).then((position) => {
+      if (position) {
+        return {
+          status: 200,
+          data: {
+            address: position.address,
+            lat: position.lat,
+            lng: position.lng,
+          },
+        };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  setPosition(businessId: string, address: string, lat: number, lng: number): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      /* await */ PositionRepository.update(businessId, address, lat, lng);
-      return { status: 200, data: `Updated address successfully` };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  setPosition(businessId: string, address: string, lat: number, lng: number): Promise<ReturnObj> {
+    return PositionRepository.update(businessId, address, lat, lng).then((position) => {
+      if (position) return { status: 200, message: `Updated address successfully` };
+      else return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+    });
   }
 
   /***************

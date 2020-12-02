@@ -1,20 +1,21 @@
-//import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
 
-//@Entity()
-export default class Position {
-  //@PrimaryColumn({ type: 'uuid' })
+@Entity()
+export default class Position extends BaseEntity {
+  @PrimaryColumn({ type: 'uuid' })
   businessId: string;
 
-  //@Column()
+  @Column()
   address: string;
 
-  //@Column()
+  @Column()
   lat: number;
 
-  //@Column()
+  @Column()
   lng: number;
 
   constructor(businessId: string, address: string, lat: number, lng: number) {
+    super();
     this.businessId = businessId;
     this.address = address;
     this.lat = lat;
