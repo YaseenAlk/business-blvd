@@ -1,6 +1,5 @@
 <template>
 <div v-if="question" class="question">
-  {{q}}
    <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" v-if="show">
       <b-form-group
         :id="'q-group-'+ question"

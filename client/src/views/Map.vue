@@ -33,6 +33,10 @@ export default {
 </script>
 
 <style>
+.info-page {
+    padding: 1em;
+}
+
 .map-page-both {
     display: grid;
     grid-template-columns: 1fr 1fr;
