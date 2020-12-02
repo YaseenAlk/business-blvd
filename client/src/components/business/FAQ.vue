@@ -1,16 +1,46 @@
 <template>
 	<div>
     <h2>Community Questions</h2>
-     <div class="card-container">
+     <div v-for="inq in inquiries" :key="inq.id" class="card-container">
         <div class="card">
           <div class="card-info">
-            <h4>Does it get crowded?</h4>
-            <h6>Nope, normally there is only one person there most of the time.</h6>
+            <h4>{{ inq.question }}</h4>
+            <h6>{{ inq.answer }}</h6>
           </div>
         </div>
       </div>
   </div>
 </template>
+<script>
+import axios from "axios";
+
+export default {
+  name: "FAQ",
+  props: {
+    business: Object,
+  },
+  data() {
+    return {
+      inquiries: undefined,
+    }
+  },
+  created() {
+    axios.get(`api/inquiries/business/${this.business.businessId}`)
+      .then((resp) => resp.data)
+      .then((inquiries) => {
+        this.inquiries = inquiries;
+        // TODO(johancc) - Remove before deploying!
+        this.inquiries = this.inquiries.length !== 0 ? this.inquiries : [
+          { 
+            question: "Does it get crowded?", 
+            answer: "Nope, no one is ever there."
+          }
+        ];
+      })
+
+  }
+}
+</script>
 <style scoped>
 .card {
 	background-color: #fff;

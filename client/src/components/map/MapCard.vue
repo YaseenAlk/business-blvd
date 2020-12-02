@@ -1,12 +1,12 @@
 <template>
-    <router-link class="card" v-bind:to="internalURL">
-        <h2>{{name}}</h2>
+    <router-link v-if="rating !== undefined" class="card" v-bind:to="business.internalURL">
+        <h2>{{business.name}}</h2>
         <div v-if="business.ownerId !== undefined">
             <h6 class="verified-line">
                 <b-icon-patch-check-fll variant="primary" class="verified-icon" /><b>Verified Business Owner</b>
             </h6>
         </div>
-        <p>{{address}}</p>
+        <p v-if="position">{{ position.address}}</p>
         <div class="card-bottom">
             <div>
                 <b-icon-question-circle class="card-bottom-icon" />
@@ -14,10 +14,10 @@
             </div>
             <div>
                 <b-icon-star-half size="20" class="card-bottom-icon" />
-                <span>{{ratingCount}} rating</span>
+                <span>{{rating.service.average}}/5 rating</span>
             </div>
             <div class="covid-score">
-                <div class="covid-score-number">{{covidScore}}</div>
+                <div class="covid-score-number">{{rating.safety.average}}/5</div>
                 <span class="covid-score-subtitle">Covid Safety Score</span>
             </div>
         </div>
@@ -26,6 +26,7 @@
 
 <script>
 import { BIconQuestionCircle, BIconStarHalf, BIconPatchCheckFll } from 'bootstrap-vue';
+import axios from 'axios';
 
 export default {
     name: 'MapCard',
@@ -37,16 +38,23 @@ export default {
         BIconStarHalf,
         BIconPatchCheckFll
     },
-    data(){
-        return {
-            name: this.business.name,
-            address: this.business.position.address,
-
-            ratingCount: Object.keys(this.business.ratings._serviceRatingsMap).length,
-            covidScore: Object.keys(this.business.ratings._safetyRatingsMap).length,
-
-            internalURL: this.business.internalURL,
-        }
+    created() {
+      axios.get(`/api/business/${this.business.businessId}/ratings`)
+      .then((resp) => resp.data)
+      .then((ratings) => {
+        this.rating = ratings;
+      })
+      .then(() => axios.get(`/api/business/${this.business.businessId}/position`))
+      .then((res) => res.data)
+      .then((position) => {
+        this.position = position;
+      })
+    },
+    data() {
+      return {
+        position: undefined,
+        rating: undefined,
+      }
     },
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="business">
+    <div v-if="business && loaded">
       <b-container class="flex-col align-items-center" style="max-width: 85%">
       <Header v-bind:business="business"/>
       <div class="business-page">
@@ -28,7 +28,7 @@
       </b-container>
     </div>
     <div v-else>
-      Loading
+      Loading...
     </div>  
   </div>
 </template>
@@ -49,9 +49,34 @@ import axios from 'axios';
 export default {
   name: 'Business',
   beforeCreate: function(){
-    axios.get('/api/business/' + this.$route.params.id).then((res) =>{
-      this.business = res.data;
-    }).catch((err) => {
+    const businessId = this.$route.params.id
+    axios.get(`/api/business/${businessId}`)
+    .then((res) => res.data)
+    .then((business) => {
+      this.business = business;
+    })
+    .then(() => axios.get(`api/business/${businessId}/position`))
+    .then((res) => res.data)
+    .then((position) => {
+      this.business.position = position;
+    })
+    .then(() => axios.get(`api/business/${businessId}/ratings`))
+    .then((res) => res.data)
+    .then((ratings) => {
+      this.business.ratings = ratings;
+    })
+    .then(() => axios.get(`api/business/${businessId}/hours`))
+    .then((res) => res.data.entries)
+    .then((hours) => {
+      this.business.hours = hours;
+    })
+    .then(() => axios.get(`/api/business/${businessId}/social-media`))
+    .then((resp) => resp.data)
+    .then((social) => {
+      this.business.social = social;
+    })
+    .then(() => { this.loaded = true; })
+    .catch((err) => {
       console.error(err.response.data || err);
     });
   },
@@ -68,7 +93,8 @@ export default {
 	},
 	data(){
 		return {
-			business: undefined,
+      business: undefined,
+      loaded: false,
 		};
 	}
 }
