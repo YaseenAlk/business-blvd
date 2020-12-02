@@ -43,7 +43,7 @@ export default {
             console.log(this.form);
             axios.post('/api/inquiries', this.form).then((res) => {
               this.success = res.data.message;
-              //this.$bvModal.hide('question');
+              this.$bvModal.hide('question');
             }).catch((err) => {
               this.error = err.response.data.message || err;
             });
