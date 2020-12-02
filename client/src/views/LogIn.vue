@@ -59,9 +59,11 @@ export default {
                 let user = { username: res.data.username, userId: res.data.userId };
                 eventBus.$emit('successful-login', user);
                 this.$router.push('/map');
+                this.loading = false;
             }).catch((err) => {
                 this.error = err.response.data.message || err;
-            }).then(() => this.loading = false);
+                this.loading = false
+            });
         }
     }
 }

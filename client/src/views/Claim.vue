@@ -72,9 +72,11 @@ export default {
       this.claimForm.loading = true;
       axios.post('/api/business/' + this.claimForm.businessID + '/claim').then((res) => {
         this.claimForm.successMessage = res.data.message;
+        this.claimForm.loading = false;
       }).catch((err) => {
         this.claimForm.errorMessage = err.response.data.message || err;
-      }).then(() => this.claimForm.loading = false);
+        this.claimForm.loading = false;
+      });
     },
     unclaimBusiness(){
       this.unclaimForm.successMessage = undefined;
@@ -82,9 +84,11 @@ export default {
       this.unclaimForm.loading = true;
       axios.delete('/api/business/' + this.unclaimForm.businessID + '/claim').then((res) => {
         this.unclaimForm.successMessage = res.data.message;
+        this.unclaimForm.loading = false;
       }).catch((err) => { 
         this.unclaimForm.errorMessage = err.response.data.message || err;
-      }).then(() => this.unclaimForm.loading = false);
+        this.unclaimForm.loading = false;
+      });
     },
     loadAllBusinessIDs(){
       axios.get('/api/business/all').then((res) => {

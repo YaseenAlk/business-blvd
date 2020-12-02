@@ -85,10 +85,12 @@ export default {
         axios.put(`/api/business/${selectedBusiness.businessId}/ratings/`, this.form)
         .then(() => {
           this.success = "Submitted rating successfully!";
+          this.loading = false;
         })
         .catch((err) => {
           this.error = err.response.data.message || err;
-        }).then(() => this.loading = false);
+          this.loading = false;
+        });
     }
   },
   components: {
