@@ -16,12 +16,14 @@ class InquiryRepository {
     return this.data.filter((inq) => inq.businessId === id && inq.privacy === 'public');
   }
 
-  getPrivateInquiriesFromBusiness(id: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.privacy === 'private');
+  getPrivateInquiriesFromBusiness(businessId: string): Inquiry[] {
+    return this.data.filter((inq) => inq.businessId === businessId && inq.privacy === 'private');
   }
 
-  getPrivateInquiriesOfBusinessFromAuthor(id: string, userId: string): Inquiry[] {
-    return this.data.filter((inq) => inq.businessId === id && inq.authorId === userId && inq.privacy === 'private');
+  getPrivateInquiriesOfBusinessFromAuthor(businessId: string, userId: string): Inquiry[] {
+    return this.data.filter(
+      (inq: Inquiry) => inq.businessId === businessId && inq.authorId === userId && inq.privacy === 'private',
+    );
   }
 
   createOne(id: string, businessId: string, question: string, userId: string) {

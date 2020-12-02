@@ -3,6 +3,7 @@ import UserRepository from '../repositories/UserRepository';
 import InquiryRepository from '../repositories/InquiryRepository';
 import Business from '../models/business/Business';
 import BusinessRepository from '../repositories/BusinessRepository';
+import { Inquiry } from '../models/Inquiry';
 
 export class Validation {
   // auth
@@ -195,6 +196,22 @@ export class Validation {
     next();
   }
 
+  static ownsBusinessInquiry(req: Request, res: Response, next: NextFunction): void {
+    const inquiry: Inquiry = InquiryRepository.findOneById(req.params.inquiryId);
+    const businessId = inquiry.businessId;
+    const business: Business | undefined = BusinessRepository.findOneById(businessId);
+    const user = req.session.userID;
+    if (!business) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (!business.isOwner(user)) {
+      res.status(403).json({ message: 'Not authorized to manage this business inquiry' }).end();
+      return;
+    }
+    next();
+  }
+
   static ownsBusiness(req: Request, res: Response, next: NextFunction): void {
     const business: Business | undefined = BusinessRepository.findOneById(req.params.businessId || req.body.businessId);
     const user = req.session.userID;
@@ -264,13 +281,12 @@ export class Validation {
   ];
 
   static postAnswerMiddleware = [
-    Validation.businessIdDefined,
-    Validation.businessIdValid,
+    Validation.inquiryIdDefined,
+    Validation.inquiryIdValid,
     Validation.answerDefined,
     Validation.answerValid,
-    Validation.businessIdExists,
     Validation.inquiryIdExists,
-    Validation.ownsBusiness,
+    Validation.ownsBusinessInquiry,
   ];
 
   static publicityToggleMiddleware = [
@@ -278,7 +294,7 @@ export class Validation {
     Validation.businessIdValid,
     Validation.businessIdExists,
     Validation.inquiryIdExists,
-    Validation.ownsBusiness,
+    Validation.ownsBusinessInquiry,
   ];
 
   static claimBusinessMiddleware = [

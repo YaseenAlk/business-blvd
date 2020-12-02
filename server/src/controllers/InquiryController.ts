@@ -4,14 +4,15 @@ import { v4 as uuidv4 } from 'uuid';
 import Business from '../models/business/Business';
 
 class InquiryController {
-  getInquiriesFromBusiness(id: string, userId?: string) {
-    const inquiries = InquiryRepository.getPublicInquiriesFromBusiness(id);
-    const business: Business | undefined = BusinessRepository.findOneById(id);
+  getInquiriesFromBusiness(businessId: string, userId?: string) {
+    const inquiries = InquiryRepository.getPublicInquiriesFromBusiness(businessId);
+    const business: Business | undefined = BusinessRepository.findOneById(businessId);
+
     if (userId) {
       if (business?.ownerId === userId) {
-        inquiries.push(...InquiryRepository.getPrivateInquiriesFromBusiness(id));
+        inquiries.push(...InquiryRepository.getPrivateInquiriesFromBusiness(businessId));
       } else {
-        inquiries.push(...InquiryRepository.getPrivateInquiriesOfBusinessFromAuthor(id, userId));
+        inquiries.push(...InquiryRepository.getPrivateInquiriesOfBusinessFromAuthor(businessId, userId));
       }
     }
     return inquiries;

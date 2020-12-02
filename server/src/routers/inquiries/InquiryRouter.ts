@@ -33,13 +33,13 @@ class InquiryRouter {
       Validation.getInquiriesMiddleware,
       (req: Request, res: Response, next: NextFunction) => {
         try {
-          const id: string = req.params.id;
+          const businessId: string = req.params.businessId;
 
           // sign in optional
           const userId: string | undefined = req.session.userID;
           const result = userId
-            ? this._controller.getInquiriesFromBusiness(id, userId)
-            : this._controller.getInquiriesFromBusiness(id);
+            ? this._controller.getInquiriesFromBusiness(businessId, userId)
+            : this._controller.getInquiriesFromBusiness(businessId);
 
           res.status(200).json(result);
         } catch (error) {
@@ -125,13 +125,13 @@ class InquiryRouter {
         }
         */
     this._router.post(
-      '/:id/answer',
+      '/:inquiryId/answer',
       Validation.postAnswerMiddleware,
       (req: Request, res: Response, next: NextFunction) => {
         try {
-          const id: string = req.params.id;
+          const inquiryId: string = req.params.inquiryId;
           const answer: string = req.body.answer;
-          const result = this._controller.postAnswer(id, answer);
+          const result = this._controller.postAnswer(inquiryId, answer);
           res.status(200).json(result);
         } catch (error) {
           next(error);
