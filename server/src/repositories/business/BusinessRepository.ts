@@ -20,6 +20,10 @@ class BusinessRepository {
     return this.exampleIds;
   }
 
+  getAllBusinessIDs(): string[] {
+    return this.data.keys();
+  }
+
   businessExists(businessId: string): boolean {
     return this.data.has(businessId);
   }
