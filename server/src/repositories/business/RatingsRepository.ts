@@ -1,4 +1,3 @@
-import { TSMap } from 'typescript-map';
 import Ratings from '../../models/business/Ratings';
 
 import BusinessRepository from './BusinessRepository';
