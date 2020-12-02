@@ -21,21 +21,49 @@ export interface BusinessJSON {
   phone: string;
 }
 
+// @Entity()
 export default class Business {
-  private _name: string;
-  private _position: Position;
-  private _description: string;
-  private _businessId: string;
-  private _ratings: Ratings;
-  private _hours: Hours;
-  private _socialMedia: Socials;
-  private _followers: Set<string> = new Set();
-  private _tags: Set<BusinessTags>;
-  // private _inquiries: string[];
-  private _ownerId: string | undefined;
-  private _internalURL: string;
-  private _externalURL: string;
-  private _phone: string;
+  // @PrimaryColumn("uuid")
+  _businessId: string;
+
+  // @Column()
+  _name: string;
+
+  // @Column()
+  _position: Position;
+
+  // @Column()
+  _description: string;
+
+  // @Column()
+  _ratings: Ratings;
+
+  // @Column()
+  _hours: Hours;
+
+  // @Column()
+  _socialMedia: Socials;
+
+  // @Column()
+  _followers: Set<string> = new Set();
+
+  // @Column()
+  _tags: Set<BusinessTags>;
+
+  //  _inquiries: string[];
+
+  // @Column({nullable: true})
+  _ownerId: string | undefined;
+
+  // @Column()
+  _internalURL: string;
+
+  // @Column()
+  _externalURL: string;
+
+  // @Column()
+  _phone: string;
+
   constructor(entry: BusinessJSON) {
     this._name = entry.name;
     this._position = entry.position;
