@@ -1,12 +1,10 @@
 import { TSMap } from 'typescript-map';
-import { Hours, Day, Time, TimeBlock } from '../../models/business/Hours';
+import Hours, { Day, Time, TimeBlock } from '../../models/business/Hours';
 
 import BusinessRepository from './BusinessRepository';
 
 class HoursRepository {
-  private data: Hours[] = [];
-
-  constructor() {
+  generateExamples(): Promise<Hours> {
     const exampleHours: [Day, Time, Time][] = [
       [Day.SUNDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' }],
       [Day.MONDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
@@ -18,38 +16,45 @@ class HoursRepository {
 
     const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
 
-    this.data.push(new Hours(b1, { asListFlat: exampleHours }));
-    this.data.push(new Hours(b2, { asListFlat: exampleHours }));
-  }
-
-  findHoursById(businessId: string): Hours | undefined {
-    return this.data.filter((hours) => hours.businessId === businessId)[0];
-  }
-
-  getHoursOnDay(businessId: string, day: Day): TimeBlock | undefined {
-    const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
-    return businessHours?.entries.get(day);
-  }
-
-  clearEntries(businessId: string) {
-    const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
-    if (businessHours) businessHours.entries = new TSMap<Day, TimeBlock>();
-    // await businessHours.save();
-  }
-
-  updateSingleEntry(businessId: string, day: Day, openingTime: Time, closingTime: Time): Hours | undefined {
-    const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
-    businessHours?.entries.set(day, { open: openingTime, close: closingTime });
-    // await businessHours.save();
-    return businessHours;
-  }
-
-  updateMultipleEntries(businessId: string, incoming: TSMap<Day, TimeBlock>) {
-    const businessHours = this.data.filter((hours) => hours.businessId === businessId)[0];
-    incoming.forEach((value, key) => {
-      if (key) businessHours?.entries.set(key, value);
+    const h1 = new Hours(b1, { asListFlat: exampleHours });
+    const h2 = new Hours(b2, { asListFlat: exampleHours });
+    return h1.save().then(() => {
+      return h2.save();
     });
-    // await businessHours.save();
+  }
+
+  // getters
+  findHoursById(businessId: string): Promise<Hours | undefined> {
+    return Hours.findOne({ businessId });
+  }
+
+  getHoursOnDay(businessId: string, day: Day): Promise<TimeBlock | undefined> {
+    return Hours.findOne({ businessId }).then((hours) => {
+      return hours?.entries.get(day);
+    });
+  }
+
+  clearEntries(businessId: string): Promise<Hours | undefined> {
+    return Hours.findOne({ businessId }).then((hours) => {
+      if (hours) hours.entries = new TSMap<Day, TimeBlock>();
+      return hours?.save();
+    });
+  }
+
+  updateSingleEntry(businessId: string, day: Day, openingTime: Time, closingTime: Time): Promise<Hours | undefined> {
+    return Hours.findOne({ businessId }).then((hours) => {
+      hours?.entries.set(day, { open: openingTime, close: closingTime });
+      return hours?.save();
+    });
+  }
+
+  updateMultipleEntries(businessId: string, incoming: TSMap<Day, TimeBlock>): Promise<Hours | undefined> {
+    return Hours.findOne({ businessId }).then((hours) => {
+      incoming.forEach((value, key) => {
+        if (key) hours?.entries.set(key, value);
+      });
+      return hours?.save();
+    });
   }
 }
 export = new HoursRepository();

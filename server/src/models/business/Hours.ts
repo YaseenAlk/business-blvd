@@ -1,5 +1,7 @@
 import { TSMap } from 'typescript-map';
 
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+
 export enum Day {
   SUNDAY,
   MONDAY,
@@ -26,16 +28,17 @@ export type TimeBlock = {
   close: Time;
 };
 
-// @Entity()
-export class Hours {
-  // @PrimaryColumn("uuid")
+@Entity()
+export default class Hours extends BaseEntity {
+  @PrimaryColumn('uuid')
   businessId: string;
 
-  // @Column("jsonb")
+  @Column('jsonb')
   entries: TSMap<Day, TimeBlock>;
 
   // allows input entries to be an existing TSMap or a list of tuples
   constructor(businessId: string, inputEntries: InputEntries) {
+    super();
     this.businessId = businessId;
     this.entries = new TSMap();
     inputEntries.asMap?.forEach((value, key) => {
