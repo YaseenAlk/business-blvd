@@ -5,7 +5,7 @@ import BusinessController from '../../controllers/business/BusinessController';
 import PositionRouter from './subrouters/PositionRouter';
 import RatingsRouter from './subrouters/RatingsRouter';
 import HoursRouter from './subrouters/HoursRouter';
-import SocialMediaRouter from './subrouters/SocialMediaRouter';
+import SocialsRouter from './subrouters/SocialsRouter';
 import FollowersRouter from './subrouters/FollowersRouter';
 import TagsRouter from './subrouters/TagsRouter';
 
@@ -17,7 +17,7 @@ class BusinessRouter {
   private _subrouterPosition = PositionRouter;
   private _subrouterRatings = RatingsRouter;
   private _subrouterHours = HoursRouter;
-  private _subrouterSocialMedia = SocialMediaRouter;
+  private _subrouterSocialMedia = SocialsRouter;
   private _subrouterFollowers = FollowersRouter;
   private _subrouterTags = TagsRouter;
 

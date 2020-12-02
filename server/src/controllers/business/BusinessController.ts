@@ -11,6 +11,7 @@ import RatingsRepository from '../../repositories/business/RatingsRepository';
 import SocialsRepository from '../../repositories/business/SocialsRepository';
 import TagsRepository from '../../repositories/business/TagsRepository';
 import Business from '../../models/business/Business';
+import { Platforms } from '../../models/business/Socials';
 
 class BusinessController {
   /***************
@@ -146,32 +147,35 @@ class BusinessController {
   SOCIAL METHODS
   ****************/
 
-  getSocialMedia(businessId: string): ReturnObj {
-    const socials = /* await */ SocialsRepository.findSocialsById(businessId);
-    if (socials) {
-      return { status: 201, data: socials };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getSocialMedia(businessId: string): Promise<ReturnObj & ({ data: Platforms } | { message: string })> {
+    return SocialsRepository.findSocialsById(businessId).then((platforms) => {
+      if (platforms) {
+        return { status: 201, data: platforms };
+      } else {
+        return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  setSocialMedia(businessId: string, twitter?: string, facebook?: string, instagram?: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      if (twitter) {
-        /* await */ SocialsRepository.updateTwitter(businessId, twitter);
+  setSocialMedia(businessId: string, twitter?: string, facebook?: string, instagram?: string): Promise<ReturnObj> {
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        const promises: Promise<Platforms | undefined>[] = [];
+        if (twitter) promises.push(SocialsRepository.updateTwitter(businessId, twitter));
+        if (facebook) promises.push(SocialsRepository.updateFacebook(businessId, facebook));
+        if (instagram) promises.push(SocialsRepository.updateInstagram(businessId, instagram));
+        return Promise.all(promises).then(() => {
+          return { status: 200, message: 'Updated social media!' };
+        });
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
       }
-      if (facebook) {
-        /* await */ SocialsRepository.updateFacebook(businessId, facebook);
-      }
-      if (instagram) {
-        /* await */ SocialsRepository.updateInstagram(businessId, instagram);
-      }
-      return { status: 200, data: 'Updated social media!' };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+    });
   }
+
+  /***************
+  CLAIM METHODS
+  ****************/
 
   claimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
