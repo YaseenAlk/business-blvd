@@ -18,8 +18,12 @@ class HoursRepository {
 
     const h1 = new Hours(b1, { asListFlat: exampleHours });
     const h2 = new Hours(b2, { asListFlat: exampleHours });
-    return h1.save().then(() => {
-      return h2.save();
+    return Hours.findOne({ businessId: b1 }).then((hours) => {
+      if (!hours)
+        return h1.save().then(() => {
+          return h2.save();
+        });
+      else return hours;
     });
   }
 

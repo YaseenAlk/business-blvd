@@ -6,8 +6,12 @@ class PositionRepository {
     const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
     const p1 = new Position(b1, '123 Seasame Street', 42.362541, -71.09845);
     const p2 = new Position(b2, '123 Seasame Street', 42.362541, -71.09845);
-    return p1.save().then(() => {
-      return p2.save();
+    return Position.findOne({ businessId: b1 }).then((position) => {
+      if (!position)
+        return p1.save().then(() => {
+          return p2.save();
+        });
+      return position;
     });
   }
 

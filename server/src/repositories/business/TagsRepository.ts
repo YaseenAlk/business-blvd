@@ -7,8 +7,12 @@ class TagsRepository {
     const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
     const t1 = new TagsList(b1, exampleList);
     const t2 = new TagsList(b2, exampleList);
-    return t1.save().then(() => {
-      return t2.save();
+    return TagsList.findOne({ businessId: b1 }).then((list) => {
+      if (!list)
+        return t1.save().then(() => {
+          return t2.save();
+        });
+      else return list;
     });
   }
 

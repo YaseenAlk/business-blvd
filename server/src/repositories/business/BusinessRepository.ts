@@ -15,8 +15,12 @@ class BusinessRepository {
   }
 
   generateExamples(): Promise<Business> {
-    return this.b1.save().then(() => {
-      return this.b2.save();
+    return Business.findOne({ businessId: this.b1.businessId }).then((business) => {
+      if (!business)
+        return this.b1.save().then(() => {
+          return this.b2.save();
+        });
+      else return business;
     });
   }
 

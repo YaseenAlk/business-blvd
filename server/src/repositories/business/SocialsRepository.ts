@@ -13,8 +13,12 @@ class SocialsRepository {
     const s1 = new Socials(b1, exampleSocials);
     const s2 = new Socials(b2, exampleSocials);
 
-    return s1.save().then(() => {
-      return s2.save();
+    return Socials.findOne({ businessId: b1 }).then((socials) => {
+      if (!socials)
+        return s1.save().then(() => {
+          return s2.save();
+        });
+      else return socials;
     });
   }
 

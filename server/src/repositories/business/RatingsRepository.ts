@@ -17,8 +17,12 @@ class RatingsRepository {
     const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
     const r1 = new Ratings(b1, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings });
     const r2 = new Ratings(b2, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings });
-    return r1.save().then(() => {
-      return r2.save();
+    return Ratings.findOne({ businessId: b1 }).then((ratings) => {
+      if (!ratings)
+        return r1.save().then(() => {
+          return r2.save();
+        });
+      else return ratings;
     });
   }
 
