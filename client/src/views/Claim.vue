@@ -7,7 +7,12 @@
         </b-form-group>
         <b-alert variant="success" v-bind:show="claimForm.successMessage !== undefined">{{claimForm.successMessage}}</b-alert>
         <b-alert variant="danger" v-bind:show="claimForm.errorMessage !== undefined">{{claimForm.errorMessage}}</b-alert>
-        <b-button variant="success" type="submit">Claim Business</b-button>
+        <b-button variant="success" type="submit">
+           <span class="d-flex align-items-center">
+            <div v-if="!claimForm.loading">Claim Business</div>
+            <b-spinner v-else small></b-spinner>
+           </span>
+        </b-button>
     </b-form>
     <div>
       <b-button variant="secondary" v-b-toggle.collapse v-on:click="loadAllBusinessIDs">For debugging and MVP purposes. Remove in final project</b-button>
@@ -22,7 +27,12 @@
           </b-form-group>
           <b-alert variant="success" v-bind:show="unclaimForm.successMessage !== undefined">{{unclaimForm.successMessage}}</b-alert>
           <b-alert variant="danger" v-bind:show="unclaimForm.errorMessage !== undefined">{{unclaimForm.errorMessage}}</b-alert>
-          <b-button variant="success" type="submit">Unclaim Business</b-button>
+          <b-button variant="success" type="submit">
+            <span class="d-flex align-items-center">
+              <div v-if="!unclaimForm.loading">Unclaim Business</div>
+              <b-spinner v-else small></b-spinner>
+           </span>
+          </b-button>
         </b-form>
       </b-collapse>
     </div>
@@ -41,12 +51,14 @@ export default {
         businessID: undefined,
         successMessage: undefined,
         errorMessage: undefined,
+        loading: false,
       },
       
       unclaimForm: {
         businessID: undefined,
         successMessage: undefined,
         errorMessage: undefined,
+        loading: false,
       },
 
       // debugging purposes
@@ -57,19 +69,25 @@ export default {
     claimBusiness(){
       this.claimForm.successMessage = undefined;
       this.claimForm.errorMessage = undefined;
+      this.claimForm.loading = true;
       axios.post('/api/business/' + this.claimForm.businessID + '/claim').then((res) => {
         this.claimForm.successMessage = res.data.message;
+        this.claimForm.loading = false;
       }).catch((err) => {
         this.claimForm.errorMessage = err.response.data.message || err;
+        this.claimForm.loading = false;
       });
     },
     unclaimBusiness(){
       this.unclaimForm.successMessage = undefined;
       this.unclaimForm.errorMessage = undefined;
+      this.unclaimForm.loading = true;
       axios.delete('/api/business/' + this.unclaimForm.businessID + '/claim').then((res) => {
         this.unclaimForm.successMessage = res.data.message;
+        this.unclaimForm.loading = false;
       }).catch((err) => { 
         this.unclaimForm.errorMessage = err.response.data.message || err;
+        this.unclaimForm.loading = false;
       });
     },
     loadAllBusinessIDs(){

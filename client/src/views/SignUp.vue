@@ -14,13 +14,16 @@
                 <b-form-input id="password" type="password" v-model="form.password" size="sm" required/>
             </b-form-group>
             <b-alert variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
-            <b-button type="submit" variant="success">Sign Up</b-button>
+            <b-button type="submit" variant="success">
+                <div v-if="!loading">Sign Up</div>
+                <b-spinner small v-else></b-spinner>
+            </b-button>
         </b-form>
     </div>
 </template>
 
 <script>
-import { BForm, BFormInput, BFormGroup, BAlert } from 'bootstrap-vue';
+import { BForm, BFormInput, BFormGroup, BAlert, BSpinner } from 'bootstrap-vue';
 import { eventBus } from '@/main';
 import axios from 'axios';
 
@@ -31,6 +34,7 @@ export default {
         BFormInput,
         BFormGroup,
         BAlert,
+        BSpinner,
     },
     methods: {
         clearAlerts(){
@@ -38,12 +42,15 @@ export default {
         },
         onSubmit: function(){
             this.clearAlerts(); 
+            this.loading = true;
             axios.post('/api/users', this.form).then(() => {
                 let user = { username: this.form.username };
                 eventBus.$emit('successful-login', user);
                 this.$router.push('/map');
+                this.loading = false;
             }).catch((err) => {
                 this.error = err.response.data.message || err;
+                this.loading = false;
             });
         },
     },
@@ -55,7 +62,8 @@ export default {
             password: undefined,
         },
         error: undefined,
-        fields: undefined //for debugging purposes, remove in deployment
+        fields: undefined, //for debugging purposes, remove in deployment
+        loading: false,
       };
     }
 }
