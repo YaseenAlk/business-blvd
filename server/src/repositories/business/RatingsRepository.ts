@@ -26,11 +26,11 @@ class RatingsRepository {
     });
   }
 
-  findSafetyRatingsMapById(businessId: string): Promise<TSMap<string, number> | undefined> {
+  findSafetyRatingsMapById(businessId: string): Promise<Record<string, number> | undefined> {
     return Ratings.findOne({ businessId }).then((ratings) => ratings?.safetyRatings);
   }
 
-  findServiceRatingsMapById(businessId: string): Promise<TSMap<string, number> | undefined> {
+  findServiceRatingsMapById(businessId: string): Promise<Record<string, number> | undefined> {
     return Ratings.findOne({ businessId }).then((ratings) => ratings?.serviceRatings);
   }
 
@@ -43,23 +43,23 @@ class RatingsRepository {
   }
 
   getSingleServiceRating(businessId: string, userId: string): Promise<number | undefined> {
-    return Ratings.findOne({ businessId }).then((ratings) => ratings?.serviceRatings.get(userId));
+    return Ratings.findOne({ businessId }).then((ratings) => ratings?.serviceRatings[userId]);
   }
 
   getSingleSafetyRating(businessId: string, userId: string): Promise<number | undefined> {
-    return Ratings.findOne({ businessId }).then((ratings) => ratings?.safetyRatings.get(userId));
+    return Ratings.findOne({ businessId }).then((ratings) => ratings?.safetyRatings[userId]);
   }
 
   updateServiceRating(businessId: string, userId: string, rating: number): Promise<Ratings | undefined> {
     return Ratings.findOne({ businessId }).then((ratings) => {
-      ratings?.serviceRatings.set(userId, rating);
+      if (ratings) ratings.serviceRatings[userId] = rating;
       return ratings?.save();
     });
   }
 
   updateSafetyRating(businessId: string, userId: string, rating: number): Promise<Ratings | undefined> {
     return Ratings.findOne({ businessId }).then((ratings) => {
-      ratings?.safetyRatings.set(userId, rating);
+      if (ratings) ratings.safetyRatings[userId] = rating;
       return ratings?.save();
     });
   }

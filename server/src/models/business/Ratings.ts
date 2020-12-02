@@ -15,26 +15,30 @@ export default class Ratings extends BaseEntity {
   businessId: string;
 
   @Column('jsonb')
-  serviceRatings: TSMap<string, number>;
+  serviceRatings: Record<string, number>;
 
   @Column('jsonb')
-  safetyRatings: TSMap<string, number>;
+  safetyRatings: Record<string, number>;
 
   constructor(businessId?: string, serviceRatings?: InputEntries, safetyRatings?: InputEntries) {
     super();
     this.businessId = businessId || uuidv4();
-    this.serviceRatings = new TSMap();
-    this.safetyRatings = new TSMap();
+    this.serviceRatings = {};
+    this.safetyRatings = {};
 
     serviceRatings?.asMap?.forEach((value, key) => {
-      if (key) this.serviceRatings.set(key, value);
+      if (key) this.serviceRatings[key] = value;
     });
-    serviceRatings?.asList?.forEach((entry) => this.serviceRatings.set(entry[0], entry[1]));
+    serviceRatings?.asList?.forEach((entry) => {
+      this.serviceRatings[entry[0]] = entry[1];
+    });
 
     safetyRatings?.asMap?.forEach((value, key) => {
-      if (key) this.safetyRatings.set(key, value);
+      if (key) this.safetyRatings[key] = value;
     });
-    safetyRatings?.asList?.forEach(([id, rating]) => this.safetyRatings.set(id, rating));
+    safetyRatings?.asList?.forEach(([id, rating]) => {
+      this.safetyRatings[id] = rating;
+    });
   }
 
   private getAverage(values: number[]) {
