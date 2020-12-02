@@ -3,7 +3,7 @@ import BusinessRepository from './BusinessRepository';
 
 class TagsRepository {
   generateExamples(): Promise<TagsList> {
-    const exampleList = [BusinessTags.DELIVERY, BusinessTags.HANDSANITIZER];
+    const exampleList = [BusinessTags.DELIVERY, BusinessTags.HAND_SANITIZER];
     const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
     const t1 = new TagsList(b1, exampleList);
     const t2 = new TagsList(b2, exampleList);
