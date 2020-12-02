@@ -1,19 +1,21 @@
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+
 export enum BusinessTags {
   DELIVERY,
   PICKUP,
   HANDSANITIZER,
 }
 
-// accepting suggestions for a better name for this class lol
-// @Entity()
-export default class TagsList {
-  // @PrimaryColumn("uuid")
+@Entity()
+export default class TagsList extends BaseEntity {
+  @PrimaryColumn('uuid')
   businessId: string;
 
-  // @Column({ type: "enum", enum: BusinessTags, default: [], array: true })
+  @Column({ type: 'enum', enum: BusinessTags, default: [], array: true })
   tags: BusinessTags[];
 
   constructor(businessId: string, tags?: BusinessTags[]) {
+    super();
     this.businessId = businessId;
     this.tags = Array.from(tags || []);
   }

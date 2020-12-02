@@ -21,10 +21,11 @@ class TagsRouter {
     /***************
     GET TAGS ROUTE
     ****************/
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: add validation
+    this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getTags(businessId);
+        const { status, data } = await this._controller.getTags(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -33,11 +34,12 @@ class TagsRouter {
     /***************
     ADD TAG ROUTE
     ****************/
-    this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: add validation
+    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { tagId } = req.body;
-        const { status, data } = this._controller.addTag(businessId, tagId);
+        const { status, data } = await this._controller.addTag(businessId, tagId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -46,11 +48,12 @@ class TagsRouter {
     /***************
     REMOVE TAG ROUTE
     ****************/
-    this._router.delete('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: add validation
+    this._router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { tagId } = req.body;
-        const { status, data } = this._controller.addTag(businessId, tagId);
+        const { status, data } = await this._controller.addTag(businessId, tagId);
         res.status(status).json(data);
       } catch (error) {
         next(error);

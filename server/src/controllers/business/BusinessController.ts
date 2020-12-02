@@ -258,44 +258,44 @@ class BusinessController {
   /***************
   TAG METHODS
   ****************/
-  getTags(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      const tags = TagsRepository.findTagsById(businessId);
-      return { status: 200, data: tags };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getTags(businessId: string): Promise<ReturnObj & ({ data: BusinessTags[] } | { message: string })> {
+    return TagsRepository.findTagsById(businessId).then((tags) => {
+      if (tags) {
+        return { status: 200, data: tags };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  hasTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      const hasTag = /* await */ TagsRepository.hasTag(businessId, tagId);
-      return { status: 200, data: hasTag };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  hasTag(businessId: string, tagId: BusinessTags): Promise<ReturnObj & ({ data: boolean } | { message: string })> {
+    return TagsRepository.hasTag(businessId, tagId).then((hasTag) => {
+      if (hasTag !== undefined) {
+        return { status: 200, data: hasTag };
+      } else {
+        return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  addTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      /* await */ TagsRepository.addTagsToId(businessId, tagId);
-      return { status: 200, message: `Succesfully added tag ${tagId}` };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  addTag(businessId: string, tagId: BusinessTags): Promise<ReturnObj> {
+    return TagsRepository.addTagsToId(businessId, tagId).then((tags) => {
+      if (tags) {
+        return { status: 200, message: `Succesfully added tag ${tagId}` };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  removeTag(businessId: string, tagId: BusinessTags): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      /* await */ TagsRepository.removeTagsFromId(businessId, tagId);
-      return { status: 200, data: `Successfully removed tag ${tagId}` };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  removeTag(businessId: string, tagId: BusinessTags): Promise<ReturnObj> {
+    return TagsRepository.removeTagsFromId(businessId, tagId).then((tags) => {
+      if (tags) {
+        return { status: 200, message: `Successfully removed tag ${tagId}` };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
   /***************
