@@ -64,7 +64,7 @@ export default class Business extends BaseEntity {
   }
 
   public hasOwner(): boolean {
-    return this.ownerId !== undefined;
+    return this.ownerId !== null && this.ownerId !== undefined;
   }
   public isOwner(ownerId: string): boolean {
     return this.ownerId !== undefined && this.ownerId === ownerId;
