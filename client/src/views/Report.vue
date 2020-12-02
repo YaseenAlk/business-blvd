@@ -7,11 +7,11 @@
         <b-form-group label="Select a business: " label-for="businessSelect" label-align="left" label-cols-sm="4">
           <b-form-select id="businessSelect" v-model="form.selected" :options="options" required />
         </b-form-group>
-        <b-form-group label="COVID Safety Score: " label-for="safetyScore" label-align="left" label-cols-sm="4">
-            <b-form-input id="safetyScore" type="number" :min="0" :max="5" v-model="form.safetyScore" size="sm" required/>
+        <b-form-group label="COVID Safety Rating: " label-for="safetyRating" label-align="left" label-cols-sm="4">
+            <b-form-input id="safetyRating" type="number" :min="0" :max="5" v-model="form.safetyRating" size="sm" required/>
         </b-form-group>
-        <b-form-group label="Service Score: " label-for="serviceScore" label-align="left" label-cols-sm="4">
-            <b-form-input id="serviceScore" type="number" :min="0" :max="5" v-model="form.serviceScore" size="sm" required/>
+        <b-form-group label="Service Rating: " label-for="service" label-align="left" label-cols-sm="4">
+            <b-form-input id="serviceRating" type="number" :min="0" :max="5" v-model="form.serviceRating" size="sm" required/>
         </b-form-group>
         <b-form-group label="Review: " label-for="review" label-align="left" label-cols-sm="4">
             <b-form-input id="review" type="text" v-model="form.review" size="sm" required/>
@@ -63,8 +63,8 @@ export default {
       options: undefined,
       form: {
         selected: undefined,
-        safetyScore: undefined,
-        serviceScore: undefined,
+        safetyRating: undefined,
+        serviceRating: undefined,
         review: undefined,
       },
       error: undefined,
@@ -82,6 +82,7 @@ export default {
         this.loading = true;
         const selectedBusiness = this.businesses
           .filter((o) => o.name === this.form.selected)[0];
+        console.log(this.form)
         axios.put(`/api/business/${selectedBusiness.businessId}/ratings/`, this.form)
         .then(() => {
           this.success = "Submitted rating successfully!";
