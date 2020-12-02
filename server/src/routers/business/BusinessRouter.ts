@@ -49,8 +49,11 @@ class BusinessRouter {
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = await this._controller.getBusiness(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getBusiness(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -62,8 +65,11 @@ class BusinessRouter {
     this._router.get('/name', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = await this._controller.getName(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getName(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -73,8 +79,11 @@ class BusinessRouter {
       try {
         const { businessId } = req.params;
         const { name } = req.body;
-        const { status, data } = await this._controller.setName(businessId, name);
-        res.status(status).json(data);
+        const result = await this._controller.setName(businessId, name);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -86,8 +95,11 @@ class BusinessRouter {
     this._router.get('/description', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = await this._controller.getDescription(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getDescription(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -97,8 +109,11 @@ class BusinessRouter {
       try {
         const { businessId } = req.params;
         const { description } = req.body;
-        const { status, data } = await this._controller.setDescription(businessId, description);
-        res.status(status).json(data);
+        const result = await this._controller.setDescription(businessId, description);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -110,8 +125,11 @@ class BusinessRouter {
     this._router.get('/owner', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = await this._controller.getOwner(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getOwner(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -121,8 +139,11 @@ class BusinessRouter {
       try {
         const { businessId } = req.params;
         const { ownerId } = req.body;
-        const { status, data } = await this._controller.setOwner(businessId, ownerId);
-        res.status(status).json(data);
+        const result = await this._controller.setOwner(businessId, ownerId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -134,8 +155,11 @@ class BusinessRouter {
     this._router.get('/url', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = await this._controller.getExternalURL(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getExternalURL(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -145,8 +169,11 @@ class BusinessRouter {
       try {
         const { businessId } = req.params;
         const { url } = req.body;
-        const { status, data } = await this._controller.setExternalURL(businessId, url);
-        res.status(status).json(data);
+        const result = await this._controller.setExternalURL(businessId, url);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -158,8 +185,11 @@ class BusinessRouter {
     this._router.get('/phone', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = await this._controller.getPhoneNumber(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getPhoneNumber(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -169,8 +199,11 @@ class BusinessRouter {
       try {
         const { businessId } = req.params;
         const { phone } = req.body;
-        const { status, data } = await this._controller.setPhoneNumber(businessId, phone);
-        res.status(status).json(data);
+        const result = await this._controller.setPhoneNumber(businessId, phone);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -187,8 +220,11 @@ class BusinessRouter {
         try {
           const { businessId } = req.params;
           const userId = req.session.userID;
-          const { status, message } = await this._controller.claimBusiness(businessId, userId);
-          res.status(status).json({ message }).end();
+          const result = await this._controller.claimBusiness(businessId, userId);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
         } catch (error) {
           next(error);
         }
@@ -203,8 +239,11 @@ class BusinessRouter {
         try {
           const { businessId } = req.params;
           const userId = req.session.userID;
-          const { status, message } = await this._controller.unclaimBusiness(businessId, userId);
-          res.status(status).json({ message }).end();
+          const result = await this._controller.unclaimBusiness(businessId, userId);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
         } catch (error) {
           next(error);
         }

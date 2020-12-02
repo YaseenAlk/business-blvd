@@ -81,7 +81,10 @@ class InquiryRouter {
           const { businessId, question } = req.body;
           const userId: string = req.session.userID;
           const result = await this._controller.createInquiry(businessId, question, userId);
-          res.status(result.status).json(result.message).end();
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
         } catch (error) {
           next(error);
         }
@@ -137,7 +140,10 @@ class InquiryRouter {
           const id: string = req.params.id;
           const answer: string = req.body.answer;
           const result = await this._controller.postAnswer(id, answer);
-          res.status(result.status).json(result.message).end();
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
         } catch (error) {
           next(error);
         }
@@ -189,7 +195,10 @@ class InquiryRouter {
         try {
           const id: string = req.params.id;
           const result = await this._controller.makePublic(id);
-          res.status(result.status).json(result.message).end();
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
         } catch (error) {
           next(error);
         }
@@ -207,7 +216,10 @@ class InquiryRouter {
         try {
           const id: string = req.params.id;
           const result = await this._controller.makePrivate(id);
-          res.status(result.status).json(result.message).end();
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
         } catch (error) {
           next(error);
         }

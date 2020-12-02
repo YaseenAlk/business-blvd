@@ -26,8 +26,11 @@ class PositionRouter {
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, message } = await this._controller.getPosition(businessId);
-        res.status(status).json(message);
+        const result = await this._controller.getPosition(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -41,8 +44,11 @@ class PositionRouter {
       try {
         const { businessId } = req.params;
         const { address, lat, lng } = req.body;
-        const { status, message } = await this._controller.setPosition(businessId, address, lat, lng);
-        res.status(status).json(message);
+        const result = await this._controller.setPosition(businessId, address, lat, lng);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }

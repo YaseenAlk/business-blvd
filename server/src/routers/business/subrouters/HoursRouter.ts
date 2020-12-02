@@ -25,8 +25,11 @@ class HoursRouter {
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = await this._controller.getHours(businessId);
-        res.status(status).json(data);
+        const result = await this._controller.getHours(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
@@ -40,8 +43,11 @@ class HoursRouter {
       try {
         const { businessId } = req.params;
         const { day, openTime, closeTime } = req.body;
-        const { status, data } = await this._controller.setHours(businessId, day, openTime, closeTime);
-        res.status(status).json(data);
+        const result = await this._controller.setHours(businessId, day, openTime, closeTime);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
       } catch (error) {
         next(error);
       }
