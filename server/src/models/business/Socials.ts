@@ -1,23 +1,29 @@
-type Platforms = { facebook?: string; twitter?: string; instagram?: string };
-// @Entity()
-export default class Socials {
-  // @PrimaryColumn("uuid")
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+
+import { v4 as uuidv4 } from 'uuid';
+
+export type Platforms = { facebook?: string; twitter?: string; instagram?: string };
+
+@Entity()
+export default class Socials extends BaseEntity {
+  @PrimaryColumn('uuid')
   businessId: string;
 
-  // @Column({nullable: true})
+  @Column({ nullable: true })
   facebook?: string;
 
-  // @Column({nullable: true})
+  @Column({ nullable: true })
   twitter?: string;
 
-  // @Column({nullable: true})
+  @Column({ nullable: true })
   instagram?: string;
 
-  constructor(businessId: string, socials: Platforms) {
-    this.businessId = businessId;
-    this.facebook = socials.facebook;
-    this.twitter = socials.twitter;
-    this.instagram = socials.instagram;
+  constructor(businessId?: string, socials?: Platforms) {
+    super();
+    this.businessId = businessId || uuidv4();
+    this.facebook = socials?.facebook || '';
+    this.twitter = socials?.twitter || '';
+    this.instagram = socials?.instagram || '';
   }
 
   public getSocialURLs(): Platforms {

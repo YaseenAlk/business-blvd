@@ -1,20 +1,24 @@
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+
+import { v4 as uuidv4 } from 'uuid';
+
 export enum BusinessTags {
   DELIVERY,
   PICKUP,
   HAND_SANITIZER,
 }
 
-// accepting suggestions for a better name for this class lol
-// @Entity()
-export default class TagsList {
-  // @PrimaryColumn("uuid")
+@Entity()
+export default class TagsList extends BaseEntity {
+  @PrimaryColumn('uuid')
   businessId: string;
 
-  // @Column({ type: "enum", enum: BusinessTags, default: [], array: true })
+  @Column({ type: 'enum', enum: BusinessTags, default: [], array: true })
   tags: BusinessTags[];
 
-  constructor(businessId: string, tags?: BusinessTags[]) {
-    this.businessId = businessId;
+  constructor(businessId?: string, tags?: BusinessTags[]) {
+    super();
+    this.businessId = businessId || uuidv4();
     this.tags = Array.from(tags || []);
   }
 }

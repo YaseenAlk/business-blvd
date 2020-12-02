@@ -22,11 +22,12 @@ class PositionRouter {
     /***************
     GET POSITION ROUTE
     ****************/
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    // TODO: add validation middleware
+    this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getPosition(businessId);
-        res.status(status).json(data);
+        const { status, message } = await this._controller.getPosition(businessId);
+        res.status(status).json(message);
       } catch (error) {
         next(error);
       }
@@ -35,12 +36,13 @@ class PositionRouter {
     /***************
     SET POSITION ROUTE
     ****************/
-    this._router.put('/', Validation.ownsBusiness, (req: Request, res: Response, next: NextFunction) => {
+    // TODO: add validation middleware
+    this._router.put('/', Validation.ownsBusiness, async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { address, lat, lng } = req.body;
-        const { status, data } = this._controller.setPosition(businessId, address, lat, lng);
-        res.status(status).json(data);
+        const { status, message } = await this._controller.setPosition(businessId, address, lat, lng);
+        res.status(status).json(message);
       } catch (error) {
         next(error);
       }

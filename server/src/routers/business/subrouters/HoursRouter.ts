@@ -21,10 +21,11 @@ class HoursRouter {
     /***************
     GET HOURS ROUTE
     ****************/
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: add validation middleware
+    this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getHours(businessId);
+        const { status, data } = await this._controller.getHours(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -34,11 +35,12 @@ class HoursRouter {
     /***************
     SET HOURS ROUTE
     ****************/
-    this._router.put('/', (req: Request, res: Response, next: NextFunction) => {
+    // todo: add validation middleware
+    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { day, openTime, closeTime } = req.body;
-        const { status, data } = this._controller.setHours(businessId, day, openTime, closeTime);
+        const { status, data } = await this._controller.setHours(businessId, day, openTime, closeTime);
         res.status(status).json(data);
       } catch (error) {
         next(error);

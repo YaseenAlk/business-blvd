@@ -1,3 +1,6 @@
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+
 export interface BusinessJSON {
   name: string;
   description: string;
@@ -9,41 +12,42 @@ export interface BusinessJSON {
   phone: string;
 }
 
-// @Entity()
-export default class Business {
-  // @PrimaryColumn("uuid")
+@Entity()
+export default class Business extends BaseEntity {
+  @PrimaryColumn('uuid')
   businessId: string;
 
-  // @Column()
+  @Column()
   name: string;
 
-  // @Column()
+  @Column()
   description: string;
 
-  // @Column()
+  @Column({ type: 'text', array: true })
   followers: string[];
 
-  // @Column({nullable: true, type: 'uuid'})
+  @Column({ nullable: true, type: 'uuid' })
   ownerId: string | undefined;
 
-  // @Column()
+  @Column()
   internalURL: string;
 
-  // @Column()
+  @Column()
   externalURL: string;
 
-  // @Column()
+  @Column()
   phone: string;
 
-  constructor(entry: BusinessJSON) {
-    this.name = entry.name;
-    this.description = entry.description;
-    this.businessId = entry.businessId;
-    this.followers = Array.from(entry.followers);
-    this.ownerId = entry.ownerId;
-    this.internalURL = entry.internalURL;
-    this.externalURL = entry.externalURL;
-    this.phone = entry.phone;
+  constructor(entry?: BusinessJSON) {
+    super();
+    this.name = entry?.name || '';
+    this.description = entry?.description || '';
+    this.businessId = entry?.businessId || uuidv4();
+    this.followers = Array.from(entry?.followers || []);
+    this.ownerId = entry?.ownerId || uuidv4();
+    this.internalURL = entry?.internalURL || '';
+    this.externalURL = entry?.externalURL || '';
+    this.phone = entry?.phone || '';
   }
 
   public addFollower(id: string): void {
@@ -64,20 +68,5 @@ export default class Business {
   }
   public isOwner(ownerId: string): boolean {
     return this.ownerId !== undefined && this.ownerId === ownerId;
-  }
-
-  // this might not really be necessary anymore
-  // we'll probably axe this
-  public toJSON(): BusinessJSON {
-    return {
-      name: this.name,
-      description: this.description,
-      businessId: this.businessId,
-      followers: Array.from(this.followers),
-      ownerId: this.ownerId,
-      internalURL: this.internalURL,
-      externalURL: this.externalURL,
-      phone: this.phone,
-    };
   }
 }

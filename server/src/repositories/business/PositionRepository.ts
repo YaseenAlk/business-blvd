@@ -2,25 +2,28 @@ import Position from '../../models/business/Position';
 import BusinessRepository from './BusinessRepository';
 
 class PositionRepository {
-  private data: Position[] = [];
-
-  constructor() {
+  generateExamples(): Promise<Position> {
     const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
-    this.data.push(new Position(b1, '123 Seasame Street', 42.362541, -71.09845));
-    this.data.push(new Position(b2, '123 Seasame Street', 42.362541, -71.09845));
+    const p1 = new Position(b1, '123 Seasame Street', 42.362541, -71.09845);
+    const p2 = new Position(b2, '123 Seasame Street', 42.362541, -71.09845);
+    return p1.save().then(() => {
+      return p2.save();
+    });
   }
 
-  findOneById(businessId: string): Position | undefined {
-    return this.data.filter((position) => position.businessId === businessId)[0];
+  findOneById(businessId: string): Promise<Position | undefined> {
+    return Position.findOne({ businessId });
   }
 
-  update(businessId: string, address: string, lat: number, lng: number) {
-    const position = this.data.filter((position) => position.businessId === businessId)[0];
-    if (position) {
-      position.address = address;
-      position.lat = lat;
-      position.lng = lng;
-    }
+  update(businessId: string, address: string, lat: number, lng: number): Promise<Position | undefined> {
+    return Position.findOne({ businessId }).then((position) => {
+      if (position) {
+        position.address = address;
+        position.lat = lat;
+        position.lng = lng;
+      }
+      return position?.save();
+    });
   }
 }
 

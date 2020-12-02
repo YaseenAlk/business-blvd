@@ -1,84 +1,39 @@
-/*
-Inquiry:
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
 
-    - int id
-    - int authorId
-    - int businessId
-    - string question
-    - string? answer  
-*/
+import { v4 as uuidv4 } from 'uuid';
 
 export enum Publicity {
   PRIVATE = 'private',
   PUBLIC = 'public',
 }
 
-// @Entity()
-export class Inquiry {
-  // @PrimaryColumn("uuid")
-  private _id: string;
+@Entity()
+export class Inquiry extends BaseEntity {
+  @PrimaryColumn('uuid')
+  id: string;
 
-  // @Column("uuid")
-  private _authorId: string;
+  @Column('uuid')
+  authorId: string;
 
-  // @Column("uuid")
-  private _businessId: string;
+  @Column('uuid')
+  businessId: string;
 
-  // @Column()
-  private _question: string;
+  @Column()
+  question: string;
 
-  // @Column()
-  private _publicity: Publicity;
+  @Column()
+  publicity: Publicity;
 
-  // @Column({ type: "enum", enum: Publicity, default: Publicity.PRIVATE })
-  private _answer?: string;
+  @Column({ nullable: true, type: 'enum', enum: Publicity, default: Publicity.PRIVATE })
+  answer?: string;
 
-  constructor(
-    id: string,
-    authorId: string,
-    businessId: string,
-    question: string,
-    publicity?: Publicity,
-    answer?: string,
-  ) {
-    this._id = id;
-    this._authorId = authorId;
-    this._businessId = businessId;
-    this._question = question;
-    this._publicity = publicity || Publicity.PRIVATE;
-    if (answer) this._answer = answer;
-  }
-
-  get id(): string {
-    return this._id;
-  }
-
-  get authorId(): string {
-    return this._authorId;
-  }
-
-  get businessId(): string {
-    return this._businessId;
-  }
-
-  get question(): string {
-    return this._question;
-  }
-  set question(newQuestion: string) {
-    this._question = newQuestion;
-  }
-
-  get publicity(): Publicity {
-    return this._publicity;
-  }
-  set publicity(newPublicity: Publicity) {
-    this._publicity = newPublicity;
-  }
-
-  get answer(): string | undefined {
-    return this._answer;
-  }
-  set answer(newAnswer: string | undefined) {
-    this._answer = newAnswer;
+  constructor(authorId?: string, businessId?: string, question?: string, publicity?: Publicity, answer?: string) {
+    super();
+    this.id = uuidv4();
+    this.authorId = authorId || uuidv4();
+    this.businessId = businessId || uuidv4();
+    this.question = question || '';
+    this.publicity = publicity || Publicity.PRIVATE;
+    if (answer) this.answer = answer;
   }
 }

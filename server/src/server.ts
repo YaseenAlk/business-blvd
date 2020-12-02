@@ -9,9 +9,24 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import MasterRouter from './routers/MasterRouter';
 import ErrorHandler from './models/ErrorHandler';
+
 // Database connection
 import { getConnectionManager, ConnectionOptions } from 'typeorm';
 import { User } from './models/User';
+import { Inquiry } from './models/Inquiry';
+import Business from './models/business/Business';
+import Hours from './models/business/Hours';
+import Position from './models/business/Position';
+import Ratings from './models/business/Ratings';
+import Socials from './models/business/Socials';
+import TagsList from './models/business/TagsList';
+
+import BusinessRepository from './repositories/business/BusinessRepository';
+import HoursRepository from './repositories/business/HoursRepository';
+import PositionRepository from './repositories/business/PositionRepository';
+import RatingsRepository from './repositories/business/RatingsRepository';
+import SocialsRepository from './repositories/business/SocialsRepository';
+import TagsRepository from './repositories/business/TagsRepository';
 
 // load the environment variables from the .env file
 dotenv.config({
@@ -81,7 +96,7 @@ const config: ConnectionOptions = {
   url: process.env.DB_URL || 'postgres://username:password@host:port/database',
   synchronize: process.env.DB_SYNCHRONIZE ? process.env.DB_SYNCHRONIZE.toLowerCase() === 'true' : true,
   logging: process.env.DB_LOGGING ? process.env.DB_LOGGING.toLowerCase() === 'true' : false,
-  entities: [User],
+  entities: [User, Inquiry, Business, Hours, Position, Ratings, Socials, TagsList],
   ssl: true,
   extra: {
     ssl: {
@@ -104,8 +119,14 @@ export default (): Promise<Server> => {
       server.onClose = async () => {
         await connection.close();
       };
-      return server;
     })
+    .then(() => BusinessRepository.generateExamples())
+    .then(() => HoursRepository.generateExamples())
+    .then(() => PositionRepository.generateExamples())
+    .then(() => RatingsRepository.generateExamples())
+    .then(() => SocialsRepository.generateExamples())
+    .then(() => TagsRepository.generateExamples())
+    .then(() => server)
     .catch((e) => {
       // eslint-disable-next-line no-console
       console.log(`Error connecting to DB: ${e}`);

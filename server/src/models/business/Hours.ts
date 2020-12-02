@@ -1,5 +1,7 @@
 import { TSMap } from 'typescript-map';
 
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+
 export enum Day {
   SUNDAY,
   MONDAY,
@@ -26,22 +28,23 @@ export type TimeBlock = {
   close: Time;
 };
 
-// @Entity()
-export class Hours {
-  // @PrimaryColumn("uuid")
+@Entity()
+export default class Hours extends BaseEntity {
+  @PrimaryColumn('uuid')
   businessId: string;
 
-  // @Column("jsonb")
+  @Column('jsonb')
   entries: TSMap<Day, TimeBlock>;
 
   // allows input entries to be an existing TSMap or a list of tuples
-  constructor(businessId: string, inputEntries: InputEntries) {
-    this.businessId = businessId;
+  constructor(businessId?: string, inputEntries?: InputEntries) {
+    super();
+    this.businessId = businessId || '';
     this.entries = new TSMap();
-    inputEntries.asMap?.forEach((value, key) => {
+    inputEntries?.asMap?.forEach((value, key) => {
       if (key) this.entries.set(key, value);
     });
-    inputEntries.asList?.forEach((entry) => this.entries.set(entry[0], entry[1]));
-    inputEntries.asListFlat?.forEach((entry) => this.entries.set(entry[0], { open: entry[1], close: entry[2] }));
+    inputEntries?.asList?.forEach((entry) => this.entries.set(entry[0], entry[1]));
+    inputEntries?.asListFlat?.forEach((entry) => this.entries.set(entry[0], { open: entry[1], close: entry[2] }));
   }
 }

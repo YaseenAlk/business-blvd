@@ -1,41 +1,50 @@
-import Socials from '../../models/business/Socials';
+import Socials, { Platforms } from '../../models/business/Socials';
 import BusinessRepository from './BusinessRepository';
 
 class SocialsRepository {
-  private data: Socials[] = [];
-
-  constructor() {
-    const exampleSocials = {
+  generateExamples(): Promise<Socials> {
+    const exampleSocials: Platforms = {
       facebook: 'https://www.facebook.com',
       twitter: 'https://www.twitter.com',
       instagram: 'https://www.instagram.com',
     };
 
     const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
-    this.data.push(new Socials(b1, exampleSocials));
-    this.data.push(new Socials(b2, exampleSocials));
+    const s1 = new Socials(b1, exampleSocials);
+    const s2 = new Socials(b2, exampleSocials);
+
+    return s1.save().then(() => {
+      return s2.save();
+    });
   }
 
-  findSocialsById(businessId: string): { facebook?: string; twitter?: string; instagram?: string } | undefined {
-    return this.data.filter((socials) => socials.businessId === businessId)[0]?.getSocialURLs();
+  // getters
+  findSocialsById(businessId: string): Promise<Platforms | undefined> {
+    return Socials.findOne({ businessId }).then((socials) => {
+      return socials?.getSocialURLs();
+    });
   }
 
-  updateFacebook(businessId: string, facebookURL: string): void {
-    const socials = this.data.filter((socials) => socials.businessId === businessId)[0];
-    if (socials) socials.facebook = facebookURL;
-    // await socials.save();
+  // setters
+  updateFacebook(businessId: string, facebookURL: string): Promise<Platforms | undefined> {
+    return Socials.findOne({ businessId }).then((socials) => {
+      if (socials) socials.facebook = facebookURL;
+      return socials?.save().then((socials) => socials.getSocialURLs());
+    });
   }
 
-  updateTwitter(businessId: string, twitterURL: string): void {
-    const socials = this.data.filter((socials) => socials.businessId === businessId)[0];
-    if (socials) socials.twitter = twitterURL;
-    // await socials.save();
+  updateTwitter(businessId: string, twitterURL: string): Promise<Platforms | undefined> {
+    return Socials.findOne({ businessId }).then((socials) => {
+      if (socials) socials.twitter = twitterURL;
+      return socials?.save().then((socials) => socials.getSocialURLs());
+    });
   }
 
-  updateInstagram(businessId: string, instagramURL: string): void {
-    const socials = this.data.filter((socials) => socials.businessId === businessId)[0];
-    if (socials) socials.instagram = instagramURL;
-    // await socials.save();
+  updateInstagram(businessId: string, instagramURL: string): Promise<Platforms | undefined> {
+    return Socials.findOne({ businessId }).then((socials) => {
+      if (socials) socials.instagram = instagramURL;
+      return socials?.save().then((socials) => socials.getSocialURLs());
+    });
   }
 }
 
