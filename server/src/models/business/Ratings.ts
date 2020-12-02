@@ -44,15 +44,17 @@ export default class Ratings extends BaseEntity {
   }
 
   public getSafetyRatings(): { average: number; ratings: Array<number> } {
+    const vals: number[] = Object.values(this.safetyRatings);
     return {
-      average: this.getAverage(this.safetyRatings.values()),
-      ratings: this.safetyRatings.values(),
+      average: this.getAverage(vals),
+      ratings: vals,
     };
   }
   public getServiceRatings(): { average: number; ratings: Array<number> } {
+    const vals: number[] = Object.values(this.serviceRatings);
     return {
-      average: this.getAverage(this.serviceRatings.values()),
-      ratings: this.serviceRatings.values(),
+      average: this.getAverage(vals),
+      ratings: vals,
     };
   }
 }
