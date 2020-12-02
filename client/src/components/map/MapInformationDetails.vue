@@ -27,10 +27,6 @@ export default {
 </script>
 
 <style>
-.info-page {
-    padding: 32px;
-}
-
 .card-section {
     transition: all 0.5s ease-in-out;
 }

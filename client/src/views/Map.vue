@@ -16,7 +16,6 @@ export default {
     name: 'Map',
     created(){
         eventBus.$on('click-marker', () => {
-            console.log('here, click');
             this.classObject = 'map-page-both';
         });
     },
