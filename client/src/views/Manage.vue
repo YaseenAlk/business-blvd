@@ -1,9 +1,9 @@
 <template>
     <div v-if="business">
-      <h1> {{this.business.name}} </h1>
+      <h1> {{ business.name }} </h1>
       <b-container v-if="show">
         <b-row style="font-size: 2rem;">
-          <b-form class="col-md-8" @submit="onSubmit" @reset="onReset">
+          <b-form class="col-md-8" @submit.prevent="onSubmit" @reset.prevent="onReset">
             <b-form-group
               id="name-group"
               label="Business Name:"
@@ -106,15 +106,12 @@ export default {
 		};
   },
   methods: {
-    onSubmit(e) {
-      e.preventDefault();
+    onSubmit() {
       console.log("Submitting!")
       console.log(this.form)
     },
-    onReset(e) {
-      e.preventDefault();
+    onReset() {
       this.form.name = undefined;
-      
       // Reset the validation state.
       this.show = false;
       this.$nextTick(() => {

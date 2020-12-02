@@ -1,6 +1,6 @@
 <template>
 <div v-if="question" class="question">
-   <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+   <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" v-if="show">
       <b-form-group
         :id="'q-group-'+ question"
         :label="question"
@@ -35,13 +35,11 @@ export default {
     }
   },
   methods: {
-    onSubmit(e) {
-      e.preventDefault();
+    onSubmit() {
       console.log("Submitting!")
       console.log(this.form)
     },
-    onReset(e) {
-      e.preventDefault();
+    onReset() {
       this.form.name = undefined;
       
       // Reset the validation state.
