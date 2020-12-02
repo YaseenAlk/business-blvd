@@ -1,4 +1,5 @@
 import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity()
 export default class Position extends BaseEntity {
@@ -8,17 +9,17 @@ export default class Position extends BaseEntity {
   @Column()
   address: string;
 
-  @Column()
+  @Column('decimal')
   lat: number;
 
-  @Column()
+  @Column('decimal')
   lng: number;
 
-  constructor(businessId: string, address: string, lat: number, lng: number) {
+  constructor(businessId?: string, address?: string, lat?: number, lng?: number) {
     super();
-    this.businessId = businessId;
-    this.address = address;
-    this.lat = lat;
-    this.lng = lng;
+    this.businessId = businessId || uuidv4();
+    this.address = address || '';
+    this.lat = lat || 0;
+    this.lng = lng || 0;
   }
 }

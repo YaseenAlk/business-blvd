@@ -2,6 +2,8 @@ import { TSMap } from 'typescript-map';
 
 import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
 
+import { v4 as uuidv4 } from 'uuid';
+
 type InputEntries = {
   asMap?: TSMap<string, number>;
   asList?: [string, number][];
@@ -18,21 +20,21 @@ export default class Ratings extends BaseEntity {
   @Column('jsonb')
   safetyRatings: TSMap<string, number>;
 
-  constructor(businessId: string, serviceRatings: InputEntries, safetyRatings: InputEntries) {
+  constructor(businessId?: string, serviceRatings?: InputEntries, safetyRatings?: InputEntries) {
     super();
-    this.businessId = businessId;
+    this.businessId = businessId || uuidv4();
     this.serviceRatings = new TSMap();
     this.safetyRatings = new TSMap();
 
-    serviceRatings.asMap?.forEach((value, key) => {
+    serviceRatings?.asMap?.forEach((value, key) => {
       if (key) this.serviceRatings.set(key, value);
     });
-    serviceRatings.asList?.forEach((entry) => this.serviceRatings.set(entry[0], entry[1]));
+    serviceRatings?.asList?.forEach((entry) => this.serviceRatings.set(entry[0], entry[1]));
 
-    safetyRatings.asMap?.forEach((value, key) => {
+    safetyRatings?.asMap?.forEach((value, key) => {
       if (key) this.safetyRatings.set(key, value);
     });
-    safetyRatings.asList?.forEach(([id, rating]) => this.safetyRatings.set(id, rating));
+    safetyRatings?.asList?.forEach(([id, rating]) => this.safetyRatings.set(id, rating));
   }
 
   private getAverage(values: number[]) {

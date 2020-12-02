@@ -1,5 +1,7 @@
 import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
 
+import { v4 as uuidv4 } from 'uuid';
+
 export type Platforms = { facebook?: string; twitter?: string; instagram?: string };
 
 @Entity()
@@ -16,12 +18,12 @@ export default class Socials extends BaseEntity {
   @Column({ nullable: true })
   instagram?: string;
 
-  constructor(businessId: string, socials: Platforms) {
+  constructor(businessId?: string, socials?: Platforms) {
     super();
-    this.businessId = businessId;
-    this.facebook = socials.facebook;
-    this.twitter = socials.twitter;
-    this.instagram = socials.instagram;
+    this.businessId = businessId || uuidv4();
+    this.facebook = socials?.facebook || '';
+    this.twitter = socials?.twitter || '';
+    this.instagram = socials?.instagram || '';
   }
 
   public getSocialURLs(): Platforms {

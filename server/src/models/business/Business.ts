@@ -1,4 +1,5 @@
 import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface BusinessJSON {
   name: string;
@@ -37,16 +38,16 @@ export default class Business extends BaseEntity {
   @Column()
   phone: string;
 
-  constructor(entry: BusinessJSON) {
+  constructor(entry?: BusinessJSON) {
     super();
-    this.name = entry.name;
-    this.description = entry.description;
-    this.businessId = entry.businessId;
-    this.followers = Array.from(entry.followers);
-    this.ownerId = entry.ownerId;
-    this.internalURL = entry.internalURL;
-    this.externalURL = entry.externalURL;
-    this.phone = entry.phone;
+    this.name = entry?.name || '';
+    this.description = entry?.description || '';
+    this.businessId = entry?.businessId || uuidv4();
+    this.followers = Array.from(entry?.followers || []);
+    this.ownerId = entry?.ownerId || uuidv4();
+    this.internalURL = entry?.internalURL || '';
+    this.externalURL = entry?.externalURL || '';
+    this.phone = entry?.phone || '';
   }
 
   public addFollower(id: string): void {

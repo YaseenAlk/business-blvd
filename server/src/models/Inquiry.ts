@@ -27,12 +27,12 @@ export class Inquiry extends BaseEntity {
   @Column({ nullable: true, type: 'enum', enum: Publicity, default: Publicity.PRIVATE })
   answer?: string;
 
-  constructor(authorId: string, businessId: string, question: string, publicity?: Publicity, answer?: string) {
+  constructor(authorId?: string, businessId?: string, question?: string, publicity?: Publicity, answer?: string) {
     super();
     this.id = uuidv4();
-    this.authorId = authorId;
-    this.businessId = businessId;
-    this.question = question;
+    this.authorId = authorId || uuidv4();
+    this.businessId = businessId || uuidv4();
+    this.question = question || '';
     this.publicity = publicity || Publicity.PRIVATE;
     if (answer) this.answer = answer;
   }
