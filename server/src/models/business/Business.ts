@@ -22,7 +22,7 @@ export default class Business extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ type: 'text', array: true })
   followers: string[];
 
   @Column({ nullable: true, type: 'uuid' })
