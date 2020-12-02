@@ -1,8 +1,6 @@
 <template>
-    <div class="info-page">
-        <div v-if="selectedBusiness !== undefined">
-            <MapCard v-bind:business="selectedBusiness" />
-        </div>
+    <div v-if="selectedBusiness !== undefined">
+        <MapCard v-bind:business="selectedBusiness" />
     </div>
 </template>
 
