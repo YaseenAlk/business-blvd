@@ -46,10 +46,10 @@ class BusinessRouter {
     /***************
     GET BUSINESS ROUTE
     ****************/
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getBusiness(businessId);
+        const { status, data } = await this._controller.getBusiness(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -59,21 +59,21 @@ class BusinessRouter {
     /***************
     SET/GET NAME ROUTES
     ****************/
-    this._router.get('/name', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/name', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getName(businessId);
+        const { status, data } = await this._controller.getName(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
       }
     });
 
-    this._router.put('/name', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/name', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { name } = req.body;
-        const { status, data } = this._controller.setName(businessId, name);
+        const { status, data } = await this._controller.setName(businessId, name);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -83,21 +83,21 @@ class BusinessRouter {
     /***************
     SET/GET DESCRIPTION ROUTES
     ****************/
-    this._router.get('/description', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/description', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getDescription(businessId);
+        const { status, data } = await this._controller.getDescription(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
       }
     });
 
-    this._router.put('/description', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/description', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { description } = req.body;
-        const { status, data } = this._controller.setDescription(businessId, description);
+        const { status, data } = await this._controller.setDescription(businessId, description);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -107,21 +107,21 @@ class BusinessRouter {
     /***************
     SET/GET OWNER ROUTES
     ****************/
-    this._router.get('/owner', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/owner', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getOwner(businessId);
+        const { status, data } = await this._controller.getOwner(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
       }
     });
 
-    this._router.put('/owner', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/owner', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { ownerId } = req.body;
-        const { status, data } = this._controller.setOwner(businessId, ownerId);
+        const { status, data } = await this._controller.setOwner(businessId, ownerId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -131,21 +131,21 @@ class BusinessRouter {
     /***************
     SET/GET URL ROUTES
     ****************/
-    this._router.get('/url', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/url', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getExternalURL(businessId);
+        const { status, data } = await this._controller.getExternalURL(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
       }
     });
 
-    this._router.put('/url', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/url', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { url } = req.body;
-        const { status, data } = this._controller.setExternalURL(businessId, url);
+        const { status, data } = await this._controller.setExternalURL(businessId, url);
         res.status(status).json(data);
       } catch (error) {
         next(error);
@@ -155,21 +155,21 @@ class BusinessRouter {
     /***************
     SET/GET PHONE ROUTES
     ****************/
-    this._router.get('/phone', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/phone', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { status, data } = this._controller.getPhoneNumber(businessId);
+        const { status, data } = await this._controller.getPhoneNumber(businessId);
         res.status(status).json(data);
       } catch (error) {
         next(error);
       }
     });
 
-    this._router.put('/phone', (req: Request, res: Response, next: NextFunction) => {
+    this._router.put('/phone', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { phone } = req.body;
-        const { status, data } = this._controller.setPhoneNumber(businessId, phone);
+        const { status, data } = await this._controller.setPhoneNumber(businessId, phone);
         res.status(status).json(data);
       } catch (error) {
         next(error);

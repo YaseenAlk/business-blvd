@@ -10,26 +10,28 @@ import HoursRepository from '../../repositories/business/HoursRepository';
 import RatingsRepository from '../../repositories/business/RatingsRepository';
 import SocialsRepository from '../../repositories/business/SocialsRepository';
 import TagsRepository from '../../repositories/business/TagsRepository';
+import Business from '../../models/business/Business';
 
 class BusinessController {
   /***************
   BUSINESSES METHODS
   ****************/
 
-  getBusiness(businessId: string): ReturnObj {
-    if (businessId == 'all') {
-      return {
-        status: 200,
-        data: BusinessRepository.getAllBusinesses().map((business) => business.toJSON()),
-      };
-    } else {
-      const business = /* await */ BusinessRepository.findOneById(businessId);
-      if (business) {
-        return { status: 200, data: business.toJSON() };
-      } else {
-        return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-      }
-    }
+  getBusiness(
+    businessId: string,
+  ): Promise<ReturnObj & ({ data: Business[] } | { data: Business } | { message: string })> {
+    if (businessId == 'all')
+      return BusinessRepository.getAllBusinesses().then((businesses) => {
+        return { status: 200, data: businesses };
+      });
+    else
+      return BusinessRepository.findOneById(businessId).then((business) => {
+        if (business) {
+          return { status: 200, data: business };
+        } else {
+          return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
+        }
+      });
   }
 
   /***************
@@ -167,81 +169,84 @@ class BusinessController {
 
   claimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.ownerId = userId;
-      return UserRepository.addBusinessOwned(userId, businessId).then(() => {
-        return { status: 200, message: 'Business successfully claimed!' };
-      });
-    } else {
-      return Promise.resolve({ status: 404, message: 'Business not found' });
-    }
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        return BusinessRepository.claimBusiness(businessId, userId).then(() => {
+          return UserRepository.addBusinessOwned(userId, businessId).then(() => {
+            return { status: 200, message: 'Business successfully claimed!' };
+          });
+        });
+      } else {
+        return Promise.resolve({ status: 404, message: 'Business not found' });
+      }
+    });
   }
 
   unclaimBusiness(businessId: string, userId: string): Promise<ReturnObj> {
     // errors and validation are already handled by middleware at the router level
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.ownerId = undefined;
-      return UserRepository.removeBusinessOwned(userId, businessId).then(() => {
-        return { status: 200, message: 'Business successfully unclaimed!' };
-      });
-    } else {
-      return Promise.resolve({ status: 404, message: 'Business not found' });
-    }
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        return BusinessRepository.unclaimBusiness(businessId, userId).then(() => {
+          return UserRepository.removeBusinessOwned(userId, businessId).then(() => {
+            return { status: 200, message: 'Business successfully unclaimed!' };
+          });
+        });
+      } else {
+        return Promise.resolve({ status: 404, message: 'Business not found' });
+      }
+    });
   }
 
   /***************
   FOLLOWERS METHODS
   ****************/
-  getFollowers(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      return { status: 200, data: business.getFollowers() };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getFollowers(businessId: string): Promise<ReturnObj & ({ data: string[] } | { message: string })> {
+    return BusinessRepository.getFollowersById(businessId).then((followers) => {
+      if (!followers) return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      else return { status: 200, data: followers };
+    });
   }
 
-  isFollowedBy(businessId: string, userId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      return { status: 200, data: business.isFollowedBy(userId) };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  isFollowedBy(businessId: string, userId: string): Promise<ReturnObj & ({ data: boolean } | { message: string })> {
+    return BusinessRepository.followedBy(businessId, userId).then((isFollowed) => {
+      if (isFollowed === undefined)
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      else return { status: 200, data: isFollowed };
+    });
   }
 
   unfollow(businessId: string, userId: string): Promise<ReturnObj> {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.removeFollower(userId);
-      return UserRepository.findOneByID(userId).then((account) => {
-        account?.unfollowBusiness(businessId);
-        return {
-          status: 200,
-          message: `Unfollow successful!`,
-        };
-      });
-    } else {
-      return Promise.resolve({ status: 404, data: `Whoops! Unable to find that business in our datastore.` });
-    }
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        return BusinessRepository.removeFollower(businessId, userId).then(() => {
+          return UserRepository.unfollowBusiness(businessId, userId).then(() => {
+            return {
+              status: 200,
+              message: `Unfollow successful!`,
+            };
+          });
+        });
+      } else {
+        return Promise.resolve({ status: 404, message: `Whoops! Unable to find that business in our datastore.` });
+      }
+    });
   }
 
   follow(businessId: string, userId: string): Promise<ReturnObj> {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.addFollower(userId);
-      return UserRepository.findOneByID(userId).then((account) => {
-        account?.followBusiness(businessId);
-        return {
-          status: 200,
-          message: `Follow successful!`,
-        };
-      });
-    } else {
-      return Promise.resolve({ status: 404, data: `Whoops! Unable to find that business in our datastore.` });
-    }
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        return BusinessRepository.addFollower(businessId, userId).then(() => {
+          return UserRepository.followBusiness(userId, businessId).then(() => {
+            return {
+              status: 200,
+              message: `Follow successful!`,
+            };
+          });
+        });
+      } else {
+        return Promise.resolve({ status: 404, message: `Whoops! Unable to find that business in our datastore.` });
+      }
+    });
   }
 
   /***************
@@ -290,112 +295,118 @@ class BusinessController {
   /***************
   NAME METHODS
   ****************/
-  getName(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      return { status: 200, data: business.name };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getName(businessId: string): Promise<ReturnObj & ({ data: string } | { message: string })> {
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        return { status: 200, data: business.name };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  setName(businessId: string, name: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.name = name;
-      return { status: 200, data: `Changed business name.` };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  setName(businessId: string, name: string): Promise<ReturnObj> {
+    return BusinessRepository.updateNameById(businessId, name).then((business) => {
+      if (business) {
+        return { status: 200, message: `Changed business name.` };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
   /***************
   DESCRIPTION METHODS
   ****************/
-  getDescription(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      return { status: 200, data: business.description };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getDescription(businessId: string): Promise<ReturnObj & ({ data: string } | { message: string })> {
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        return { status: 200, data: business.description };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  setDescription(businessId: string, description: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.description = description;
-      return { status: 200, data: `Changed business description.` };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  setDescription(businessId: string, description: string): Promise<ReturnObj> {
+    return BusinessRepository.updateDescriptionById(businessId, description).then((business) => {
+      if (business) {
+        return { status: 200, message: `Changed business description.` };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
   /***************
   OWNER METHODS
   ****************/
-  getOwner(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      if (business.ownerId) return { status: 200, data: business.ownerId };
-      else return { status: 404, message: 'Business not currently claimed' };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getOwner(businessId: string): Promise<ReturnObj & ({ data: string } | { message: string })> {
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        if (business.ownerId) return { status: 200, data: business.ownerId };
+        else return { status: 404, message: 'Business not currently claimed' };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  setOwner(businessId: string, ownerId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.ownerId = ownerId;
-      return { status: 200, data: `Changed business ownerId.` };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  setOwner(businessId: string, ownerId: string): Promise<ReturnObj> {
+    return BusinessRepository.updateOwnerById(businessId, ownerId).then((business) => {
+      // do we need to also update User Repository? not sure if this route is even needed if we already have another route
+      if (business) {
+        return { status: 200, message: `Changed business ownerId.` };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
   /***************
   URL METHODS
   ****************/
-  getExternalURL(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      return { status: 200, data: business.externalURL };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getExternalURL(businessId: string): Promise<ReturnObj & ({ data: string } | { message: string })> {
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        return { status: 200, data: business.externalURL };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  setExternalURL(businessId: string, url: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.externalURL = url;
-      return { status: 200, data: `Changed business external url.` };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  setExternalURL(businessId: string, url: string): Promise<ReturnObj> {
+    return BusinessRepository.updateExternalURLById(businessId, url).then((business) => {
+      if (business) {
+        return { status: 200, message: `Changed business external url.` };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
   /***************
   PHONE METHODS
   ****************/
-  getPhoneNumber(businessId: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      return { status: 200, data: business.phone };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  getPhoneNumber(businessId: string): Promise<ReturnObj & ({ data: string } | { message: string })> {
+    return BusinessRepository.findOneById(businessId).then((business) => {
+      if (business) {
+        return { status: 200, data: business.phone };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 
-  setPhoneNumber(businessId: string, phone: string): ReturnObj {
-    const business = /* await */ BusinessRepository.findOneById(businessId);
-    if (business) {
-      business.phone = phone;
-      return { status: 200, data: `Changed business phone number.` };
-    } else {
-      return { status: 404, data: `Whoops! Unable to find that business in our datastore.` };
-    }
+  setPhoneNumber(businessId: string, phone: string): Promise<ReturnObj> {
+    return BusinessRepository.updatePhoneNumberById(businessId, phone).then((business) => {
+      if (business) {
+        return { status: 200, message: `Changed business phone number.` };
+      } else {
+        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+      }
+    });
   }
 }
 

@@ -1,3 +1,5 @@
+import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+
 export interface BusinessJSON {
   name: string;
   description: string;
@@ -9,33 +11,34 @@ export interface BusinessJSON {
   phone: string;
 }
 
-// @Entity()
-export default class Business {
-  // @PrimaryColumn("uuid")
+@Entity()
+export default class Business extends BaseEntity {
+  @PrimaryColumn('uuid')
   businessId: string;
 
-  // @Column()
+  @Column()
   name: string;
 
-  // @Column()
+  @Column()
   description: string;
 
-  // @Column()
+  @Column()
   followers: string[];
 
-  // @Column({nullable: true})
+  @Column({ nullable: true })
   ownerId: string | undefined;
 
-  // @Column()
+  @Column()
   internalURL: string;
 
-  // @Column()
+  @Column()
   externalURL: string;
 
-  // @Column()
+  @Column()
   phone: string;
 
   constructor(entry: BusinessJSON) {
+    super();
     this.name = entry.name;
     this.description = entry.description;
     this.businessId = entry.businessId;
@@ -64,20 +67,5 @@ export default class Business {
   }
   public isOwner(ownerId: string): boolean {
     return this.ownerId !== undefined && this.ownerId === ownerId;
-  }
-
-  // this might not really be necessary anymore
-  // we'll probably axe this
-  public toJSON(): BusinessJSON {
-    return {
-      name: this.name,
-      description: this.description,
-      businessId: this.businessId,
-      followers: Array.from(this.followers),
-      ownerId: this.ownerId,
-      internalURL: this.internalURL,
-      externalURL: this.externalURL,
-      phone: this.phone,
-    };
   }
 }

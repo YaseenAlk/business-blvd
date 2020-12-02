@@ -31,17 +31,18 @@ class InquiryRouter {
     this._router.get(
       '/business/:businessId',
       Validation.getInquiriesMiddleware,
-      (req: Request, res: Response, next: NextFunction) => {
+      async (req: Request, res: Response, next: NextFunction) => {
         try {
           const id: string = req.params.id;
 
           // sign in optional
           const userId: string | undefined = req.session.userID;
-          const result = userId
-            ? this._controller.getInquiriesFromBusiness(id, userId)
-            : this._controller.getInquiriesFromBusiness(id);
+          const result = await this._controller.getInquiriesFromBusiness(id, userId);
 
-          res.status(200).json(result);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
         } catch (error) {
           next(error);
         }
@@ -72,16 +73,20 @@ class InquiryRouter {
             question: String
         }
         */
-    this._router.post('/', Validation.postInquiryMiddleware, (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId, question } = req.body;
-        const userId: string = req.session.userID;
-        const result = this._controller.createInquiry(businessId, question, userId);
-        res.status(200).json(result);
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.post(
+      '/',
+      Validation.postInquiryMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId, question } = req.body;
+          const userId: string = req.session.userID;
+          const result = await this._controller.createInquiry(businessId, question, userId);
+          res.status(result.status).json(result.message).end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
 
     // edit a question (must be signed in):
     /*
@@ -127,12 +132,12 @@ class InquiryRouter {
     this._router.post(
       '/:id/answer',
       Validation.postAnswerMiddleware,
-      (req: Request, res: Response, next: NextFunction) => {
+      async (req: Request, res: Response, next: NextFunction) => {
         try {
           const id: string = req.params.id;
           const answer: string = req.body.answer;
-          const result = this._controller.postAnswer(id, answer);
-          res.status(200).json(result);
+          const result = await this._controller.postAnswer(id, answer);
+          res.status(result.status).json(result.message).end();
         } catch (error) {
           next(error);
         }
@@ -180,11 +185,11 @@ class InquiryRouter {
     this._router.post(
       '/:id/publicity',
       Validation.publicityToggleMiddleware,
-      (req: Request, res: Response, next: NextFunction) => {
+      async (req: Request, res: Response, next: NextFunction) => {
         try {
           const id: string = req.params.id;
-          const result = this._controller.makePublic(id);
-          res.status(200).json(result);
+          const result = await this._controller.makePublic(id);
+          res.status(result.status).json(result.message).end();
         } catch (error) {
           next(error);
         }
@@ -198,11 +203,11 @@ class InquiryRouter {
     this._router.delete(
       '/:id/publicity',
       Validation.publicityToggleMiddleware,
-      (req: Request, res: Response, next: NextFunction) => {
+      async (req: Request, res: Response, next: NextFunction) => {
         try {
           const id: string = req.params.id;
-          const result = this._controller.makePrivate(id);
-          res.status(200).json(result);
+          const result = await this._controller.makePrivate(id);
+          res.status(result.status).json(result.message).end();
         } catch (error) {
           next(error);
         }
