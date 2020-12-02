@@ -12,13 +12,18 @@
             </b-form-group>
             {{fields}}
             <b-alert variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
-            <b-button type="submit" variant="success">Log In</b-button>
+            <b-button type="submit" variant="success">
+                <span class="d-flex align-items-center">
+                    <div v-if="!loading">Log In</div>
+                    <b-spinner small v-else></b-spinner>
+                </span>
+            </b-button>
         </b-form>
     </div>
 </template>
 
 <script>
-import { BForm, BFormGroup, BFormInput, BButton, BAlert } from 'bootstrap-vue';
+import { BForm, BFormGroup, BFormInput, BButton, BAlert, BSpinner } from 'bootstrap-vue';
 import { eventBus } from '@/main';
 import axios from 'axios';
 
@@ -30,6 +35,7 @@ export default {
         BFormInput,
         BButton,
         BAlert,
+        BSpinner
     },
     data(){
         return {
@@ -38,7 +44,8 @@ export default {
                 password: undefined,
             },
             error: undefined,
-            fields: undefined // For debugging purposes, remove for deployment
+            fields: undefined, // For debugging purposes, remove for deployment
+            loading: false,
         };
     },
     methods: {
@@ -47,13 +54,14 @@ export default {
         },
         onSubmit: function(){
             this.clearAlerts();
+            this.loading = true;
             axios.post('/api/users/signin', this.form).then((res) => {
                 let user = { username: res.data.username, userId: res.data.userId };
                 eventBus.$emit('successful-login', user);
                 this.$router.push('/map');
             }).catch((err) => {
                 this.error = err.response.data.message || err;
-            });
+            }).then(() => this.loading = false);
         }
     }
 }
