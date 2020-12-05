@@ -8,7 +8,7 @@ import { User } from '../models/User';
 
 export class Validation {
   // auth
-  static usernameDefined(req: Request, res: Response, next: NextFunction): void {
+  static async usernameDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.params.username || req.body.username;
     if (username === undefined) {
       res.status(400).json({ message: 'Must specify a username' }).end();
@@ -17,7 +17,7 @@ export class Validation {
     next();
   }
 
-  static passwordDefined(req: Request, res: Response, next: NextFunction): void {
+  static async passwordDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const password = req.body.password;
     if (password === undefined) {
       res.status(400).json({ message: 'Must specify a password' }).end();
@@ -26,7 +26,7 @@ export class Validation {
     next();
   }
 
-  static emailDefined(req: Request, res: Response, next: NextFunction): void {
+  static async emailDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const email = req.body.email;
     if (email === undefined) {
       res.status(400).json({ message: 'Must specify an email' }).end();
@@ -35,7 +35,7 @@ export class Validation {
     next();
   }
 
-  static businessIdDefined(req: Request, res: Response, next: NextFunction): void {
+  static async businessIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const businessId = req.params.businessId || req.body.businessId;
     if (businessId === undefined) {
       res.status(400).json({ message: 'Must specify a business id' }).end();
@@ -44,7 +44,7 @@ export class Validation {
     next();
   }
 
-  static inquiryIdDefined(req: Request, res: Response, next: NextFunction): void {
+  static async inquiryIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const inquiryId = req.params.inquiryId || req.body.inquiryId;
     if (inquiryId === undefined) {
       res.status(400).json({ message: 'Must specify an inquiry id' }).end();
@@ -53,7 +53,7 @@ export class Validation {
     next();
   }
 
-  static questionDefined(req: Request, res: Response, next: NextFunction): void {
+  static async questionDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const question = req.params.question || req.body.question;
     if (question === undefined) {
       res.status(400).json({ message: 'Must specify a question' }).end();
@@ -62,7 +62,7 @@ export class Validation {
     next();
   }
 
-  static answerDefined(req: Request, res: Response, next: NextFunction): void {
+  static async answerDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const answer = req.params.answer || req.body.answer;
     if (answer === undefined) {
       res.status(400).json({ message: 'Must specify an answer' }).end();
@@ -71,7 +71,7 @@ export class Validation {
     next();
   }
 
-  static usernameValid(req: Request, res: Response, next: NextFunction): void {
+  static async usernameValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.params.username || req.body.username;
     // for now, shouldn't be empty. can be expanded to have specific length and stuff later
     // its OK to get undefined inputs as long as usernameDefined is also inserted as middleware
@@ -82,7 +82,7 @@ export class Validation {
     next();
   }
 
-  static passwordValid(req: Request, res: Response, next: NextFunction): void {
+  static async passwordValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     // could be expanded to check for password safety (e.g. repeated characters, too simple, etc)
     const password = req.body.password;
     // for now, shouldn't be empty. can be expanded to have specific length and stuff later
@@ -94,7 +94,7 @@ export class Validation {
     next();
   }
 
-  static emailValid(req: Request, res: Response, next: NextFunction): void {
+  static async emailValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const email = req.body.email;
 
     // allows anything of the form anystring@anystring.anystring
@@ -107,7 +107,7 @@ export class Validation {
     next();
   }
 
-  static businessIdValid(req: Request, res: Response, next: NextFunction): void {
+  static async businessIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const businessId = req.params.businessId || req.body.businessId;
 
     if (businessId !== undefined && businessId.length === 0) {
@@ -117,7 +117,7 @@ export class Validation {
     next();
   }
 
-  static inquiryIdValid(req: Request, res: Response, next: NextFunction): void {
+  static async inquiryIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const inquiryId = req.params.inquiryId || req.body.inquiryId;
 
     if (inquiryId !== undefined && inquiryId.length === 0) {
@@ -127,7 +127,7 @@ export class Validation {
     next();
   }
 
-  static questionValid(req: Request, res: Response, next: NextFunction): void {
+  static async questionValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const question = req.params.question || req.body.question;
 
     if (question !== undefined && question.length === 0) {
@@ -137,7 +137,7 @@ export class Validation {
     next();
   }
 
-  static answerValid(req: Request, res: Response, next: NextFunction): void {
+  static async answerValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const answer = req.params.answer || req.body.answer;
 
     if (answer !== undefined && answer.length === 0) {
@@ -259,7 +259,24 @@ export class Validation {
     next();
   }
 
-  static signinMiddleware = [
+  static exportList(
+    middlewares: ((req: Request, res: Response, next: NextFunction) => Promise<void>)[],
+  ): ((req: Request, res: Response, next: NextFunction) => Promise<void>)[] {
+    return middlewares.map(
+      (f: (req: Request, res: Response, next: NextFunction) => Promise<void>) => (
+        rq: Request,
+        rs: Response,
+        nxt: NextFunction,
+      ) =>
+        Promise.resolve(
+          f(rq, rs, nxt)
+            .then((rz) => rz)
+            .catch(nxt), // wraps every middleware function with a .catch so that error handler middleware is called
+        ),
+    );
+  }
+
+  static signinMiddleware = Validation.exportList([
     Validation.usernameDefined,
     Validation.passwordDefined,
     Validation.usernameValid,
@@ -267,9 +284,9 @@ export class Validation {
     Validation.usernameExists,
     Validation.passwordValid,
     Validation.passwordCorrect,
-  ];
+  ]);
 
-  static createAccountMiddleware = [
+  static createAccountMiddleware = Validation.exportList([
     Validation.usernameDefined,
     Validation.passwordDefined,
     Validation.emailDefined,
@@ -278,49 +295,49 @@ export class Validation {
     Validation.passwordValid,
     Validation.usernameNotTaken,
     Validation.emailNotTaken,
-  ];
+  ]);
 
-  static getInquiriesMiddleware = [
+  static getInquiriesMiddleware = Validation.exportList([
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.businessIdExists,
-  ];
+  ]);
 
-  static postInquiryMiddleware = [
+  static postInquiryMiddleware = Validation.exportList([
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.questionDefined,
     Validation.questionValid,
     Validation.businessIdExists,
-  ];
+  ]);
 
-  static postAnswerMiddleware = [
+  static postAnswerMiddleware = Validation.exportList([
     Validation.inquiryIdDefined,
     Validation.inquiryIdValid,
     Validation.answerDefined,
     Validation.answerValid,
     Validation.inquiryIdExists,
     Validation.ownsBusinessInquiry,
-  ];
+  ]);
 
-  static publicityToggleMiddleware = [
+  static publicityToggleMiddleware = Validation.exportList([
     Validation.inquiryIdDefined,
     Validation.inquiryIdValid,
     Validation.inquiryIdExists,
     Validation.ownsBusinessInquiry,
-  ];
+  ]);
 
   // business route validations below!
 
   // this will get executed by MasterRouter on any route that starts with /business/:businessId
   // so any subroutes of business don't need to re-use these middleware
-  static businessRouteMiddleware = [
+  static businessRouteMiddleware = Validation.exportList([
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.businessIdExists,
-  ];
+  ]);
 
-  static claimBusinessMiddleware = [Validation.businessIdUnclaimed];
+  static claimBusinessMiddleware = Validation.exportList([Validation.businessIdUnclaimed]);
 
-  static unclaimBusinessMiddleware = [Validation.ownsBusiness];
+  static unclaimBusinessMiddleware = Validation.exportList([Validation.ownsBusiness]);
 }
