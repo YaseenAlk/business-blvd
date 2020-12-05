@@ -203,7 +203,6 @@ export class Validation {
     const inquiry: Inquiry | undefined = await InquiryRepository.findOneById(req.params.inquiryId);
     const businessId = inquiry?.businessId;
     if (!businessId) {
-      console.log('c', inquiry, businessId);
       res.status(404).json({ message: 'Inquiry does not exist' }).end();
       return;
     }
@@ -249,14 +248,9 @@ export class Validation {
   }
 
   static async inquiryIdExists(req: Request, res: Response, next: NextFunction): Promise<void> {
-    console.log('a', req.params.inquiryId);
-    console.log('b', req.body.inquiryId);
-
     const inquiry: Inquiry | undefined = await InquiryRepository.findOneById(
       req.params.inquiryId || req.body.inquiryId,
     );
-
-    console.log('d', inquiry);
 
     if (inquiry === undefined) {
       res.status(404).json({ message: 'Inquiry does not exist' }).end();
