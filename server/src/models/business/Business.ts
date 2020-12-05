@@ -6,7 +6,7 @@ export interface BusinessJSON {
   description: string;
   businessId: string;
   followers: string[];
-  ownerId: string | undefined;
+  ownerId: string | null;
   internalURL: string;
   externalURL: string;
   phone: string;
@@ -27,7 +27,7 @@ export default class Business extends BaseEntity {
   followers: string[];
 
   @Column({ nullable: true, type: 'uuid' })
-  ownerId: string | undefined;
+  ownerId: string | null;
 
   @Column()
   internalURL: string;
@@ -44,7 +44,7 @@ export default class Business extends BaseEntity {
     this.description = entry?.description || '';
     this.businessId = entry?.businessId || uuidv4();
     this.followers = Array.from(entry?.followers || []);
-    this.ownerId = entry?.ownerId;
+    this.ownerId = entry?.ownerId || null;
     this.internalURL = entry?.internalURL || '';
     this.externalURL = entry?.externalURL || '';
     this.phone = entry?.phone || '';
@@ -64,9 +64,9 @@ export default class Business extends BaseEntity {
   }
 
   public hasOwner(): boolean {
-    return this.ownerId !== null && this.ownerId !== undefined;
+    return this.ownerId !== null && this.ownerId !== null;
   }
   public isOwner(ownerId: string): boolean {
-    return this.ownerId !== undefined && this.ownerId === ownerId;
+    return this.ownerId !== null && this.ownerId === ownerId;
   }
 }

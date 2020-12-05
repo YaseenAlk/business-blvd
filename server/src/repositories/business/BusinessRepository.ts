@@ -64,7 +64,7 @@ class BusinessRepository {
 
   unclaimBusiness(businessId: string, userId: string): Promise<Business | undefined> {
     return Business.findOne({ businessId }).then((business) => {
-      if (business && userId === business.ownerId) business.ownerId = undefined;
+      if (business && userId === business.ownerId) business.ownerId = null;
       return business?.save();
     });
   }
@@ -125,7 +125,7 @@ class BusinessRepository {
       name: "Poppa's Workshop",
       description: 'Where the elbow grease is used.',
       businessId: businessId,
-      ownerId: undefined,
+      ownerId: null,
       followers: ['33', '13'],
       internalURL: 'business/' + businessId,
       externalURL: 'https://www.poppasworkshop.com',
