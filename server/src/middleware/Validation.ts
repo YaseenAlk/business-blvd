@@ -110,7 +110,10 @@ export class Validation {
   static async businessIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const businessId = req.params.businessId || req.body.businessId;
 
-    if (businessId !== undefined && businessId.length === 0) {
+    // uuid validator
+    const validatorRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    if (businessId !== undefined && (businessId.length === 0 || !validatorRegex.test(businessId))) {
       res.status(400).json({ message: 'Must specify a valid business id' }).end();
       return;
     }
@@ -120,7 +123,10 @@ export class Validation {
   static async inquiryIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const inquiryId = req.params.inquiryId || req.body.inquiryId;
 
-    if (inquiryId !== undefined && inquiryId.length === 0) {
+    // uuid validator
+    const validatorRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    if (inquiryId !== undefined && (inquiryId.length === 0 || !validatorRegex.test(inquiryId))) {
       res.status(400).json({ message: 'Must specify a valid inquiry id' }).end();
       return;
     }
