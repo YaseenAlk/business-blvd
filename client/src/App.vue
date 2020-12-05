@@ -52,9 +52,10 @@ export default {
     axios.get('/heartbeat')
     .then(() => {
       console.log('Server connected.');
-    }).catch((err) => {
-      console.log(err.response.statusText);
     })
+    .catch((err) => {
+      console.log(err.response.statusText);
+    });
   }
 }
 </script>
