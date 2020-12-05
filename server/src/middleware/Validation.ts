@@ -310,17 +310,17 @@ export class Validation {
     Validation.ownsBusinessInquiry,
   ];
 
-  static claimBusinessMiddleware = [
+  // business route validations below!
+
+  // this will get executed by MasterRouter on any route that starts with /business/:businessId
+  // so any subroutes of business don't need to re-use these middleware
+  static businessRouteMiddleware = [
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.businessIdExists,
-    Validation.businessIdUnclaimed,
   ];
 
-  static unclaimBusinessMiddleware = [
-    Validation.businessIdDefined,
-    Validation.businessIdValid,
-    Validation.businessIdExists,
-    Validation.ownsBusiness,
-  ];
+  static claimBusinessMiddleware = [Validation.businessIdUnclaimed];
+
+  static unclaimBusinessMiddleware = [Validation.ownsBusiness];
 }

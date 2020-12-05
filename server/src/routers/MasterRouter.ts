@@ -4,6 +4,8 @@ import InquiryRouter from './inquiries/InquiryRouter';
 import BusinessRouter from './business/BusinessRouter';
 import UserRouter from './users/UserRouter';
 
+import { Validation } from '../middleware/Validation';
+
 class MasterRouter {
   private _router = Router();
 
@@ -24,7 +26,7 @@ class MasterRouter {
    * Connect routes to their matching routers.
    */
   private _configure() {
-    this._router.use('/business/:businessId', this._subrouterBusiness);
+    this._router.use('/business/:businessId', Validation.businessRouteMiddleware, this._subrouterBusiness);
     this._router.use('/users', this._subrouterUsers);
     this._router.use('/inquiries', this._subrouterInquiries);
   }
