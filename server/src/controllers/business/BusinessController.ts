@@ -1,4 +1,4 @@
-import Hours, { Day, Time } from '../../models/business/Hours';
+import Hours, { parseDay, Time } from '../../models/business/Hours';
 import { BusinessTags, parseTag } from '../../models/business/TagsList';
 import UserRepository from '../../repositories/UserRepository';
 
@@ -80,10 +80,11 @@ class BusinessController {
 
   setHours(
     businessId: string,
-    day: Day,
+    dayString: string,
     openTime: Time,
     closeTime: Time,
   ): Promise<ReturnObj & ({ data: Hours } | { message: string })> {
+    const day = parseDay(dayString);
     return HoursRepository.updateSingleEntry(businessId, day, openTime, closeTime).then((updatedHours) => {
       if (updatedHours) {
         return { status: 201, data: updatedHours };

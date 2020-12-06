@@ -12,6 +12,10 @@ export enum Day {
   SATURDAY,
 }
 
+export function parseDay(dayAsString: string): Day {
+  return Day[dayAsString.toUpperCase() as keyof typeof Day];
+}
+
 export type Time = {
   hour: string;
   minute: string;
