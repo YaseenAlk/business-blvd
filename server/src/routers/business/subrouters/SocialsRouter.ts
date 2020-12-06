@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
+import { Auth } from '../../../middleware/Auth';
+import { Validation } from '../../../middleware/Validation';
 
 class SocialsRouter {
   private _router = Router({ mergeParams: true });
@@ -21,7 +23,6 @@ class SocialsRouter {
     /***************
     GET SOCIAL ROUTE
     ****************/
-    // todo: add validation
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
@@ -38,20 +39,24 @@ class SocialsRouter {
     /***************
     SET SOCIAL ROUTE
     ****************/
-    // todo: add validation
-    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { twitter, facebook, instagram } = req.body;
-        const result = await this._controller.setSocialMedia(businessId, twitter, facebook, instagram);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.put(
+      '/',
+      Auth.enforceSignedIn,
+      Validation.updateSocialsMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { twitter, facebook, instagram } = req.body;
+          const result = await this._controller.setSocialMedia(businessId, twitter, facebook, instagram);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
   }
 }
 

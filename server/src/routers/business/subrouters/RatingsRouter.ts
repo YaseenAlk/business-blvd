@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
+import { Auth } from '../../../middleware/Auth';
+import { Validation } from '../../../middleware/Validation';
 
 class RatingsRouter {
   private _router = Router({ mergeParams: true });
@@ -21,7 +23,6 @@ class RatingsRouter {
     /***************
     GET ALL RATINGS
     ****************/
-    // todo: validation middleware
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
@@ -38,26 +39,30 @@ class RatingsRouter {
     /***************
     SET USER RATINGS
     ****************/
-    // todo: validation middleware
-    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { safetyRating, serviceRating } = req.body;
-        const { userId } = req.session;
-        const result = await this._controller.setRatings(businessId, userId, safetyRating, serviceRating);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.put(
+      '/',
+      Auth.enforceSignedIn,
+      Validation.updateRatingsMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { safetyRating, serviceRating } = req.body;
+          const { userId } = req.session;
+          const result = await this._controller.setRatings(businessId, userId, safetyRating, serviceRating);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
 
     /***************
     GET RATINGS BY USER
     ****************/
-    // todo: validation middleware
+    // we're not using this route anywhere but should it have some validation?
     this._router.get('/:userId', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId, userId } = req.params;

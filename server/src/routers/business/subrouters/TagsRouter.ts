@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
+import { Auth } from '../../../middleware/Auth';
+import { Validation } from '../../../middleware/Validation';
 
 class TagsRouter {
   private _router = Router({ mergeParams: true });
@@ -21,7 +23,6 @@ class TagsRouter {
     /***************
     GET TAGS ROUTE
     ****************/
-    // todo: add validation
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
@@ -37,8 +38,10 @@ class TagsRouter {
     /***************
     ADD TAG ROUTE
     ****************/
-    // todo: add validation
-    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
+    // next 2 routes require sign in
+    this._router.use(Auth.enforceSignedIn);
+
+    this._router.put('/', Validation.addTagMiddleware, async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
         const { tagId } = req.body;
@@ -54,20 +57,23 @@ class TagsRouter {
     /***************
     REMOVE TAG ROUTE
     ****************/
-    // todo: add validation
-    this._router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { tagId } = req.body;
-        const result = await this._controller.addTag(businessId, tagId);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.delete(
+      '/',
+      Validation.deleteTagMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { tagId } = req.body;
+          const result = await this._controller.removeTag(businessId, tagId);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
   }
 }
 

@@ -1,6 +1,4 @@
 // we may want to split this into multiple repositories. let's see how big this gets
-import { v4 as uuidv4 } from 'uuid';
-
 import Business, { BusinessJSON } from '../../models/business/Business';
 
 class BusinessRepository {

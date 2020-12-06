@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
+import { Auth } from '../../../middleware/Auth';
 import { Validation } from '../../../middleware/Validation';
 
 class PositionRouter {
@@ -22,7 +23,6 @@ class PositionRouter {
     /***************
     GET POSITION ROUTE
     ****************/
-    // TODO: add validation middleware
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
@@ -39,20 +39,24 @@ class PositionRouter {
     /***************
     SET POSITION ROUTE
     ****************/
-    // TODO: add validation middleware
-    this._router.put('/', Validation.ownsBusiness, async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { address, lat, lng } = req.body;
-        const result = await this._controller.setPosition(businessId, address, lat, lng);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.put(
+      '/',
+      Auth.enforceSignedIn,
+      Validation.updatePositionMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { address, lat, lng } = req.body;
+          const result = await this._controller.setPosition(businessId, address, lat, lng);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
   }
 }
 
