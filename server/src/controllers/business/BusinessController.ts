@@ -1,5 +1,5 @@
 import Hours, { Day, Time } from '../../models/business/Hours';
-import { BusinessTags } from '../../models/business/TagsList';
+import { BusinessTags, parseTag } from '../../models/business/TagsList';
 import UserRepository from '../../repositories/UserRepository';
 
 import { ReturnObj } from '../Common';
@@ -149,7 +149,9 @@ class BusinessController {
         const promises: Promise<Ratings | undefined>[] = [];
         if (safetyRating) promises.push(RatingsRepository.updateSafetyRating(businessId, userId, safetyRating));
         if (serviceRating) promises.push(RatingsRepository.updateServiceRating(businessId, userId, serviceRating));
-        return { status: 200, message: 'Updated ratings!' };
+        return Promise.all(promises).then(() => {
+          return { status: 200, message: 'Updated ratings!' };
+        });
       } else {
         return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
       }
@@ -295,8 +297,9 @@ class BusinessController {
     });
   }
 
-  addTag(businessId: string, tagId: BusinessTags): Promise<ReturnObj> {
-    return TagsRepository.addTagsToId(businessId, tagId).then((tags) => {
+  addTag(businessId: string, tagId: string): Promise<ReturnObj> {
+    const tagAsEnum = parseTag(tagId);
+    return TagsRepository.addTagsToId(businessId, tagAsEnum).then((tags) => {
       if (tags) {
         return { status: 200, message: `Succesfully added tag ${tagId}` };
       } else {
@@ -305,8 +308,9 @@ class BusinessController {
     });
   }
 
-  removeTag(businessId: string, tagId: BusinessTags): Promise<ReturnObj> {
-    return TagsRepository.removeTagsFromId(businessId, tagId).then((tags) => {
+  removeTag(businessId: string, tagId: string): Promise<ReturnObj> {
+    const tagAsEnum = parseTag(tagId);
+    return TagsRepository.removeTagsFromId(businessId, tagAsEnum).then((tags) => {
       if (tags) {
         return { status: 200, message: `Successfully removed tag ${tagId}` };
       } else {
