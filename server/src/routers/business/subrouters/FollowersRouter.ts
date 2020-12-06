@@ -73,8 +73,8 @@ class FollowersRouter {
     this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
-        const { userId } = req.session;
-        const result = await this._controller.follow(businessId, userId);
+        const { userID } = req.session;
+        const result = await this._controller.follow(businessId, userID);
         res
           .status(result.status)
           .json(result.message || result.data)
