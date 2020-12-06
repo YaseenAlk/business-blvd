@@ -119,6 +119,22 @@ export class Validation {
     next();
   }
 
+  static async claimCodeValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const businessId = req.params.businessId || req.body.businessId;
+    const claimCode = req.body.claimCode || req.body.claimCode;
+
+    const business: Business | undefined = await BusinessRepository.findOneById(businessId);
+    if (business?.claimCode !== claimCode) {
+      res
+        .status(401)
+        .json({ message: 'Business claim code incorrect. Please verify code was correctly entered.' })
+        .end();
+      return;
+    }
+
+    next();
+  }
+
   static inquiryIdValid(req: Request, res: Response, next: NextFunction): void {
     const inquiryId = req.params.inquiryId || req.body.inquiryId;
 
@@ -422,6 +438,7 @@ export class Validation {
     Validation.businessIdValid,
     Validation.businessIdExists,
     Validation.businessIdUnclaimed,
+    Validation.claimCodeValid,
   ];
 
   static unclaimBusinessMiddleware = [
