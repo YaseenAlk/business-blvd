@@ -20,6 +20,7 @@ import Position from './models/business/Position';
 import Ratings from './models/business/Ratings';
 import Socials from './models/business/Socials';
 import TagsList from './models/business/TagsList';
+import Review from './models/Review';
 
 import BusinessRepository from './repositories/business/BusinessRepository';
 import HoursRepository from './repositories/business/HoursRepository';
@@ -96,7 +97,7 @@ const config: ConnectionOptions = {
   url: process.env.DB_URL || 'postgres://username:password@host:port/database',
   synchronize: process.env.DB_SYNCHRONIZE ? process.env.DB_SYNCHRONIZE.toLowerCase() === 'true' : true,
   logging: process.env.DB_LOGGING ? process.env.DB_LOGGING.toLowerCase() === 'true' : false,
-  entities: [User, Inquiry, Business, Hours, Position, Ratings, Socials, TagsList],
+  entities: [User, Inquiry, Business, Hours, Position, Ratings, Socials, TagsList, Review],
   ssl: true,
   extra: {
     ssl: {
