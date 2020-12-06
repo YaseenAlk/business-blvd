@@ -343,6 +343,82 @@ export class Validation {
     Validation.businessIdExists,
   ]);
 
+  static updateNameMiddleware = Validation.exportList([
+    Validation.nameDefined,
+    Validation.nameValid,
+    // Validation.nameNotTaken maybe? or can we have 2 businesses with the same name?
+  ]);
+
+  static updateDescriptionMiddleware = Validation.exportList([
+    Validation.descriptionDefined,
+    Validation.descriptionValid,
+  ]);
+
+  static updateURLMiddleware = Validation.exportList([Validation.URLDefined, Validation.URLValid]);
+
+  static updatePhoneMiddleware = Validation.exportList([Validation.phoneDefined, Validation.phoneValid]);
+
+  static updateHoursMiddleware = Validation.exportList([
+    Validation.dayDefined,
+    Validation.openTimeDefined,
+    Validation.closeTimeDefined,
+    Validation.dayValid,
+    Validation.openTimeValid,
+    Validation.closeTimeValid,
+  ]);
+
+  static updatePositionMiddleware = Validation.exportList([
+    Validation.addressDefined,
+    Validation.latDefined,
+    Validation.lngDefined,
+    Validation.addressValid,
+    Validation.latValid,
+    Validation.lngValid,
+  ]);
+
+  static updateSocialsMiddleware = Validation.exportList([
+    // this middleware means you don't have to specify ALL socials when you PUT, but you do need to specify at least one
+    Validation.twitterOrFacebookOrInstagramDefined,
+
+    // uncommenting these would require you to have all
+    // Validation.twitterDefined,
+    // Validation.facebookDefined,
+    // Validation.instagramDefined,
+
+    Validation.twitterValid,
+    Validation.facebookValid,
+    Validation.instagramValid,
+  ]);
+
+  static updateRatingsMiddleware = Validation.exportList([
+    // this middleware means you don't have to specify BOTH ratings when you PUT, but you do need to specify at least one
+    Validation.safetyRatingOrServiceRatingDefined,
+
+    // uncommenting these would require you to have both
+    //Validation.safetyRatingDefined,
+    //Validation.serviceRatingDefined,
+    Validation.safetyRatingValid,
+    Validation.serviceRatingValid,
+  ]);
+
+  static addTagMiddleware = Validation.exportList([
+    Validation.tagIdDefined,
+    Validation.tagIdValid,
+    Validation.tagExists,
+    // repository ignores repetitive tags so no need to check for that
+  ]);
+
+  static deleteTagMiddleware = Validation.exportList([
+    Validation.tagIdDefined,
+    Validation.tagIdValid,
+    Validation.tagExists,
+    // repository doesn't care if the taglist doesnt have this tag
+  ]);
+
+  static addFollowerMiddleware = Validation.exportList([Validation.notFollowingBusiness]);
+
+  static unfollowMiddleware = Validation.exportList([Validation.followingBusiness]);
+
   static claimBusinessMiddleware = Validation.exportList([Validation.businessIdUnclaimed]);
 
   static unclaimBusinessMiddleware = Validation.exportList([Validation.ownsBusiness]);
