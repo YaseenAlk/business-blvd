@@ -70,9 +70,9 @@ class UserRouter {
       Validation.updateAccountMiddleware,
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const { email, username, password } = req.body;
+          const { email, username, oldPassword, newPassword } = req.body;
           const { userID } = req.session;
-          const result = await this._controller.updateAccount(userID, username, email, password);
+          const result = await this._controller.updateAccount(userID, username, email, newPassword);
           res
             .status(result.status)
             .json({ message: result.message, userId: result.userId, username: result.username })

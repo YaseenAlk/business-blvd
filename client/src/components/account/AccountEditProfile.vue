@@ -26,7 +26,7 @@
     <b-form id="editPassword" class="form" @submit.prevent="submitPassword">
         <h4 class="form-title">Update Account Password</h4>
         <b-form-group label="Current Password:" label-for="currentPassword" label-align="left" label-cols-sm="4">
-            <b-form-input required id="currentPassword" type="password" v-model="form.newCurrentPassword" />
+            <b-form-input required id="currentPassword" type="password" v-model="form.currentPassword" />
         </b-form-group>
         <b-form-group label="New Password:" label-for="newPassword" label-align="left" label-cols-sm="4">
             <b-form-input required id="newPassword" type="password" v-model="form.newPassword1" />
@@ -82,11 +82,9 @@ export default {
     this.emailSuccess = undefined;
     this.emailError = undefined;
 
-    console.log(this.form.newEmail);
-
-    axios.put(`/api/users`, {email: this.form.newEmail})
-      .then((res) => eventBus.$emit('show-success-toast', res))
-      .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)));
+      axios.put(`/api/users`, {email: this.form.newEmail})
+        .then((res) => eventBus.$emit('show-success-toast', res.data.message))
+        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)));
     },
     submitUsername: function(){
       this.usernameSuccess = undefined;
@@ -94,13 +92,13 @@ export default {
 
       axios.put(`/api/users`, {username: this.form.newUsername})
       .then(res => {
-        eventBus.$emit('show-success-toast', res);
+        eventBus.$emit('show-success-toast', res.data.message);
         console.log(res);
         let user = { username: this.form.newUsername, userId: res.data.userId };
         eventBus.$emit('successful-login', user);
         
       })
-      .catch(err => eventBus.$emit('show-error-toast', (err.response.data || err)));
+      .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)));
     },
     submitPassword: function(){
       this.passwordSuccess = undefined;
@@ -110,9 +108,8 @@ export default {
           this.passwordError = "New passwords must match";
           return
       }
-
-      axios.put(`/api/users`, {password: this.form.newPassword1})
-      .then(res => eventBus.$emit('show-success-toast', res.message))
+      axios.put(`/api/users`, {oldPassword: this.form.currentPassword, newPassword: this.form.newPassword1})
+      .then(res => eventBus.$emit('show-success-toast', res.data.message))
       .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)));
     }
   },

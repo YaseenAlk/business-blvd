@@ -42,9 +42,14 @@ export class Validation {
 
   static async anyAccountInfoDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.params.username || req.body.username;
-    const password = req.body.password;
-    const email = req.body.instagram;
-    if (username === undefined && password === undefined && email === undefined) {
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+    const email = req.body.email;
+    if (
+      (username === undefined && newPassword === undefined && oldPassword === undefined && email === undefined) ||
+      (newPassword !== undefined && oldPassword === undefined) ||
+      (newPassword === undefined && oldPassword !== undefined)
+    ) {
       res.status(400).json({ message: 'Must specify some user account info' }).end();
       return;
     }
@@ -271,6 +276,20 @@ export class Validation {
     // its OK to get undefined inputs as long as passwordDefined is also inserted as middleware
     if (password !== undefined && password.length === 0) {
       res.status(400).json({ message: 'Must specify a password' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async passwordsValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+
+    if (
+      (oldPassword !== undefined && oldPassword.length === 0) ||
+      (newPassword !== undefined && newPassword.length === 0)
+    ) {
+      res.status(400).json({ message: 'Must specify old and new passwords' }).end();
       return;
     }
     next();
@@ -598,6 +617,19 @@ export class Validation {
       return;
     }
 
+    next();
+  }
+
+  static async oldPasswordCorrect(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const password = req.body.oldPassword;
+    if (password !== undefined) {
+      const account: User | undefined = await UserRepository.findOneByID(req.session.userID);
+      if (password !== account?.password) {
+        // we keep it intentionally vague for security reasons
+        res.status(401).json({ message: 'Incorrect username/password combination' }).end();
+        return;
+      }
+    }
     next();
   }
 
@@ -1013,10 +1045,11 @@ export class Validation {
     // Validation.passwordDefined,
 
     Validation.usernameValid,
-    Validation.passwordValid,
+    Validation.passwordsValid,
     Validation.emailValid,
 
     Validation.usernameNotTaken,
     Validation.emailNotTaken,
+    Validation.oldPasswordCorrect,
   ]);
 }
