@@ -1,25 +1,15 @@
 import Socials, { Platforms } from '../../models/business/Socials';
-import BusinessRepository from './BusinessRepository';
 
 class SocialsRepository {
-  generateExamples(): Promise<Socials> {
+  generateExample(businessId: string, facebook: string, twitter: string, instagram: string) {
     const exampleSocials: Platforms = {
-      facebook: 'https://www.facebook.com',
-      twitter: 'https://www.twitter.com',
-      instagram: 'https://www.instagram.com',
+      facebook: facebook,
+      twitter: twitter,
+      instagram: instagram,
     };
 
-    const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
-    const s1 = new Socials(b1, exampleSocials);
-    const s2 = new Socials(b2, exampleSocials);
-
-    return Socials.findOne({ businessId: b1 }).then((socials) => {
-      if (!socials)
-        return s1.save().then(() => {
-          return s2.save();
-        });
-      else return socials;
-    });
+    const socials = new Socials(businessId, exampleSocials);
+    return socials.save();
   }
 
   // getters

@@ -27,6 +27,10 @@ class BusinessRouter {
 
   constructor() {
     this._configure();
+    this._getters();
+    // any routes below this require a sign-in
+    this._router.use(Auth.enforceSignedIn);
+    this._setters();
   }
 
   /**
@@ -42,10 +46,13 @@ class BusinessRouter {
     this._router.use('/social-media', this._subrouterSocialMedia);
     this._router.use('/followers', this._subrouterFollowers);
     this._router.use('/tags', this._subrouterTags);
+  }
 
+  private _getters() {
     /***************
     GET BUSINESS ROUTE
     ****************/
+    // validation already handled in MasterRouter
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
@@ -60,7 +67,7 @@ class BusinessRouter {
     });
 
     /***************
-    SET/GET NAME ROUTES
+    GET NAME ROUTES
     ****************/
     this._router.get('/name', async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -75,22 +82,8 @@ class BusinessRouter {
       }
     });
 
-    this._router.put('/name', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { name } = req.body;
-        const result = await this._controller.setName(businessId, name);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
-
     /***************
-    SET/GET DESCRIPTION ROUTES
+    GET DESCRIPTION ROUTES
     ****************/
     this._router.get('/description', async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -105,22 +98,8 @@ class BusinessRouter {
       }
     });
 
-    this._router.put('/description', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { description } = req.body;
-        const result = await this._controller.setDescription(businessId, description);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
-
     /***************
-    SET/GET OWNER ROUTES
+    GET OWNER ROUTES
     ****************/
     this._router.get('/owner', async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -135,6 +114,89 @@ class BusinessRouter {
       }
     });
 
+    /***************
+    GET URL ROUTES
+    ****************/
+    this._router.get('/url', async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const result = await this._controller.getExternalURL(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    /***************
+    GET PHONE ROUTES
+    ****************/
+    this._router.get('/phone', async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { businessId } = req.params;
+        const result = await this._controller.getPhoneNumber(businessId);
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    this._router.get('*', async (req: Request, res: Response) => {
+      res.status(404).json({ message: 'Invalid route.' });
+    });
+  }
+
+  private _setters() {
+    /***************
+    SET NAME ROUTES
+    ****************/
+    this._router.put(
+      '/name',
+      Validation.updateNameMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { name } = req.body;
+          const result = await this._controller.setName(businessId, name);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
+
+    /***************
+    SET DESCRIPTION ROUTES
+    ****************/
+    this._router.put(
+      '/description',
+      Validation.updateDescriptionMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { description } = req.body;
+          const result = await this._controller.setDescription(businessId, description);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
+
+    /***************
+    SET OWNER ROUTES
+    ****************/
     this._router.put('/owner', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
@@ -150,71 +212,52 @@ class BusinessRouter {
     });
 
     /***************
-    SET/GET URL ROUTES
+    SET URL ROUTES
     ****************/
-    this._router.get('/url', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const result = await this._controller.getExternalURL(businessId);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
-
-    this._router.put('/url', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { url } = req.body;
-        const result = await this._controller.setExternalURL(businessId, url);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.put(
+      '/url',
+      Validation.updateURLMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { url } = req.body;
+          const result = await this._controller.setExternalURL(businessId, url);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
 
     /***************
-    SET/GET PHONE ROUTES
+    SET PHONE ROUTES
     ****************/
-    this._router.get('/phone', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const result = await this._controller.getPhoneNumber(businessId);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
-
-    this._router.put('/phone', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { phone } = req.body;
-        const result = await this._controller.setPhoneNumber(businessId, phone);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.put(
+      '/phone',
+      Validation.updatePhoneMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { phone } = req.body;
+          const result = await this._controller.setPhoneNumber(businessId, phone);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
 
     /***************
     CLAIM BUSINESS ROUTES
     ****************/
     this._router.post(
       '/claim',
-      Auth.enforceSignedIn,
       Validation.claimBusinessMiddleware,
       async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -233,7 +276,6 @@ class BusinessRouter {
 
     this._router.delete(
       '/claim',
-      Auth.enforceSignedIn,
       Validation.unclaimBusinessMiddleware,
       async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -249,6 +291,10 @@ class BusinessRouter {
         }
       },
     );
+
+    this._router.get('*', async (req: Request, res: Response) => {
+      res.status(404).json({ message: 'Invalid route.' });
+    });
   }
 }
 
