@@ -629,7 +629,7 @@ export class Validation {
       const account: User | undefined = await UserRepository.findOneByID(req.session.userID);
       if (password !== account?.password) {
         // we keep it intentionally vague for security reasons
-        res.status(401).json({ message: 'Incorrect username/password combination' }).end();
+        res.status(401).json({ message: 'Incorrect password' }).end();
         return;
       }
     }
