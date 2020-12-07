@@ -55,6 +55,16 @@ class BusinessRepository {
   }
 
   // updaters
+
+  clearAllClaimed(): Promise<void> {
+    return Business.find().then((businesses) => {
+      businesses.forEach(async (business) => {
+        business.ownerId = null;
+        await business.save();
+      });
+    });
+  }
+
   claimBusiness(businessId: string, userId: string): Promise<Business | undefined> {
     return Business.findOne({ businessId }).then((business) => {
       if (business) business.ownerId = userId;

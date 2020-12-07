@@ -19,6 +19,15 @@ class UserRepository {
   }
 
   // updaters
+  clearAllClaimed(): Promise<void> {
+    return User.find().then((allUsers) =>
+      allUsers.forEach(async (user) => {
+        user.owned.forEach((business) => user.unclaimBusiness(business));
+        await user.save();
+      }),
+    );
+  }
+
   addOne(email: string, username: string, password: string): Promise<User> {
     const newUser: User = new User(email, username, password);
     return newUser.save();

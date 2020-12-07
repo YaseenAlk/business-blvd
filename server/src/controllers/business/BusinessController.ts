@@ -16,6 +16,15 @@ import Ratings from '../../models/business/Ratings';
 
 class BusinessController {
   /***************
+  ADMIN METHODS
+  ****************/
+  unclaimAll(): Promise<ReturnObj> {
+    return BusinessRepository.clearAllClaimed()
+      .then(() => UserRepository.clearAllClaimed())
+      .then(() => ({ status: 200, message: 'All businesses unclaimed' }));
+  }
+
+  /***************
   BUSINESSES METHODS
   ****************/
 
