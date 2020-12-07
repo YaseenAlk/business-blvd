@@ -58,11 +58,17 @@ const router = new Router({
         {
             path: '/manage/:id',
             props: {
-              id: String,
+                id: String,
             },
             name: 'Manage',
-            component: () => 
-              import('./views/Manage.vue')
+            component: () =>
+                import ('./views/Manage.vue')
+        },
+        {
+            path: '/inbox',
+            name: 'Inbox',
+            component: () =>
+                import ('./views/Inbox.vue')
         },
         {
             path: '*',
@@ -73,7 +79,7 @@ const router = new Router({
     ]
 });
 
-const authRoutes = new Set(['Report', 'Claim', 'Account'])
+const authRoutes = new Set(['Report', 'Claim', 'Account', 'Inbox'])
 
 router.beforeEach((from, to, next) => {
 

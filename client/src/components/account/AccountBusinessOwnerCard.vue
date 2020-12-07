@@ -1,8 +1,11 @@
 <template>
-  <b-link v-bind:to="'/manage/'+business.businessId" class="business-owner-card">
-    <h4>{{business.name}}</h4>
-    <span v-if="business.position !== undefined">{{business.position.address}}</span>
-  </b-link>
+  <div>
+    <b-spinner v-if="isLoading" variant="primary"></b-spinner>
+    <b-link v-else v-bind:to="'/manage/'+business.businessId" class="business-owner-card">
+      <h4>{{business.name}}</h4>
+      <div v-if="business.position !== undefined">{{business.position.address}}</div>
+    </b-link>
+  </div>
 </template>
 
 <script>
@@ -12,14 +15,22 @@ import axios from 'axios';
 export default {
   name: 'AccountBusinessOwnerCard',
   created(){
+    this.isLoading = true;
     axios.get('/api/business/' + this.business.businessId + '/position').then((res) => {
       this.business.position = res.data;
+      this.isLoading = false;
     }).catch((err) =>{
       console.error(err.response.data || err);
+      this.isLoading = false;
     });
   },
   props: {
     business: Object
+  },
+  data() {
+    return {
+      isLoading: true,
+    }
   },
   components: {
     BLink

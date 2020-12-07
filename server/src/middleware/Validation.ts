@@ -4,9 +4,11 @@ import InquiryRepository from '../repositories/InquiryRepository';
 import Business from '../models/business/Business';
 import BusinessRepository from '../repositories/business/BusinessRepository';
 import { Inquiry } from '../models/Inquiry';
+import Review from '../models/Review';
 import { User } from '../models/User';
 import { parseTag } from '../models/business/TagsList';
 import { parseDay } from '../models/business/Hours';
+import ReviewRepository from '../repositories/ReviewRepository';
 
 export class Validation {
   // auth
@@ -285,6 +287,22 @@ export class Validation {
       res.status(400).json({ message: 'Must specify a valid business id' }).end();
       return;
     }
+    next();
+  }
+
+  static async claimCodeValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const businessId = req.params.businessId || req.body.businessId;
+    const claimCode = req.body.claimCode || req.body.claimCode;
+
+    const business: Business | undefined = await BusinessRepository.findOneById(businessId);
+    if (business?.claimCode !== claimCode) {
+      res
+        .status(401)
+        .json({ message: 'Business claim code incorrect. Please verify code was correctly entered.' })
+        .end();
+      return;
+    }
+
     next();
   }
 
@@ -670,6 +688,44 @@ export class Validation {
     next();
   }
 
+  static async reviewDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const review = req.params.review || req.body.review;
+    if (review === undefined) {
+      res.status(400).json({ message: 'Must specify a review' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async responseDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const response = req.params.response || req.body.response;
+    if (response === undefined) {
+      res.status(400).json({ message: 'Must specify a response' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async reviewValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const review = req.params.review || req.body.review;
+
+    if (review !== undefined && review.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid review' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async responseValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const response = req.params.response || req.body.response;
+
+    if (response !== undefined && response.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid response' }).end();
+      return;
+    }
+    next();
+  }
+
   static async followingBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
     const businessId: string = req.params.businessId || req.body.businessId;
     const userId: string = req.session.userID;
@@ -680,6 +736,68 @@ export class Validation {
     }
     if (!beingFollowed) {
       res.status(409).json({ message: 'Not following business' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async reviewIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const reviewId = req.params.reviewId || req.body.reviewId;
+    if (reviewId === undefined) {
+      res.status(400).json({ message: 'Must specify a review id' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async reviewIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const reviewId = req.params.reviewId || req.body.reviewId;
+
+    if (reviewId !== undefined && reviewId.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid review id' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async reviewIdExists(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const review: Review | undefined = await ReviewRepository.findOneById(req.params.reviewId || req.body.reviewId);
+
+    if (review === undefined) {
+      res.status(404).json({ message: 'Review does not exist' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async ownsBusinessReview(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const review: Review | undefined = await ReviewRepository.findOneById(req.params.reviewId || req.body.reviewId);
+    const businessId = review?.businessId;
+    if (!businessId) {
+      res.status(404).json({ message: 'Review does not exist' }).end();
+      return;
+    }
+    const business: Business | undefined = await BusinessRepository.findOneById(businessId);
+    const user = req.session.userID;
+    if (!business) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (!business.isOwner(user)) {
+      res.status(403).json({ message: 'Not authorized to manage this business review' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async singleReviewPerPersonPerBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const userId = req.session.userID;
+    const businessId = req.body.businessId;
+
+    const review: Review | undefined = await ReviewRepository.findOneByAuthor(businessId, userId);
+
+    if (review !== undefined) {
+      res.status(409).json({ message: 'Can only review a business once per user!' }).end();
       return;
     }
     next();
@@ -843,4 +961,28 @@ export class Validation {
   static claimBusinessMiddleware = Validation.exportList([Validation.businessIdUnclaimed]);
 
   static unclaimBusinessMiddleware = Validation.exportList([Validation.ownsBusiness]);
+
+  static getReviewsMiddleware = Validation.exportList([
+    Validation.businessIdDefined,
+    Validation.businessIdValid,
+    Validation.businessIdExists,
+  ]);
+
+  static postReviewMiddleware = Validation.exportList([
+    Validation.businessIdDefined,
+    Validation.businessIdValid,
+    Validation.reviewDefined,
+    Validation.reviewValid,
+    Validation.businessIdExists,
+    Validation.singleReviewPerPersonPerBusiness,
+  ]);
+
+  static postResponseMiddleware = Validation.exportList([
+    Validation.reviewIdDefined,
+    Validation.reviewIdValid,
+    Validation.responseDefined,
+    Validation.responseValid,
+    Validation.reviewIdExists,
+    Validation.ownsBusinessReview,
+  ]);
 }

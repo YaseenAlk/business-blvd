@@ -38,6 +38,9 @@ export default class Business extends BaseEntity {
   @Column()
   phone: string;
 
+  @Column()
+  claimCode: string;
+
   constructor(entry?: BusinessJSON) {
     super();
     this.name = entry?.name || '';
@@ -48,6 +51,7 @@ export default class Business extends BaseEntity {
     this.internalURL = entry?.internalURL || '';
     this.externalURL = entry?.externalURL || '';
     this.phone = entry?.phone || '';
+    this.claimCode = '123456';
   }
 
   public addFollower(id: string): void {

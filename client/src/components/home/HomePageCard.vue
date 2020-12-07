@@ -12,6 +12,9 @@
         <div v-if="variant === 'map'">
             <GPSIcon v-bind:size="size" />
         </div>
+        <div v-if="variant=== 'inbox'">
+            <InboxIcon v-bind:size="size" />
+        </div>
         <div v-else />
         <div class="card-title">
             {{title}}
@@ -24,6 +27,7 @@ import AccountIcon from '@/icons/AccountIcon.vue';
 import BusinessIcon from '@/icons/BusinessIcon.vue';
 import ReportIcon from '@/icons/ReportIcon.vue';
 import GPSIcon from '@/icons/GPSIcon.vue';
+import InboxIcon from '@/icons/InboxIcon.vue';
 
 export default {
     name: 'HomePageCard',
@@ -33,7 +37,7 @@ export default {
         size: String,
     },
     components: {
-        AccountIcon, BusinessIcon, ReportIcon, GPSIcon
+        AccountIcon, BusinessIcon, ReportIcon, GPSIcon, InboxIcon
     }
 }
 </script>

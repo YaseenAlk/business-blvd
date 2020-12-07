@@ -1,12 +1,17 @@
 <template>
-  <div >
+  <div>
     <b-form id="claimForm" @submit.prevent="claimBusiness" class="claim-page">
       <h4>Claim a Business</h4>
-        <b-form-group label="Business ID:" label-for="businessID" label-align="left" label-cols-sm="4">
-          <b-form-input required id="businessID" type="text" v-model="claimForm.businessID" />
+        <b-form-group label="Business:" label-for="businessID2" label-align="left" label-cols-sm="4">
+          <b-form-select class="inbox-select" id="businessID2" v-model="selected" :options="selectOptions">
+              <template #first>
+                <b-form-select-option value="" disabled>-- Please select an option --</b-form-select-option>
+              </template>
+          </b-form-select>
         </b-form-group>
-        <b-alert variant="success" v-bind:show="claimForm.successMessage !== undefined">{{claimForm.successMessage}}</b-alert>
-        <b-alert variant="danger" v-bind:show="claimForm.errorMessage !== undefined">{{claimForm.errorMessage}}</b-alert>
+        <b-form-group label="Claim Code:" label-for="claimCode" label-align="left" label-cols-sm="4">
+          <b-form-input required id="claimCode" type="text" v-model="claimForm.claimCode" />
+        </b-form-group>
         <b-button variant="success" type="submit">
            <span class="d-flex align-items-center">
             <div v-if="!claimForm.loading">Claim Business</div>
@@ -25,8 +30,6 @@
           <b-form-group label="Business ID:" label-for="businessID" label-align="left" label-cols-sm="4">
             <b-form-input required id="businessID" type="text" v-model="unclaimForm.businessID" />
           </b-form-group>
-          <b-alert variant="success" v-bind:show="unclaimForm.successMessage !== undefined">{{unclaimForm.successMessage}}</b-alert>
-          <b-alert variant="danger" v-bind:show="unclaimForm.errorMessage !== undefined">{{unclaimForm.errorMessage}}</b-alert>
           <b-button variant="success" type="submit">
             <span class="d-flex align-items-center">
               <div v-if="!unclaimForm.loading">Unclaim Business</div>
@@ -42,24 +45,40 @@
 <script>
 import { BForm, BButton, BCollapse } from 'bootstrap-vue';
 import axios from 'axios';
+import { eventBus } from '../main.js';
 
 export default {
   name: 'Claim',
+  created(){
+    axios.get('/api/business/all').then((res) => {
+
+      Promise.all(res.data.map(async (business) => {
+        const { businessId } = business;
+        return await this.getBusinessInfo(businessId)
+      })).then((res) => {
+        this.selectOptions = res;
+        if( this.selectOptions.length > 1 ){
+          this.selected = this.selectOptions[0].value;
+        }
+      }).catch((err) => {
+        console.log('err', err);
+      });
+    });
+  },
   data(){
     return {
       claimForm: {
-        businessID: undefined,
-        successMessage: undefined,
-        errorMessage: undefined,
+        claimCode: undefined,
         loading: false,
       },
       
       unclaimForm: {
         businessID: undefined,
-        successMessage: undefined,
-        errorMessage: undefined,
         loading: false,
       },
+
+      selected: undefined,
+      selectOptions: [],
 
       // debugging purposes
       businessIDs: [],
@@ -67,26 +86,22 @@ export default {
   },
   methods: {
     claimBusiness(){
-      this.claimForm.successMessage = undefined;
-      this.claimForm.errorMessage = undefined;
       this.claimForm.loading = true;
-      axios.post('/api/business/' + this.claimForm.businessID + '/claim').then((res) => {
-        this.claimForm.successMessage = res.data;
+      axios.post('/api/business/' + this.selected + '/claim', this.claimForm).then((res) => {
+        eventBus.$emit('show-success-toast', res.data);
         this.claimForm.loading = false;
       }).catch((err) => {
-        this.claimForm.errorMessage = err.response.data.message || err;
+        eventBus.$emit('show-error-toast', (err.response.data.message || err));
         this.claimForm.loading = false;
       });
     },
     unclaimBusiness(){
-      this.unclaimForm.successMessage = undefined;
-      this.unclaimForm.errorMessage = undefined;
       this.unclaimForm.loading = true;
       axios.delete('/api/business/' + this.unclaimForm.businessID + '/claim').then((res) => {
-        this.unclaimForm.successMessage = res.data;
+        eventBus.$emit('show-success-toast', res.data);
         this.unclaimForm.loading = false;
       }).catch((err) => { 
-        this.unclaimForm.errorMessage = err.response.data.message || err;
+        eventBus.$emit('show-error-toast', (err.response.data.message || err));
         this.unclaimForm.loading = false;
       });
     },
@@ -97,6 +112,12 @@ export default {
         console.log('err', err);
       })
     },
+    async getBusinessInfo(id){
+      let name = await axios.get('/api/business/' + id ).then((res) => res.data.name).catch((err) => console.log(err.response.data.message || err));
+      let address = await axios.get('/api/business/' + id + '/position').then((res) => res.data.address).catch((err) => console.log('err', err));
+      let selectOption = {value: id, text: name + ' (' + address + ')'};
+      return selectOption;
+    },
   },
   components: {
     BForm,
@@ -106,10 +127,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .claim-page {
-  max-width: 85%;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 1em;
+  padding: 32px 1em 1em 1em;
 }
 </style>

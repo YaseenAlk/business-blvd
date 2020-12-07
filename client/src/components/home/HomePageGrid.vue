@@ -9,8 +9,8 @@
         <b-link to='/claim' class="grid-item">
             <HomePageCard title="Claim a Business" variant="business" size="64" />
         </b-link>
-        <b-link to='/account' class="grid-item">
-            <HomePageCard title="Account" variant="account" size="64" />
+        <b-link to='/inbox' class="grid-item">
+            <HomePageCard title="Inbox" variant="inbox" size="64" />
         </b-link>
     </div>
 </template>

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
+    <ToastManager />
     <router-view class="app-body" />
   </div>
 </template>
@@ -8,6 +9,7 @@
 <script>
 import axios from 'axios';
 import Navbar from './components/nav/Navbar.vue';
+import ToastManager from './ToastManager.vue';
 import { eventBus } from './main.js';
 
 export default {
@@ -46,15 +48,17 @@ export default {
     });
   },
   components: {
-    Navbar
+    Navbar,
+    ToastManager
   },
   mounted() {
     axios.get('/heartbeat')
     .then(() => {
       console.log('Server connected.');
-    }).catch((err) => {
-      console.log(err.response.statusText);
     })
+    .catch((err) => {
+      console.log(err.response.statusText);
+    });
   }
 }
 </script>
@@ -67,7 +71,7 @@ export default {
   text-align: center;
 
   display: grid;
-  grid-template-rows: min-content auto;
+  grid-template-rows: min-content 0px auto;
   height: 100%;
 }
 

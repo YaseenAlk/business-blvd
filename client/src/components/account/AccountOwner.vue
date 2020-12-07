@@ -2,7 +2,8 @@
   <div class="owner-section">
     <h2 class="owner-title">Business Owner</h2>
     <div>
-      <p v-if="ownedBusinesses.length === 0" >
+      <b-spinner v-if="isLoading" variant="primary" style="margin-top: 12px"></b-spinner>
+      <p v-else-if="ownedBusinesses.length === 0" >
           Currently, you are not listed as a business owner for any page. <b-link to="/claim">Claim a business here as the owner.</b-link>
       </p>
       <div v-else>
@@ -23,13 +24,15 @@ import AccountBusinessOwnerCard from './AccountBusinessOwnerCard.vue';
 
 export default {
   name: 'AccountOwner',
-  created() {
+  beforeCreate() {
     axios.get('/api/users/businesses').then((res) => {
       return Promise.all(res.data.map(id => axios.get(`/api/business/${id}`)));
     }).then(results => {
       this.ownedBusinesses = results.map(response => response.data);
+      this.isLoading = false;
     }).catch((err) => {
       console.log('err', err.response.data || err);
+      this.isLoading = false;
     });
   },
   props: {
@@ -37,6 +40,7 @@ export default {
   },
   data(){
     return {
+      isLoading: true,
       ownedBusinesses: [],
     };
   },

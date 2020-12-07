@@ -63,20 +63,6 @@
             <b-button type="submit" variant="primary">Submit</b-button>
             <b-button type="reset" variant="danger">Reset</b-button>
           </b-form>
-          <div class="col-md-4 questions">
-            <h4>Community Questions:</h4>
-            <div v-if="inquiries.length === 0 ">
-              <NoQuestionsFound />
-            </div>
-            <div v-else-if="inquiryFetchError !== undefined">
-              <b-alert variant="danger">{{inquiryFetchError}}</b-alert>
-            </div>
-            <div v-else> 
-              <section v-for="q in inquiries" :key="q.id">
-                <QuestionCard :q="q" :question="q.question" :id="q.id" :businessId="business.businessId"/>
-              </section>
-            </div>
-          </div>
         </b-row>
       </b-container>
     <div v-else>
@@ -86,8 +72,6 @@
 </template>
 <script>
 import axios from 'axios';
-import QuestionCard from '../components/manage/QuestionCard.vue';
-import NoQuestionsFound from '../components/manage/NoQuestionsFound.vue';
 
 export default {
   name: 'Manage',
@@ -98,27 +82,15 @@ export default {
       console.error(err.response.data || err);
     });
 
-    axios.get('/api/inquiries/business/' + this.$route.params.id).then((res) => {
-      this.inquiries = res.data;
-    }).catch((err) => {
-      this.inquiryFetchError = err.response.data.message || err;
-    });
-
     axios.get('/api/business/' + this.$route.params.id + '/position').then((res) => {
       this.form.position = res.data;
     }).catch((err) =>{
       console.error(err.response.data || err);
     })
   },
-  components: {
-    QuestionCard,
-    NoQuestionsFound
-  },
 	data(){
 		return {
       business: undefined,
-      inquiries: [],
-      inquiryFetchError: undefined,
       form: {
         name: undefined,
         description: undefined,
@@ -154,10 +126,5 @@ export default {
 
 .manage {
 	width: 85%;
-}
-
-.questions {
-  text-align: center;
-  justify-content: center;
 }
 </style>

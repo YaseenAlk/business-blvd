@@ -6,6 +6,11 @@ export enum BusinessTags {
   DELIVERY,
   PICKUP,
   HAND_SANITIZER,
+  NO_TOUCH_DOORS,
+  CASHLESS,
+  OUTDOOR_SEATING,
+  STAFF_REGULARLY_TESTED,
+  PLEXIGLASS_SHIELDS,
 }
 
 export function parseTag(tagAsString: string): BusinessTags {
