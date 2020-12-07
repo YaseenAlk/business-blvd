@@ -87,7 +87,7 @@ class BusinessController {
     const day = parseDay(dayString);
     return HoursRepository.updateSingleEntry(businessId, day, openTime, closeTime).then((updatedHours) => {
       if (updatedHours) {
-        return { status: 201, data: updatedHours };
+        return { status: 200, data: updatedHours };
       } else {
         return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
       }
@@ -166,7 +166,7 @@ class BusinessController {
   getSocialMedia(businessId: string): Promise<ReturnObj & ({ data: Platforms } | { message: string })> {
     return SocialsRepository.findSocialsById(businessId).then((platforms) => {
       if (platforms) {
-        return { status: 201, data: platforms };
+        return { status: 200, data: platforms };
       } else {
         return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
       }
