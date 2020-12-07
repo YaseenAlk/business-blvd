@@ -45,6 +45,7 @@ export default {
             this.loading = true;
             axios.post('/api/users', this.form).then((res) => {
                 let user = { username: this.form.username, userId: res.data.userId };
+                eventBus.$emit('show-global-success-toast',("Welcome to BusinessBlvd, " + user.username + "!"));
                 eventBus.$emit('successful-login', user);
                 this.$router.push('/map');
                 this.loading = false;

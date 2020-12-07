@@ -58,13 +58,14 @@ export default {
             axios.post('/api/users/signin', this.form).then((res) => {
                 let user = { username: res.data.username, userId: res.data.userId };
                 eventBus.$emit('successful-login', user);
+                eventBus.$emit('show-global-success-toast', ("Welcome, " + user.username ));
                 this.$router.push('/map');
                 this.loading = false;
             }).catch((err) => {
                 this.error = err.response.data.message || err;
                 this.loading = false
             });
-        }
+        },
     }
 }
 </script>

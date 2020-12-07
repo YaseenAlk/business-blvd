@@ -1,12 +1,13 @@
 <template>
     <div class="flex-row justify-space-between align-items-center navbar">
         <router-link to="/" class="title-link">
-            <h1 class="navbar-title">Business Boulevard</h1>
+            <h1 class="navbar-title">Business Blvd.</h1>
         </router-link>
         <b-nav class="flex-row align-items-center">
             <router-link to="/map" class="nav-link">Map</router-link>
             <b-nav-item-dropdown right v-bind:text="dropdownText">
                 <b-dropdown-item v-if="loggedIn" to="/account">Account</b-dropdown-item>
+                <b-dropdown-item v-if="loggedIn" to="/inbox">Inbox</b-dropdown-item>
                 <b-dropdown-divider v-if="loggedIn" />
                 <b-dropdown-item v-if="!loggedIn" to="/signup">Sign Up</b-dropdown-item>
                 <b-dropdown-item v-if="!loggedIn" to="/login">Log In</b-dropdown-item>
@@ -17,7 +18,6 @@
 </template>
 
 <script>
-import { BNav, BDropdownItem, BNavItemDropdown, BDropdownDivider } from 'bootstrap-vue';
 import { eventBus } from '@/main.js';
 
 import axios from 'axios';
@@ -55,21 +55,16 @@ export default {
             loggedIn: false,
         };
     },
-    components: {
-        BNav,
-        BDropdownItem,
-        BNavItemDropdown,
-        BDropdownDivider,
-    },
     methods: {
         handleLogOut: function(){
-
-            axios.post('/api/users/signout').then(() => {
+            axios.post('/api/users/signout').then((res) => {
                 eventBus.$emit('successful-logout');
-
+                eventBus.$emit('show-global-success-toast', res.data.message)
                 if( this.$route.path !== "/" ){
                     this.$router.push('/');
                 }
+            }).catch((err) => {
+                eventBus.$emit('show-global-error-toast', err.response.data.message || err)
             });
 
         }
