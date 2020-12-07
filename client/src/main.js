@@ -2,9 +2,10 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import VueCookie from 'vue-cookie';
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import { BootstrapVue, IconsPlugin, SidebarPlugin } from 'bootstrap-vue';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
-import x5GMaps from 'x5-gmaps';
+import VueMapbox from "vue-mapbox";
+import Mapbox from "mapbox-gl";
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -12,9 +13,10 @@ import 'swiper/swiper-bundle.css'
 
 Vue.use(VueCookie);
 Vue.use(BootstrapVue);
+Vue.use(SidebarPlugin)
 Vue.use(IconsPlugin);
 Vue.use(VueAwesomeSwiper);
-Vue.use(x5GMaps, { key: process.env.VUE_APP_GOOGLE_API_KEY });
+Vue.use(VueMapbox, { mapboxgl: Mapbox });
 
 export const eventBus = new Vue();
 
