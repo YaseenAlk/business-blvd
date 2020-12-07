@@ -154,7 +154,7 @@ class BusinessController {
           return { status: 200, message: 'Updated ratings!' };
         });
       } else {
-        return { status: 404, message: `Whoops! Unable to find that business in our datastore.` };
+        return { status: 404, message: ' Unable to find that business in our datastore 😔 ' };
       }
     });
   }

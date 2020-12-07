@@ -9,6 +9,7 @@ import { User } from '../models/User';
 import { parseTag } from '../models/business/TagsList';
 import { parseDay } from '../models/business/Hours';
 import ReviewRepository from '../repositories/ReviewRepository';
+import { MAX_SAFETY_RATING, MAX_SERVICE_RATING, MIN_SAFETY_RATING, MIN_SERVICE_RATING } from '../Constants';
 
 export class Validation {
   // auth
@@ -217,7 +218,7 @@ export class Validation {
   static async safetyRatingDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const safetyRating = req.params.safetyRating || req.body.safetyRating;
     if (safetyRating === undefined) {
-      res.status(400).json({ message: 'Must specify a business safetyRating' }).end();
+      res.status(400).json({ message: 'Must specify a business safety rating' }).end();
       return;
     }
     next();
@@ -226,7 +227,7 @@ export class Validation {
   static async serviceRatingDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const serviceRating = req.params.serviceRating || req.body.serviceRating;
     if (serviceRating === undefined) {
-      res.status(400).json({ message: 'Must specify a business serviceRating' }).end();
+      res.status(400).json({ message: 'Must specify a business service rating' }).end();
       return;
     }
     next();
@@ -235,7 +236,7 @@ export class Validation {
   static async tagIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const tagId = req.params.tagId || req.body.tagId;
     if (tagId === undefined) {
-      res.status(400).json({ message: 'Must specify a business tagId' }).end();
+      res.status(400).json({ message: 'Must specify a business tag' }).end();
       return;
     }
     next();
@@ -398,10 +399,10 @@ export class Validation {
     if (
       openTime.hour === undefined ||
       openTime.minute === undefined ||
-      typeof openTime.hour !== typeof '' ||
-      typeof openTime.minute !== typeof ''
+      typeof openTime.hour !== typeof String ||
+      typeof openTime.minute !== typeof String
     ) {
-      res.status(400).json({ message: 'Must specify a valid openTime with hour and minute' }).end();
+      res.status(400).json({ message: 'Must specify a valid opening time with hour and minute' }).end();
       return;
     }
     next();
@@ -413,10 +414,10 @@ export class Validation {
     if (
       closeTime.hour === undefined ||
       closeTime.minute === undefined ||
-      typeof closeTime.hour !== typeof '' ||
-      typeof closeTime.minute !== typeof ''
+      typeof closeTime.hour !== typeof String ||
+      typeof closeTime.minute !== typeof String
     ) {
-      res.status(400).json({ message: 'Must specify a valid closeTime with hour and minute' }).end();
+      res.status(400).json({ message: 'Must specify a valid closing time with hour and minute' }).end();
       return;
     }
     next();
@@ -436,7 +437,7 @@ export class Validation {
     const lat = req.params.lat || req.body.lat;
 
     if (lat !== undefined && (lat.length === 0 || isNaN(lat) || isNaN(parseFloat(lat)))) {
-      res.status(400).json({ message: 'Must specify a valid lat' }).end();
+      res.status(400).json({ message: 'Must specify a valid latitude' }).end();
       return;
     }
     next();
@@ -446,7 +447,7 @@ export class Validation {
     const lng = req.params.lng || req.body.lng;
 
     if (lng !== undefined && (lng.length === 0 || isNaN(lng) || isNaN(parseFloat(lng)))) {
-      res.status(400).json({ message: 'Must specify a valid lng' }).end();
+      res.status(400).json({ message: 'Must specify a valid longitude' }).end();
       return;
     }
     next();
@@ -494,18 +495,15 @@ export class Validation {
   static async safetyRatingValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const safetyRating = req.params.safetyRating || req.body.safetyRating;
 
-    const minRating = 0,
-      maxRating = 5;
-
     if (
       safetyRating !== undefined &&
       (safetyRating.length === 0 ||
         isNaN(safetyRating) ||
         isNaN(parseFloat(safetyRating)) ||
-        safetyRating < minRating ||
-        safetyRating > maxRating)
+        safetyRating < MIN_SAFETY_RATING ||
+        safetyRating > MAX_SAFETY_RATING)
     ) {
-      res.status(400).json({ message: 'Must specify a valid safetyRating (number 0 to 5)' }).end();
+      res.status(400).json({ message: 'Must specify a valid safety rating (number 0 to 5)' }).end();
       return;
     }
     next();
@@ -514,18 +512,15 @@ export class Validation {
   static async serviceRatingValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const serviceRating = req.params.serviceRating || req.body.serviceRating;
 
-    const minRating = 0,
-      maxRating = 5;
-
     if (
       serviceRating !== undefined &&
       (serviceRating.length === 0 ||
         isNaN(serviceRating) ||
         isNaN(parseFloat(serviceRating)) ||
-        serviceRating < minRating ||
-        serviceRating > maxRating)
+        serviceRating < MIN_SERVICE_RATING ||
+        serviceRating > MAX_SERVICE_RATING)
     ) {
-      res.status(400).json({ message: 'Must specify a valid serviceRating (number 0 to 5)' }).end();
+      res.status(400).json({ message: 'Must specify a valid service rating (number 0 to 5)' }).end();
       return;
     }
     next();
@@ -535,7 +530,7 @@ export class Validation {
     const tagId = req.params.tagId || req.body.tagId;
 
     if (tagId !== undefined && tagId.length === 0) {
-      res.status(400).json({ message: 'Must specify a valid tagId as a string' }).end();
+      res.status(400).json({ message: 'Must specify a valid tag as a string' }).end();
       return;
     }
     next();
