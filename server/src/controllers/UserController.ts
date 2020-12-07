@@ -59,7 +59,7 @@ class UserController {
     newUsername?: string,
     newEmail?: string,
     newPassword?: string,
-  ): Promise<ReturnObj | (ReturnObj & { userId: string; username: string })> {
+  ): Promise<ReturnObj & { userId?: string; username?: string }> {
     return UserRepository.updateOne(userId, newUsername, newEmail, newPassword).then((user: User | undefined) => {
       return user
         ? {
