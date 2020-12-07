@@ -10,23 +10,25 @@
         <b-form-group label="Email:" label-for="email" label-align="left" label-cols-sm="4">
             <b-form-input required id="email" type="email" v-model="form.newEmail" />
         </b-form-group>
-        <b-alert variant="success" v-bind:show="emailSuccess !== undefined">{{emailSuccess}}</b-alert>
-        <b-alert variant="danger" v-bind:show="emailError !== undefined">{{emailError}}</b-alert>
-        <b-button class="form-button" type="submit" variant="success">Update Email</b-button>
+        <b-button class="form-button" type="submit" variant="success">
+          <b-spinner sm v-if="isLoadingEmail"/>
+          <div v-else>Update Email</div>
+        </b-button>
     </b-form>
     <b-form id="editUsername" class="form" @submit.prevent="submitUsername">
         <h4 class="form-title">Update Account Username</h4>
         <b-form-group label="Username:" label-for="username" label-align="left" label-cols-sm="4">
             <b-form-input required id="username" type="text" v-model="form.newUsername" />
         </b-form-group>
-        <b-alert variant="success" v-bind:show="usernameSuccess !== undefined">{{usernameSuccess}}</b-alert>
-        <b-alert variant="danger" v-bind:show="usernameError !== undefined">{{usernameError}}</b-alert>
-        <b-button class="form-button" type="submit" variant="success">Update Username</b-button>
+        <b-button class="form-button" type="submit" variant="success">
+          <b-spinner v-if="isLoadingUsername"/>
+          <div v-else>Update Username</div>
+        </b-button>
     </b-form>
     <b-form id="editPassword" class="form" @submit.prevent="submitPassword">
         <h4 class="form-title">Update Account Password</h4>
         <b-form-group label="Current Password:" label-for="currentPassword" label-align="left" label-cols-sm="4">
-            <b-form-input required id="currentPassword" type="password" v-model="form.newCurrentPassword" />
+            <b-form-input required id="currentPassword" type="password" v-model="form.currentPassword" />
         </b-form-group>
         <b-form-group label="New Password:" label-for="newPassword" label-align="left" label-cols-sm="4">
             <b-form-input required id="newPassword" type="password" v-model="form.newPassword1" />
@@ -34,16 +36,19 @@
         <b-form-group label="Confirm New Password:" label-for="confirmPassword" label-align="left" label-cols-sm="4">
             <b-form-input required id="confirmPassword" type="password" v-model="form.newPassword2"  />
         </b-form-group>
-        <b-alert variant="success" v-bind:show="passwordSuccess !== undefined">{{passwordSuccess}}</b-alert>
-        <b-alert variant="danger" v-bind:show="passwordError !== undefined">{{passwordError}}</b-alert>
-        <b-button class="form-button" type="submit" variant="success">Update Password</b-button>
+        <b-button class="form-button" type="submit" variant="success">
+          <b-spinner v-if="isLoadingPassword"/>
+          <div v-else>Update Password</div>
+        </b-button>
     </b-form>
   </div>
 </div>
 </template>
 
 <script>
-import { BForm, BFormGroup, BFormInput, BAlert } from 'bootstrap-vue';
+import axios from 'axios';
+import { eventBus } from '../../main.js';
+
 export default {
   name: 'AccountEditProfile',
   props: {
@@ -64,59 +69,52 @@ export default {
         newPassword2: undefined, 
       },
 
-      emailSuccess: undefined,
-      emailError: undefined,
-
-      usernameSuccess: undefined,
-      usernameError: undefined,
-
-      passwordSuccess: undefined,
-      passwordError: undefined,
+      isLoadingEmail: false,
+      isLoadingUsername: false,
+      isLoadingPassword: false,
     }
   },
   methods: {
     submitEmail: function(){
-    this.emailSuccess = undefined;
-    this.emailError = undefined;
-
-    console.log('email click');
-
-    this.emailError = "No axios connection to update email";
-
-    // TODO: axios connection
+      this.isLoadingEmail = true;
+      axios.put(`/api/users`, {email: this.form.newEmail})
+        .then((res) => {
+          eventBus.$emit('show-success-toast', res.data.message);
+          this.form.newEmail = undefined;
+        })
+        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)))
+        .finally(() => this.isLoadingEmail = false);
     },
     submitUsername: function(){
-      this.usernameSuccess = undefined;
-      this.usernameError = undefined;
-
-      console.log('username click');
-
-      this.usernameError = "No axios connection to update email";
-
-      // TODO: axios connection
+      this.isLoadingUsername = true;
+      axios.put(`/api/users`, {username: this.form.newUsername})
+        .then(res => {
+          eventBus.$emit('show-success-toast', res.data.message);
+          let user = { username: this.form.newUsername, userId: res.data.userId };
+          eventBus.$emit('successful-login', user);
+          this.form.newUsername = undefined;
+        })
+        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)))
+        .finally(() => this.isLoadingUsername = false);
     },
     submitPassword: function(){
-      this.passwordSuccess = undefined;
-      this.passwordError = undefined;
-
+      this.isLoadingPassword = true;
       if( this.form.newPassword1 !== this.form.newPassword2 ){
-          this.passwordError = "New passwords must match";
+          eventBus.$emit('show-error-toast', "New passwords must match");
+          this.isLoadingPassword = false;
           return
       }
-
-      this.passwordError = "No axios connection to update password";
-
-      console.log('password click');
-
-      // TODO: axios connection
+      axios.put(`/api/users`, {oldPassword: this.form.currentPassword, newPassword: this.form.newPassword1})
+        .then(res => {
+          eventBus.$emit('show-success-toast', res.data.message);
+          this.form.currentPassword = undefined;
+          this.form.newPassword1 = undefined;
+          this.form.newPassword2 = undefined;
+        })
+        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)))
+        .finally(() => this.isLoadingPassword = false);
     }
   },
-  components: {
-    BForm, 
-    BFormGroup, 
-    BFormInput, 
-    BAlert
-  }
 }
 </script>
 

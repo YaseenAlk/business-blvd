@@ -22,7 +22,22 @@ class MasterRouter {
   }
 
   constructor() {
+    this._admin();
     this._configure();
+  }
+
+  private _admin() {
+    this._router.get('/admin/unclaim-all', async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const result = await BusinessController.unclaimAll();
+        res
+          .status(result.status)
+          .json(result.message || result.data)
+          .end();
+      } catch (error) {
+        next(error);
+      }
+    });
   }
 
   /**

@@ -54,13 +54,35 @@ class UserRouter {
     );
 
     // edit username or password (probably just email/password...)
-    // PUT /api/users/:id
+    // we chose PUT over PATCH because you can technically use this to replace the whole resource from the user perspective.
+    // Also, PATCH requires giving instructions which doesn't quite match this.
+    // PUT is also idempotent, as is this function
+
+    // PUT /api/users
     // {
     //     (optional) username: "username",
-    //     (optional) password: "password",
     //     (optional) email: "email@email.com"
+    //     (optional) oldPassword: "oldPassword",
+    //     (optional, except if oldPassword is specified) newPassword: "newPassword",
     // }
-    //this._router.put('/:id', (req: Request, res: Response, next: NextFunction) => {});
+    this._router.put(
+      '/',
+      Auth.enforceSignedIn,
+      Validation.updateAccountMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { email, username, oldPassword, newPassword } = req.body;
+          const { userID } = req.session;
+          const result = await this._controller.updateAccount(userID, username, email, newPassword);
+          res
+            .status(result.status)
+            .json({ message: result.message, userId: result.userId, username: result.username })
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
 
     // delete account
     // DELETE /api/users/:id

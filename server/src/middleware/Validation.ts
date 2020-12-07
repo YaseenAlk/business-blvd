@@ -40,6 +40,25 @@ export class Validation {
     next();
   }
 
+  static async anyAccountInfoDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const username = req.params.username || req.body.username;
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+    const email = req.body.email;
+    if (
+      (username === undefined && newPassword === undefined && oldPassword === undefined && email === undefined) ||
+      (newPassword !== undefined && oldPassword === undefined) ||
+      (newPassword === undefined && oldPassword !== undefined)
+    ) {
+      res
+        .status(400)
+        .json({ message: 'Must specify an account property to update (email, username, or oldPassword/newPassword) ' })
+        .end();
+      return;
+    }
+    next();
+  }
+
   static async businessIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const businessId = req.params.businessId || req.body.businessId;
     if (businessId === undefined) {
@@ -260,6 +279,20 @@ export class Validation {
     // its OK to get undefined inputs as long as passwordDefined is also inserted as middleware
     if (password !== undefined && password.length === 0) {
       res.status(400).json({ message: 'Must specify a password' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async passwordsValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+
+    if (
+      (oldPassword !== undefined && oldPassword.length === 0) ||
+      (newPassword !== undefined && newPassword.length === 0)
+    ) {
+      res.status(400).json({ message: 'Must specify old and new passwords' }).end();
       return;
     }
     next();
@@ -590,20 +623,45 @@ export class Validation {
     next();
   }
 
+  static async oldPasswordCorrect(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const password = req.body.oldPassword;
+    if (password !== undefined) {
+      const account: User | undefined = await UserRepository.findOneByID(req.session.userID);
+      if (password !== account?.password) {
+        // we keep it intentionally vague for security reasons
+        res.status(401).json({ message: 'Incorrect password' }).end();
+        return;
+      }
+    }
+    next();
+  }
+
   static async usernameNotTaken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const user: User | undefined = await UserRepository.findOneByUsername(req.params.username || req.body.username);
-    if (user !== undefined) {
-      res.status(409).json({ message: 'Username already in use' }).end();
-      return;
+    const username: string | undefined = req.params.username || req.body.username;
+    // as long as the usernameDefined middleware is used before this, it's OK
+    // keeping username optional here so that this middleware can be used for the Edit account route,
+    // where username is optional
+    if (username !== undefined) {
+      const user: User | undefined = await UserRepository.findOneByUsername(username);
+      if (user !== undefined) {
+        res.status(409).json({ message: 'Username already in use' }).end();
+        return;
+      }
     }
     next();
   }
 
   static async emailNotTaken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const user: User | undefined = await UserRepository.findOneByEmail(req.params.email || req.body.email);
-    if (user !== undefined) {
-      res.status(409).json({ message: 'Email already in use' }).end();
-      return;
+    const email: string | undefined = req.params.email || req.body.email;
+    // as long as the emailDefined middleware is used before this, it's OK
+    // keeping email optional here so that this middleware can be used for the Edit account route,
+    // where email is optional
+    if (email !== undefined) {
+      const user: User | undefined = await UserRepository.findOneByEmail(email);
+      if (user !== undefined) {
+        res.status(409).json({ message: 'Email already in use' }).end();
+        return;
+      }
     }
     next();
   }
@@ -979,5 +1037,23 @@ export class Validation {
     Validation.responseValid,
     Validation.reviewIdExists,
     Validation.ownsBusinessReview,
+  ]);
+
+  static updateAccountMiddleware = Validation.exportList([
+    // this allows just one of (email, username, password) to be defined
+    Validation.anyAccountInfoDefined,
+
+    // uncommenting these would require you to have all 3 specified
+    // Validation.usernameDefined,
+    // Validation.emailDefined,
+    // Validation.passwordDefined,
+
+    Validation.usernameValid,
+    Validation.passwordsValid,
+    Validation.emailValid,
+
+    Validation.usernameNotTaken,
+    Validation.emailNotTaken,
+    Validation.oldPasswordCorrect,
   ]);
 }
