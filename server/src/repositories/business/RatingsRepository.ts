@@ -1,28 +1,29 @@
 import Ratings from '../../models/business/Ratings';
 
-import BusinessRepository from './BusinessRepository';
+import { v4 as uuidv4 } from 'uuid';
 
 class RatingsRepository {
-  generateExamples(): Promise<Ratings> {
+  generateExample(businessId: string) {
+    const userId1 = uuidv4();
+    const userId2 = uuidv4();
+
+    // 1 - 5 inclusive
+    const randNum1_1 = Math.floor(Math.random() * 5) + 1;
+    const randNum1_2 = Math.floor(Math.random() * 5) + 1;
+    const randNum2_1 = Math.floor(Math.random() * 5) + 1;
+    const randNum2_2 = Math.floor(Math.random() * 5) + 1;
+
     const exampleSafetyRatings: [string, number][] = [
-      ['22', 4],
-      ['13', 4],
+      [userId1, randNum1_1],
+      [userId2, randNum2_1],
     ];
     const exampleServiceRatings: [string, number][] = [
-      ['22', 5],
-      ['12', 5],
+      [userId1, randNum1_2],
+      [userId2, randNum2_2],
     ];
 
-    const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
-    const r1 = new Ratings(b1, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings });
-    const r2 = new Ratings(b2, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings });
-    return Ratings.findOne({ businessId: b1 }).then((ratings) => {
-      if (!ratings)
-        return r1.save().then(() => {
-          return r2.save();
-        });
-      else return ratings;
-    });
+    const ratings = new Ratings(businessId, { asList: exampleServiceRatings }, { asList: exampleSafetyRatings });
+    return ratings.save();
   }
 
   findSafetyRatingsMapById(businessId: string): Promise<Record<string, number> | undefined> {

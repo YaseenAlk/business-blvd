@@ -1,19 +1,38 @@
 import TagsList, { BusinessTags } from '../../models/business/TagsList';
-import BusinessRepository from './BusinessRepository';
 
 class TagsRepository {
-  generateExamples(): Promise<TagsList> {
-    const exampleList = [BusinessTags.DELIVERY, BusinessTags.HAND_SANITIZER];
-    const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
-    const t1 = new TagsList(b1, exampleList);
-    const t2 = new TagsList(b2, exampleList);
-    return TagsList.findOne({ businessId: b1 }).then((list) => {
-      if (!list)
-        return t1.save().then(() => {
-          return t2.save();
-        });
-      else return list;
-    });
+  generateExamples(businessId: string) {
+    const allEnumsList = [
+      BusinessTags.DELIVERY,
+      BusinessTags.PICKUP,
+      BusinessTags.HAND_SANITIZER,
+      BusinessTags.NO_TOUCH_DOORS,
+      BusinessTags.CASHLESS,
+      BusinessTags.OUTDOOR_SEATING,
+      BusinessTags.STAFF_REGULARLY_TESTED,
+      BusinessTags.PLEXIGLASS_SHIELDS,
+    ];
+    const totalEnumsQuantity = allEnumsList.length;
+    const desiredEnumsQuantity = Math.floor(Math.random() * (totalEnumsQuantity + 1));
+
+    const randomEnumList = this.getRandomEnumsList(allEnumsList, desiredEnumsQuantity);
+
+    const tags = new TagsList(businessId, randomEnumList);
+    return tags.save();
+  }
+
+  getRandomEnumsList(allEnumsList: BusinessTags[], desiredEnumsQuantity: number): BusinessTags[] {
+    const bucket: BusinessTags[] = [];
+
+    for (let i = 0; i <= desiredEnumsQuantity; i++) {
+      bucket.push(this.getRandomFromBucket(allEnumsList));
+    }
+    return bucket;
+  }
+
+  getRandomFromBucket(bucket: BusinessTags[]) {
+    const randomIndex = Math.floor(Math.random() * bucket.length);
+    return bucket.splice(randomIndex, 1)[0];
   }
 
   // getters

@@ -1,10 +1,8 @@
 import { TSMap } from 'typescript-map';
 import Hours, { Day, Time, TimeBlock } from '../../models/business/Hours';
 
-import BusinessRepository from './BusinessRepository';
-
 class HoursRepository {
-  generateExamples(): Promise<Hours> {
+  generateExample(businessId: string) {
     const exampleHours: [Day, Time, Time][] = [
       [Day.SUNDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' }],
       [Day.MONDAY, { hour: '08', minute: '30' }, { hour: '20', minute: '00' }],
@@ -14,17 +12,8 @@ class HoursRepository {
       [Day.SATURDAY, { hour: '12', minute: '00' }, { hour: '18', minute: '00' }],
     ];
 
-    const [b1, b2] = BusinessRepository.getExampleBusinessIDs();
-
-    const h1 = new Hours(b1, { asListFlat: exampleHours });
-    const h2 = new Hours(b2, { asListFlat: exampleHours });
-    return Hours.findOne({ businessId: b1 }).then((hours) => {
-      if (!hours)
-        return h1.save().then(() => {
-          return h2.save();
-        });
-      else return hours;
-    });
+    const hours = new Hours(businessId, { asListFlat: exampleHours });
+    return hours.save();
   }
 
   // getters
