@@ -59,10 +59,15 @@ class UserController {
     newUsername?: string,
     newEmail?: string,
     newPassword?: string,
-  ): Promise<ReturnObj | (ReturnObj & { userId: string })> {
+  ): Promise<ReturnObj | (ReturnObj & { userId: string; username: string })> {
     return UserRepository.updateOne(userId, newUsername, newEmail, newPassword).then((user: User | undefined) => {
       return user
-        ? { status: 200, message: 'Account updated succesfully!', userId: user?.id }
+        ? {
+            status: 200,
+            message: `Account updated succesfully! Welcome ${user.username}`,
+            userId: user?.id,
+            username: user?.username,
+          }
         : { status: 404, message: 'Account not found' };
     });
   }

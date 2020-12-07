@@ -21,6 +21,7 @@ class UserRepository {
   // updaters
   updateOne(id: string, username?: string, email?: string, password?: string): Promise<User | undefined> {
     return User.findOne({ id }).then((user) => {
+      console.log(user);
       if (user) {
         if (username) user.username = username;
         if (email) user.email = email;

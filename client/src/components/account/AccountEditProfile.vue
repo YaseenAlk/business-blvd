@@ -44,6 +44,9 @@
 
 <script>
 import { BForm, BFormGroup, BFormInput, BAlert } from 'bootstrap-vue';
+import axios from 'axios';
+import { eventBus } from '../../main.js';
+
 export default {
   name: 'AccountEditProfile',
   props: {
@@ -79,21 +82,25 @@ export default {
     this.emailSuccess = undefined;
     this.emailError = undefined;
 
-    console.log('email click');
+    console.log(this.form.newEmail);
 
-    this.emailError = "No axios connection to update email";
-
-    // TODO: axios connection
+    axios.put(`/api/users`, {email: this.form.newEmail})
+      .then((res) => eventBus.$emit('show-success-toast', res))
+      .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)));
     },
     submitUsername: function(){
       this.usernameSuccess = undefined;
       this.usernameError = undefined;
 
-      console.log('username click');
-
-      this.usernameError = "No axios connection to update email";
-
-      // TODO: axios connection
+      axios.put(`/api/users`, {username: this.form.newUsername})
+      .then(res => {
+        eventBus.$emit('show-success-toast', res);
+        console.log(res);
+        let user = { username: this.form.newUsername, userId: res.data.userId };
+        eventBus.$emit('successful-login', user);
+        
+      })
+      .catch(err => eventBus.$emit('show-error-toast', (err.response.data || err)));
     },
     submitPassword: function(){
       this.passwordSuccess = undefined;
@@ -104,11 +111,9 @@ export default {
           return
       }
 
-      this.passwordError = "No axios connection to update password";
-
-      console.log('password click');
-
-      // TODO: axios connection
+      axios.put(`/api/users`, {password: this.form.newPassword1})
+      .then(res => eventBus.$emit('show-success-toast', res.message))
+      .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)));
     }
   },
   components: {

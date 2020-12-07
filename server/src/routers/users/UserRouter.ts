@@ -58,7 +58,7 @@ class UserRouter {
     // Also, PATCH requires giving instructions which doesn't quite match this.
     // PUT is also idempotent, as is this function
 
-    // PUT /api/users/:id
+    // PUT /api/users
     // {
     //     (optional) username: "username",
     //     (optional) password: "password",
@@ -71,10 +71,11 @@ class UserRouter {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const { email, username, password } = req.body;
-          const result = await this._controller.updateAccount(email, username, password);
+          const { userID } = req.session;
+          const result = await this._controller.updateAccount(userID, username, email, password);
           res
             .status(result.status)
-            .json(result.message || result.data)
+            .json({ message: result.message, userId: result.userId, username: result.username })
             .end();
         } catch (error) {
           next(error);
