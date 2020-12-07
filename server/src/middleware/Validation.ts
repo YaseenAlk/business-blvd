@@ -40,6 +40,17 @@ export class Validation {
     next();
   }
 
+  static async anyOfAccoutInfoDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const username = req.params.username || req.body.username;
+    const password = req.body.password;
+    const email = req.body.instagram;
+    if (username === undefined && password === undefined && email === undefined) {
+      res.status(400).json({ message: 'Must specify some user account info' }).end();
+      return;
+    }
+    next();
+  }
+
   static async businessIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const businessId = req.params.businessId || req.body.businessId;
     if (businessId === undefined) {
@@ -591,19 +602,31 @@ export class Validation {
   }
 
   static async usernameNotTaken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const user: User | undefined = await UserRepository.findOneByUsername(req.params.username || req.body.username);
-    if (user !== undefined) {
-      res.status(409).json({ message: 'Username already in use' }).end();
-      return;
+    const username: string | undefined = req.params.username || req.body.username;
+    // as long as the usernameDefined middleware is used before this, it's OK
+    // keeping username optional here so that this middleware can be used for the Edit account route,
+    // where username is optional
+    if (username !== undefined) {
+      const user: User | undefined = await UserRepository.findOneByUsername(username);
+      if (user !== undefined) {
+        res.status(409).json({ message: 'Username already in use' }).end();
+        return;
+      }
     }
     next();
   }
 
   static async emailNotTaken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const user: User | undefined = await UserRepository.findOneByEmail(req.params.email || req.body.email);
-    if (user !== undefined) {
-      res.status(409).json({ message: 'Email already in use' }).end();
-      return;
+    const email: string | undefined = req.params.email || req.body.email;
+    // as long as the emailDefined middleware is used before this, it's OK
+    // keeping email optional here so that this middleware can be used for the Edit account route,
+    // where email is optional
+    if (email !== undefined) {
+      const user: User | undefined = await UserRepository.findOneByEmail(email);
+      if (user !== undefined) {
+        res.status(409).json({ message: 'Email already in use' }).end();
+        return;
+      }
     }
     next();
   }
@@ -979,5 +1002,21 @@ export class Validation {
     Validation.responseValid,
     Validation.reviewIdExists,
     Validation.ownsBusinessReview,
+  ]);
+
+  static updateAccountMiddleware = Validation.exportList([
+    // this allows just one of (email, username, password) to be defined
+    Validation.anyAccountInfoDefined,
+
+    // Validation.usernameDefined,
+    // Validation.emailDefined,
+    // Validation.passwordDefined,
+
+    Validation.usernameValid,
+    Validation.passwordValid,
+    Validation.emailValid,
+
+    Validation.usernameNotTaken,
+    Validation.emailNotTaken,
   ]);
 }
