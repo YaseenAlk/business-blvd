@@ -5,6 +5,8 @@ import Business from '../models/business/Business';
 import BusinessRepository from '../repositories/business/BusinessRepository';
 import { Inquiry } from '../models/Inquiry';
 import { User } from '../models/User';
+import { parseTag } from '../models/business/TagsList';
+import { parseDay } from '../models/business/Hours';
 
 export class Validation {
   // auth
@@ -89,10 +91,10 @@ export class Validation {
     next();
   }
 
-  static async URLDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const URL = req.params.URL || req.body.URL;
-    if (URL === undefined) {
-      res.status(400).json({ message: 'Must specify a business URL' }).end();
+  static async urlDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const url = req.params.url || req.body.url;
+    if (url === undefined) {
+      res.status(400).json({ message: 'Must specify a business url' }).end();
       return;
     }
     next();
@@ -372,17 +374,174 @@ export class Validation {
     next();
   }
 
-  static async openTimeValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async closeTimeValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async addressValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async latValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async lngValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async twitterValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async facebookValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async instagramValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async safetyRatingValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async serviceRatingValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
-  static async tagIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {}
+  static async openTimeValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const openTime = req.params.openTime || req.body.openTime;
+
+    if (
+      openTime.hour === undefined ||
+      openTime.minute === undefined ||
+      typeof openTime.hour !== typeof '' ||
+      typeof openTime.minute !== typeof ''
+    ) {
+      res.status(400).json({ message: 'Must specify a valid openTime with hour and minute' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async closeTimeValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const closeTime = req.params.closeTime || req.body.closeTime;
+
+    if (
+      closeTime.hour === undefined ||
+      closeTime.minute === undefined ||
+      typeof closeTime.hour !== typeof '' ||
+      typeof closeTime.minute !== typeof ''
+    ) {
+      res.status(400).json({ message: 'Must specify a valid closeTime with hour and minute' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async addressValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const address = req.params.address || req.body.address;
+
+    if (address !== undefined && address.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid address' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async latValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const lat = req.params.lat || req.body.lat;
+
+    if (lat !== undefined && (lat.length === 0 || isNaN(lat) || isNaN(parseFloat(lat)))) {
+      res.status(400).json({ message: 'Must specify a valid lat' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async lngValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const lng = req.params.lng || req.body.lng;
+
+    if (lng !== undefined && (lng.length === 0 || isNaN(lng) || isNaN(parseFloat(lng)))) {
+      res.status(400).json({ message: 'Must specify a valid lng' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async twitterValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const twitter = req.params.twitter || req.body.twitter;
+    if (twitter !== undefined) {
+      try {
+        new URL(twitter);
+      } catch (_) {
+        res.status(400).json({ message: 'Must specify a valid twitter url' }).end();
+        return;
+      }
+    }
+    next();
+  }
+
+  static async facebookValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const facebook = req.params.facebook || req.body.facebook;
+    if (facebook !== undefined) {
+      try {
+        new URL(facebook);
+      } catch (_) {
+        res.status(400).json({ message: 'Must specify a valid facebook url' }).end();
+        return;
+      }
+    }
+    next();
+  }
+
+  static async instagramValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const instagram = req.params.instagram || req.body.instagram;
+    if (instagram !== undefined) {
+      try {
+        new URL(instagram);
+      } catch (_) {
+        res.status(400).json({ message: 'Must specify a valid instagram url' }).end();
+        return;
+      }
+    }
+    next();
+  }
+
+  static async safetyRatingValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const safetyRating = req.params.safetyRating || req.body.safetyRating;
+
+    const minRating = 0,
+      maxRating = 5;
+
+    if (
+      safetyRating !== undefined &&
+      (safetyRating.length === 0 ||
+        isNaN(safetyRating) ||
+        isNaN(parseFloat(safetyRating)) ||
+        safetyRating < minRating ||
+        safetyRating > maxRating)
+    ) {
+      res.status(400).json({ message: 'Must specify a valid safetyRating (number 0 to 5)' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async serviceRatingValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const serviceRating = req.params.serviceRating || req.body.serviceRating;
+
+    const minRating = 0,
+      maxRating = 5;
+
+    if (
+      serviceRating !== undefined &&
+      (serviceRating.length === 0 ||
+        isNaN(serviceRating) ||
+        isNaN(parseFloat(serviceRating)) ||
+        serviceRating < minRating ||
+        serviceRating > maxRating)
+    ) {
+      res.status(400).json({ message: 'Must specify a valid serviceRating (number 0 to 5)' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async tagIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const tagId = req.params.tagId || req.body.tagId;
+
+    if (tagId !== undefined && tagId.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid tagId as a string' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async tagExists(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const tagId = req.params.tagId || req.body.tagId;
+
+    if (tagId !== undefined && parseTag(tagId) === undefined) {
+      res.status(400).json({ message: 'Must specify a valid tag' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async dayExists(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const day = req.params.day || req.body.day;
+
+    if (day !== undefined && parseDay(day) === undefined) {
+      res.status(400).json({ message: 'Must specify a valid day' }).end();
+      return;
+    }
+    next();
+  }
 
   // db-dependent auth middleware (TODO for future iterations: make more efficient by only making one DB call?)
   static async usernameExists(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -496,6 +655,36 @@ export class Validation {
     next();
   }
 
+  static async notFollowingBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const businessId: string = req.params.businessId || req.body.businessId;
+    const userId: string = req.session.userID;
+    const beingFollowed: boolean | undefined = await BusinessRepository.followedBy(businessId, userId);
+    if (beingFollowed === undefined) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (beingFollowed) {
+      res.status(409).json({ message: 'Already following business' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async followingBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const businessId: string = req.params.businessId || req.body.businessId;
+    const userId: string = req.session.userID;
+    const beingFollowed: boolean | undefined = await BusinessRepository.followedBy(businessId, userId);
+    if (beingFollowed === undefined) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (!beingFollowed) {
+      res.status(409).json({ message: 'Not following business' }).end();
+      return;
+    }
+    next();
+  }
+
   static exportList(
     middlewares: ((req: Request, res: Response, next: NextFunction) => Promise<void>)[],
   ): ((req: Request, res: Response, next: NextFunction) => Promise<void>)[] {
@@ -585,7 +774,7 @@ export class Validation {
     Validation.descriptionValid,
   ]);
 
-  static updateURLMiddleware = Validation.exportList([Validation.URLDefined, Validation.URLValid]);
+  static updateURLMiddleware = Validation.exportList([Validation.urlDefined, Validation.urlValid]);
 
   static updatePhoneMiddleware = Validation.exportList([Validation.phoneDefined, Validation.phoneValid]);
 
