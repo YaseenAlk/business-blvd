@@ -50,7 +50,10 @@ export class Validation {
       (newPassword !== undefined && oldPassword === undefined) ||
       (newPassword === undefined && oldPassword !== undefined)
     ) {
-      res.status(400).json({ message: 'Must specify some user account info' }).end();
+      res
+        .status(400)
+        .json({ message: 'Must specify an account property to update (email, username, or oldPassword/newPassword) ' })
+        .end();
       return;
     }
     next();
@@ -1040,6 +1043,7 @@ export class Validation {
     // this allows just one of (email, username, password) to be defined
     Validation.anyAccountInfoDefined,
 
+    // uncommenting these would require you to have all 3 specified
     // Validation.usernameDefined,
     // Validation.emailDefined,
     // Validation.passwordDefined,

@@ -60,16 +60,18 @@ class UserController {
     newEmail?: string,
     newPassword?: string,
   ): Promise<ReturnObj & { userId?: string; username?: string }> {
-    return UserRepository.updateOne(userId, newUsername, newEmail, newPassword).then((user: User | undefined) => {
-      return user
-        ? {
-            status: 200,
-            message: `Account updated succesfully! Welcome ${user.username}`,
-            userId: user?.id,
-            username: user?.username,
-          }
-        : { status: 404, message: 'Account not found' };
-    });
+    return UserRepository.updateAccount(userId, newUsername, newEmail, newPassword).then(
+      (result: [User, string] | undefined) => {
+        return result
+          ? {
+              status: 200,
+              message: `Successfully updated your (${result[1]}), ${result[0].username}`,
+              userId: result[0].id,
+              username: result[0].username,
+            }
+          : { status: 404, message: 'Your account does not exist in our records' };
+      },
+    );
   }
 }
 

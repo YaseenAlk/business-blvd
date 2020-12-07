@@ -61,8 +61,9 @@ class UserRouter {
     // PUT /api/users
     // {
     //     (optional) username: "username",
-    //     (optional) password: "password",
     //     (optional) email: "email@email.com"
+    //     (optional) oldPassword: "oldPassword",
+    //     (optional, except if oldPassword is specified) newPassword: "newPassword",
     // }
     this._router.put(
       '/',

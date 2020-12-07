@@ -19,15 +19,24 @@ class UserRepository {
   }
 
   // updaters
-  updateOne(id: string, username?: string, email?: string, password?: string): Promise<User | undefined> {
+  updateAccount(id: string, username?: string, email?: string, password?: string): Promise<undefined | [User, string]> {
     return User.findOne({ id }).then((user) => {
-      console.log(user);
+      const updated: string[] = [];
       if (user) {
-        if (username) user.username = username;
-        if (email) user.email = email;
-        if (password) user.password = password;
+        if (username) {
+          user.username = username;
+          updated.push('username');
+        }
+        if (email) {
+          user.email = email;
+          updated.push('email');
+        }
+        if (password) {
+          user.password = password;
+          updated.push('password');
+        }
       }
-      return user?.save();
+      return user?.save().then((user) => [user, updated.join(', ')]);
     });
   }
 
