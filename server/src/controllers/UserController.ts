@@ -1,3 +1,4 @@
+import { User } from '../models/User';
 import UserRepository from '../repositories/UserRepository';
 import { ReturnObj } from './Common';
 
@@ -50,6 +51,19 @@ class UserController {
   getClaimedBusinesses(userId: string): Promise<ReturnObj & { data: string[] }> {
     return UserRepository.getOwnedBusinesses(userId).then((businesses) => {
       return { status: 200, data: businesses };
+    });
+  }
+
+  updateAccount(
+    userId: string,
+    newUsername?: string,
+    newEmail?: string,
+    newPassword?: string,
+  ): Promise<ReturnObj | (ReturnObj & { userId: string })> {
+    return UserRepository.updateOne(userId, newUsername, newEmail, newPassword).then((user: User | undefined) => {
+      return user
+        ? { status: 200, message: 'Account updated succesfully!', userId: user?.id }
+        : { status: 404, message: 'Account not found' };
     });
   }
 }

@@ -40,7 +40,7 @@ export class Validation {
     next();
   }
 
-  static async anyOfAccoutInfoDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+  static async anyAccountInfoDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.params.username || req.body.username;
     const password = req.body.password;
     const email = req.body.instagram;

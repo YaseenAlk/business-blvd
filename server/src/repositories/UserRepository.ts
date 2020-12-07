@@ -19,6 +19,17 @@ class UserRepository {
   }
 
   // updaters
+  updateOne(id: string, username?: string, email?: string, password?: string): Promise<User | undefined> {
+    return User.findOne({ id }).then((user) => {
+      if (user) {
+        if (username) user.username = username;
+        if (email) user.email = email;
+        if (password) user.password = password;
+      }
+      return user?.save();
+    });
+  }
+
   clearAllClaimed(): Promise<void> {
     return User.find().then((allUsers) =>
       allUsers.forEach(async (user) => {
