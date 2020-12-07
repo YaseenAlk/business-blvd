@@ -23,11 +23,6 @@ import TagsList from './models/business/TagsList';
 import Review from './models/Review';
 
 import BusinessRepository from './repositories/business/BusinessRepository';
-import HoursRepository from './repositories/business/HoursRepository';
-import PositionRepository from './repositories/business/PositionRepository';
-import RatingsRepository from './repositories/business/RatingsRepository';
-import SocialsRepository from './repositories/business/SocialsRepository';
-import TagsRepository from './repositories/business/TagsRepository';
 
 // load the environment variables from the .env file
 dotenv.config({
@@ -121,12 +116,7 @@ export default (): Promise<Server> => {
         await connection.close();
       };
     })
-    .then(() => BusinessRepository.generateExamples())
-    .then(() => HoursRepository.generateExamples())
-    .then(() => PositionRepository.generateExamples())
-    .then(() => RatingsRepository.generateExamples())
-    .then(() => SocialsRepository.generateExamples())
-    .then(() => TagsRepository.generateExamples())
+    .then(() => BusinessRepository.initializeDBIfEmpty())
     .then(() => server)
     .catch((e) => {
       // eslint-disable-next-line no-console
