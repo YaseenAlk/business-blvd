@@ -6,13 +6,21 @@
         <br/>
         <br/>
         {{ phone }}
-      </template>  
+      </template> 
+      <template $footer class="justify-content-md-center">
+        <Subscribe class="business-section" :business="business"/>
+      </template> 
     </b-jumbotron>
 </template>
 
 <script>
+import Subscribe from './Subscribe.vue';
+
 export default {
     name: 'Header',
+    components: {
+      Subscribe,
+    },
     props: {
         business: Object,
     },

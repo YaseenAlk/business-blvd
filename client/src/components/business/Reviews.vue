@@ -1,67 +1,100 @@
 <template>
   <div>
-    <h2>Reviews</h2>
-    <swiper :options="swiperOption">
-      <swiper-slide>
-        <div class="card">
-          <div class="card-preview">
-            <h2>Ben Bitdiddle</h2>
-            <h6>"The best coffee I had in my life."</h6>
-          </div>
-          <div class="card-info">
-            <h4>The moment I took the first sip I knew. I knew there was no other coffee shop that would compare to this. The baristas were friendly and quick. </h4>
-          </div>
+    <div v-if="reviews">
+      <h2>Reviews</h2>
+      <div v-if="reviews.length > 0">
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="review in summaryReviews" :key="review.id">
+            <div class="card">
+              <div class="card-preview">
+                <h2>{{ review.name }}</h2>
+              </div>
+              <div class="card-info">
+                <h4>{{ review.review }} </h4>
+              </div>
+            </div>
+          </swiper-slide>
+          <div class="swiper-button-prev" slot="button-prev"></div>
+          <div class="swiper-button-next" slot="button-next"></div>
+        </swiper>
+        <div>
+          <b-button variant="primary" v-b-modal="bv-modal-reviews">
+            View All Reviews <b-badge variant="light">{{ reviews.length }}</b-badge>
+          </b-button>
+          <b-modal size="lg" id="bv-modal-reviews" hide-footer>
+            <template #modal-title>
+              Reviews
+            </template>
+            <div class="d-block text-center">
+              <div v-for="review in reviews" :key="review.id" class="card-container">
+                <div class="card">
+                  <div class="card-preview">
+                    <h2>{{ review.name }}</h2>
+                  </div>
+                  <div class="card-info">
+                    <h4>{{ review.review }} </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <b-button variant="danger" class="mt-3" block @click="$bvModal.hide('bv-modal-reviews')">Close</b-button>
+          </b-modal>
         </div>
-      </swiper-slide>
-      <swiper-slide>
-        <div class="card">
-          <div class="card-preview">
-            <h2>Melon Usk</h2>
-            <h6>"Out of this world"</h6>
-          </div>
-          <div class="card-info">
-            <h4>The moment I took the first sip I knew. I knew there was no other coffee shop that would compare to this. The baristas were friendly and quick. </h4>
-          </div>
-        </div>
-      </swiper-slide>
-      <swiper-slide>
-        <div class="card">
-          <div class="card-preview">
-            <h2>Alyssa P Hacker</h2>
-            <h6>"all my homies hate vue"</h6>
-          </div>
-          <div class="card-info">
-            <h4> after the first sip I knew. I knew that this one was the one. the perfect coffee cup. The caffeine flowing was so strong I've never slept since.</h4>
-          </div>
-        </div>
-      </swiper-slide>
-      <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div>
-    </swiper>
-  </div>
+      </div>
+      <div v-else>
+        <b-card bg-variant="default"  :title="'There are no reviews for ' + this.business.name">
+          <b-button href="#/report" variant="primary">
+            Write the first review.
+          </b-button>
+        </b-card>
+      </div>
+    </div>
+    <div v-else>
+      <b-spinner type="grow" variant="primary"  size="lg"></b-spinner>
+    </div>
+</div>
+  
 </template>
 
 <script>
-  import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-  
-  export default {
-    name: 'swiper-example-navigation',
-    title: 'Navigation',
-    components: {
-      Swiper,
-      SwiperSlide
-    },
-    data() {
-      return {
-        swiperOption: {
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          }
+import axios from 'axios';
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+
+export default {
+  name: 'swiper-example-navigation',
+  title: 'Navigation',
+  components: {
+    Swiper,
+    SwiperSlide
+  },
+  props: {
+    business: Object,
+  },
+  data() {
+    return {
+      swiperOption: {
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         }
-      }
+      },
+      reviews: undefined,
+      summaryReviews: undefined,
     }
+  },
+  created() {
+    const businessId = this.business.businessId;
+    axios.get(`/api/reviews/business/${businessId}`)
+      .then((resp) => {
+        this.reviews = resp.data;
+        if (this.reviews.length > 3) {
+          this.summaryReviews = this.reviews.slice(0,3);
+        } else {
+          this.summaryReviews = this.reviews;
+        }
+      });
   }
+}
 </script>
 <style scoped>
 

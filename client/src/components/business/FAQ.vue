@@ -1,45 +1,56 @@
 <template>
-	<div>
-    <h2>Community Questions</h2>
-    <div v-for="inq in summaryInquiries" :key="inq.id" class="card-container">
-      <div class="card">
-        <div class="card-info">
-          <h4>{{ inq.question }}</h4>
-          <h6>{{ inq.answer }}</h6>
-        </div>
-      </div>
-    </div>
-    
-    <div>
-      <b-button variant="primary" @click="$bvModal.show('bv-modal-example')">
-        View All Questions <b-badge variant="light">{{ inquiries.length }}</b-badge>
-      </b-button>
-      <b-modal id="bv-modal-example" hide-footer>
-        <template #modal-title>
-          Community Questions
-        </template>
-        <div class="d-block text-center">
-          <div v-for="inq in inquiries" :key="inq.id" class="card-container">
-            <div class="card">
-              <div class="card-info">
-                <h4>{{ inq.question }}</h4>
-                <h6>{{ inq.answer }}</h6>
-              </div>
+  <div>
+    <div v-if="inquiries">
+      <h2>Community Questions</h2>
+      <div v-if="inquiries.length > 0">
+        <div v-for="inq in summaryInquiries" :key="inq.id" class="card-container">
+          <div class="card">
+            <div class="card-info">
+              <h4>{{ inq.question }}</h4>
+              <h6>{{ inq.answer }}</h6>
             </div>
           </div>
         </div>
-        <b-button variant="danger" class="mt-3" block @click="$bvModal.hide('bv-modal-example')">Close</b-button>
-      </b-modal>
+        <b-button variant="primary" @click="$bvModal.show('bv-modal-example')">
+          View All Questions <b-badge variant="light">{{ inquiries.length }}</b-badge>
+        </b-button>
+      </div>
+      <Ask class="mt-2" :business="business"/>
+      <div>
+        <b-modal id="bv-modal-example" hide-footer>
+          <template #modal-title>
+            Community Questions
+          </template>
+          <div class="d-block text-center">
+            <div v-for="inq in inquiries" :key="inq.id" class="card-container">
+              <div class="card">
+                <div class="card-info">
+                  <h4>{{ inq.question }}</h4>
+                  <h6>{{ inq.answer }}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          <b-button variant="danger" class="mt-3" block @click="$bvModal.hide('bv-modal-example')">Close</b-button>
+        </b-modal>
+      </div>
+    </div>
+    <div v-else>
+      <b-spinner type="grow" variant="primary" size="lg"></b-spinner>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
+import Ask from './Ask.vue';
 
 export default {
   name: "FAQ",
   props: {
     business: Object,
+  },
+  components: {
+    Ask,
   },
   data() {
     return {
@@ -49,15 +60,8 @@ export default {
   },
   created() {
     axios.get(`api/inquiries/business/${this.business.businessId}`)
-      .then((resp) => resp.data)
-      .then((inquiries) => {
-        this.inquiries = inquiries.length !== 0 ? inquiries : [
-          { 
-            question: "Does it get crowded?", 
-            answer: "Nope, no one is ever there."
-          }
-        ];
-        // TODO(johancc) - Remove before deploying!
+      .then((resp) => {
+        this.inquiries = resp.data;
         if (this.inquiries.length > 3) {
           this.summaryInquiries = this.inquiries.slice(0,3);
         } else {

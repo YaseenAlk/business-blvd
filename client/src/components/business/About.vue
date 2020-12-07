@@ -1,11 +1,10 @@
 <template>
   <div>
-    <h2>About</h2>
     <div class="cards-container">
       <div class="card">
         <div class="card-preview">
-          <h6>Coffee Shop</h6>
-          <h2>{{ this.business.name}}'s Story</h2>
+          <h6>{{ this.business.name }}</h6>
+          <h2> About </h2>
         </div>
         <div class="card-info">
           <h4>{{ this.business.description }} </h4>
