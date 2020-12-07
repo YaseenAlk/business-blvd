@@ -287,6 +287,10 @@ class BusinessRouter {
         }
       },
     );
+
+    this._router.get('*', async (req: Request, res: Response) => {
+      res.status(404).json({ message: 'Invalid route.' });
+    });
   }
 }
 
