@@ -1,5 +1,5 @@
-import BusinessExamples from '../BusinessExamples';
 import Business from '../../models/business/Business';
+import BusinessExamples from '../BusinessExamples';
 
 class BusinessRepository {
   initializeDBIfEmpty(): Promise<void> {

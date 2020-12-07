@@ -6,11 +6,14 @@ import BusinessRepository from '../repositories/business/BusinessRepository';
 import { Inquiry } from '../models/Inquiry';
 import Review from '../models/Review';
 import { User } from '../models/User';
+import { parseTag } from '../models/business/TagsList';
+import { parseDay } from '../models/business/Hours';
 import ReviewRepository from '../repositories/ReviewRepository';
+import { MAX_SAFETY_RATING, MAX_SERVICE_RATING, MIN_SAFETY_RATING, MIN_SERVICE_RATING } from '../Constants';
 
 export class Validation {
   // auth
-  static usernameDefined(req: Request, res: Response, next: NextFunction): void {
+  static async usernameDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.params.username || req.body.username;
     if (username === undefined) {
       res.status(400).json({ message: 'Must specify a username' }).end();
@@ -19,7 +22,7 @@ export class Validation {
     next();
   }
 
-  static passwordDefined(req: Request, res: Response, next: NextFunction): void {
+  static async passwordDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const password = req.body.password;
     if (password === undefined) {
       res.status(400).json({ message: 'Must specify a password' }).end();
@@ -28,7 +31,7 @@ export class Validation {
     next();
   }
 
-  static emailDefined(req: Request, res: Response, next: NextFunction): void {
+  static async emailDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const email = req.body.email;
     if (email === undefined) {
       res.status(400).json({ message: 'Must specify an email' }).end();
@@ -37,7 +40,7 @@ export class Validation {
     next();
   }
 
-  static businessIdDefined(req: Request, res: Response, next: NextFunction): void {
+  static async businessIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const businessId = req.params.businessId || req.body.businessId;
     if (businessId === undefined) {
       res.status(400).json({ message: 'Must specify a business id' }).end();
@@ -46,7 +49,7 @@ export class Validation {
     next();
   }
 
-  static inquiryIdDefined(req: Request, res: Response, next: NextFunction): void {
+  static async inquiryIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const inquiryId = req.params.inquiryId || req.body.inquiryId;
     if (inquiryId === undefined) {
       res.status(400).json({ message: 'Must specify an inquiry id' }).end();
@@ -55,7 +58,7 @@ export class Validation {
     next();
   }
 
-  static questionDefined(req: Request, res: Response, next: NextFunction): void {
+  static async questionDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const question = req.params.question || req.body.question;
     if (question === undefined) {
       res.status(400).json({ message: 'Must specify a question' }).end();
@@ -64,7 +67,7 @@ export class Validation {
     next();
   }
 
-  static answerDefined(req: Request, res: Response, next: NextFunction): void {
+  static async answerDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const answer = req.params.answer || req.body.answer;
     if (answer === undefined) {
       res.status(400).json({ message: 'Must specify an answer' }).end();
@@ -73,7 +76,173 @@ export class Validation {
     next();
   }
 
-  static usernameValid(req: Request, res: Response, next: NextFunction): void {
+  static async nameDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const name = req.params.name || req.body.name;
+    if (name === undefined) {
+      res.status(400).json({ message: 'Must specify a business name' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async descriptionDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const description = req.params.description || req.body.description;
+    if (description === undefined) {
+      res.status(400).json({ message: 'Must specify a business description' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async urlDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const url = req.params.url || req.body.url;
+    if (url === undefined) {
+      res.status(400).json({ message: 'Must specify a business url' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async phoneDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const phone = req.params.phone || req.body.phone;
+    if (phone === undefined) {
+      res.status(400).json({ message: 'Must specify a business phone number' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async dayDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const day = req.params.day || req.body.day;
+    if (day === undefined) {
+      res.status(400).json({ message: 'Must specify a day for the schedule entry' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async openTimeDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const openTime = req.params.openTime || req.body.openTime;
+    if (openTime === undefined) {
+      res.status(400).json({ message: 'Must specify a openTime for the schedule entry' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async closeTimeDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const closeTime = req.params.closeTime || req.body.closeTime;
+    if (closeTime === undefined) {
+      res.status(400).json({ message: 'Must specify a closeTime for the schedule entry' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async addressDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const address = req.params.address || req.body.address;
+    if (address === undefined) {
+      res.status(400).json({ message: 'Must specify address for business position' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async latDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const lat = req.params.lat || req.body.lat;
+    if (lat === undefined) {
+      res.status(400).json({ message: 'Must specify lat for business position' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async lngDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const lng = req.params.lng || req.body.lng;
+    if (lng === undefined) {
+      res.status(400).json({ message: 'Must specify lng for business position' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async anySocialDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const twitter = req.params.twitter || req.body.twitter;
+    const facebook = req.params.facebook || req.body.facebook;
+    const instagram = req.params.instagram || req.body.instagram;
+    if (twitter === undefined && facebook === undefined && instagram === undefined) {
+      res.status(400).json({ message: 'Must specify some social media url' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async twitterDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const twitter = req.params.twitter || req.body.twitter;
+    if (twitter === undefined) {
+      res.status(400).json({ message: 'Must specify a twitter url' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async instagramDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const instagram = req.params.instagram || req.body.instagram;
+    if (instagram === undefined) {
+      res.status(400).json({ message: 'Must specify a instagram url' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async facebookDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const facebook = req.params.facebook || req.body.facebook;
+    if (facebook === undefined) {
+      res.status(400).json({ message: 'Must specify a facebook url' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async anyRatingDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const safetyRating = req.params.safetyRating || req.body.safetyRating;
+    const serviceRating = req.params.serviceRating || req.body.serviceRating;
+
+    if (safetyRating === undefined && serviceRating === undefined) {
+      res.status(400).json({ message: 'Must specify some business rating' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async safetyRatingDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const safetyRating = req.params.safetyRating || req.body.safetyRating;
+    if (safetyRating === undefined) {
+      res.status(400).json({ message: 'Must specify a business safety rating' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async serviceRatingDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const serviceRating = req.params.serviceRating || req.body.serviceRating;
+    if (serviceRating === undefined) {
+      res.status(400).json({ message: 'Must specify a business service rating' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async tagIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const tagId = req.params.tagId || req.body.tagId;
+    if (tagId === undefined) {
+      res.status(400).json({ message: 'Must specify a business tag' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async usernameValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.params.username || req.body.username;
     // for now, shouldn't be empty. can be expanded to have specific length and stuff later
     // its OK to get undefined inputs as long as usernameDefined is also inserted as middleware
@@ -84,7 +253,7 @@ export class Validation {
     next();
   }
 
-  static passwordValid(req: Request, res: Response, next: NextFunction): void {
+  static async passwordValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     // could be expanded to check for password safety (e.g. repeated characters, too simple, etc)
     const password = req.body.password;
     // for now, shouldn't be empty. can be expanded to have specific length and stuff later
@@ -96,7 +265,7 @@ export class Validation {
     next();
   }
 
-  static emailValid(req: Request, res: Response, next: NextFunction): void {
+  static async emailValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const email = req.body.email;
 
     // allows anything of the form anystring@anystring.anystring
@@ -109,10 +278,13 @@ export class Validation {
     next();
   }
 
-  static businessIdValid(req: Request, res: Response, next: NextFunction): void {
+  static async businessIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const businessId = req.params.businessId || req.body.businessId;
 
-    if (businessId !== undefined && businessId.length === 0) {
+    // uuid validator
+    const validatorRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    if (businessId !== undefined && (businessId.length === 0 || !validatorRegex.test(businessId))) {
       res.status(400).json({ message: 'Must specify a valid business id' }).end();
       return;
     }
@@ -135,17 +307,20 @@ export class Validation {
     next();
   }
 
-  static inquiryIdValid(req: Request, res: Response, next: NextFunction): void {
+  static async inquiryIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const inquiryId = req.params.inquiryId || req.body.inquiryId;
 
-    if (inquiryId !== undefined && inquiryId.length === 0) {
+    // uuid validator
+    const validatorRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    if (inquiryId !== undefined && (inquiryId.length === 0 || !validatorRegex.test(inquiryId))) {
       res.status(400).json({ message: 'Must specify a valid inquiry id' }).end();
       return;
     }
     next();
   }
 
-  static questionValid(req: Request, res: Response, next: NextFunction): void {
+  static async questionValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const question = req.params.question || req.body.question;
 
     if (question !== undefined && question.length === 0) {
@@ -155,11 +330,227 @@ export class Validation {
     next();
   }
 
-  static answerValid(req: Request, res: Response, next: NextFunction): void {
+  static async answerValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const answer = req.params.answer || req.body.answer;
 
     if (answer !== undefined && answer.length === 0) {
       res.status(400).json({ message: 'Must specify a valid answer' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async nameValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const name = req.params.name || req.body.name;
+
+    if (name !== undefined && name.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid name' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async descriptionValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const description = req.params.description || req.body.description;
+
+    if (description !== undefined && description.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid description' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async urlValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const url = req.params.url || req.body.url;
+    if (url !== undefined) {
+      try {
+        new URL(url);
+      } catch (_) {
+        res.status(400).json({ message: 'Must specify a valid URL' }).end();
+        return;
+      }
+    }
+    next();
+  }
+
+  static async phoneValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const phone = req.params.phone || req.body.phone;
+
+    if (phone !== undefined && phone.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid phone' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async dayValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const day = req.params.day || req.body.day;
+
+    if (day !== undefined && day.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid day' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async openTimeValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const openTime = req.params.openTime || req.body.openTime;
+
+    if (
+      openTime.hour === undefined ||
+      openTime.minute === undefined ||
+      typeof openTime.hour !== typeof String ||
+      typeof openTime.minute !== typeof String
+    ) {
+      res.status(400).json({ message: 'Must specify a valid opening time with hour and minute' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async closeTimeValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const closeTime = req.params.closeTime || req.body.closeTime;
+
+    if (
+      closeTime.hour === undefined ||
+      closeTime.minute === undefined ||
+      typeof closeTime.hour !== typeof String ||
+      typeof closeTime.minute !== typeof String
+    ) {
+      res.status(400).json({ message: 'Must specify a valid closing time with hour and minute' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async addressValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const address = req.params.address || req.body.address;
+
+    if (address !== undefined && address.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid address' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async latValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const lat = req.params.lat || req.body.lat;
+
+    if (lat !== undefined && (lat.length === 0 || isNaN(lat) || isNaN(parseFloat(lat)))) {
+      res.status(400).json({ message: 'Must specify a valid latitude' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async lngValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const lng = req.params.lng || req.body.lng;
+
+    if (lng !== undefined && (lng.length === 0 || isNaN(lng) || isNaN(parseFloat(lng)))) {
+      res.status(400).json({ message: 'Must specify a valid longitude' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async twitterValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const twitter = req.params.twitter || req.body.twitter;
+    if (twitter !== undefined) {
+      try {
+        new URL(twitter);
+      } catch (_) {
+        res.status(400).json({ message: 'Must specify a valid twitter url' }).end();
+        return;
+      }
+    }
+    next();
+  }
+
+  static async facebookValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const facebook = req.params.facebook || req.body.facebook;
+    if (facebook !== undefined) {
+      try {
+        new URL(facebook);
+      } catch (_) {
+        res.status(400).json({ message: 'Must specify a valid facebook url' }).end();
+        return;
+      }
+    }
+    next();
+  }
+
+  static async instagramValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const instagram = req.params.instagram || req.body.instagram;
+    if (instagram !== undefined) {
+      try {
+        new URL(instagram);
+      } catch (_) {
+        res.status(400).json({ message: 'Must specify a valid instagram url' }).end();
+        return;
+      }
+    }
+    next();
+  }
+
+  static async safetyRatingValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const safetyRating = req.params.safetyRating || req.body.safetyRating;
+
+    if (
+      safetyRating !== undefined &&
+      (safetyRating.length === 0 ||
+        isNaN(safetyRating) ||
+        isNaN(parseFloat(safetyRating)) ||
+        safetyRating < MIN_SAFETY_RATING ||
+        safetyRating > MAX_SAFETY_RATING)
+    ) {
+      res.status(400).json({ message: 'Must specify a valid safety rating (number 0 to 5)' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async serviceRatingValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const serviceRating = req.params.serviceRating || req.body.serviceRating;
+
+    if (
+      serviceRating !== undefined &&
+      (serviceRating.length === 0 ||
+        isNaN(serviceRating) ||
+        isNaN(parseFloat(serviceRating)) ||
+        serviceRating < MIN_SERVICE_RATING ||
+        serviceRating > MAX_SERVICE_RATING)
+    ) {
+      res.status(400).json({ message: 'Must specify a valid service rating (number 0 to 5)' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async tagIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const tagId = req.params.tagId || req.body.tagId;
+
+    if (tagId !== undefined && tagId.length === 0) {
+      res.status(400).json({ message: 'Must specify a valid tag as a string' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async tagExists(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const tagId = req.params.tagId || req.body.tagId;
+
+    if (tagId !== undefined && parseTag(tagId) === undefined) {
+      res.status(400).json({ message: 'Must specify a valid tag' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async dayExists(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const day = req.params.day || req.body.day;
+
+    if (day !== undefined && parseDay(day) === undefined) {
+      res.status(400).json({ message: 'Must specify a valid day' }).end();
       return;
     }
     next();
@@ -221,7 +612,6 @@ export class Validation {
     const inquiry: Inquiry | undefined = await InquiryRepository.findOneById(req.params.inquiryId);
     const businessId = inquiry?.businessId;
     if (!businessId) {
-      console.log('c', inquiry, businessId);
       res.status(404).json({ message: 'Inquiry does not exist' }).end();
       return;
     }
@@ -270,6 +660,7 @@ export class Validation {
     const inquiry: Inquiry | undefined = await InquiryRepository.findOneById(
       req.params.inquiryId || req.body.inquiryId,
     );
+
     if (inquiry === undefined) {
       res.status(404).json({ message: 'Inquiry does not exist' }).end();
       return;
@@ -277,7 +668,22 @@ export class Validation {
     next();
   }
 
-  static reviewDefined(req: Request, res: Response, next: NextFunction): void {
+  static async notFollowingBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const businessId: string = req.params.businessId || req.body.businessId;
+    const userId: string = req.session.userID;
+    const beingFollowed: boolean | undefined = await BusinessRepository.followedBy(businessId, userId);
+    if (beingFollowed === undefined) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (beingFollowed) {
+      res.status(409).json({ message: 'Already following business' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async reviewDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const review = req.params.review || req.body.review;
     if (review === undefined) {
       res.status(400).json({ message: 'Must specify a review' }).end();
@@ -286,7 +692,7 @@ export class Validation {
     next();
   }
 
-  static responseDefined(req: Request, res: Response, next: NextFunction): void {
+  static async responseDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const response = req.params.response || req.body.response;
     if (response === undefined) {
       res.status(400).json({ message: 'Must specify a response' }).end();
@@ -295,7 +701,7 @@ export class Validation {
     next();
   }
 
-  static reviewValid(req: Request, res: Response, next: NextFunction): void {
+  static async reviewValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const review = req.params.review || req.body.review;
 
     if (review !== undefined && review.length === 0) {
@@ -305,7 +711,7 @@ export class Validation {
     next();
   }
 
-  static responseValid(req: Request, res: Response, next: NextFunction): void {
+  static async responseValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const response = req.params.response || req.body.response;
 
     if (response !== undefined && response.length === 0) {
@@ -315,7 +721,22 @@ export class Validation {
     next();
   }
 
-  static reviewIdDefined(req: Request, res: Response, next: NextFunction): void {
+  static async followingBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const businessId: string = req.params.businessId || req.body.businessId;
+    const userId: string = req.session.userID;
+    const beingFollowed: boolean | undefined = await BusinessRepository.followedBy(businessId, userId);
+    if (beingFollowed === undefined) {
+      res.status(404).json({ message: 'Business does not exist' }).end();
+      return;
+    }
+    if (!beingFollowed) {
+      res.status(409).json({ message: 'Not following business' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async reviewIdDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
     const reviewId = req.params.reviewId || req.body.reviewId;
     if (reviewId === undefined) {
       res.status(400).json({ message: 'Must specify a review id' }).end();
@@ -324,7 +745,7 @@ export class Validation {
     next();
   }
 
-  static reviewIdValid(req: Request, res: Response, next: NextFunction): void {
+  static async reviewIdValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const reviewId = req.params.reviewId || req.body.reviewId;
 
     if (reviewId !== undefined && reviewId.length === 0) {
@@ -363,6 +784,7 @@ export class Validation {
     }
     next();
   }
+
   static async singleReviewPerPersonPerBusiness(req: Request, res: Response, next: NextFunction): Promise<void> {
     const userId = req.session.userID;
     const businessId = req.body.businessId;
@@ -376,7 +798,24 @@ export class Validation {
     next();
   }
 
-  static signinMiddleware = [
+  static exportList(
+    middlewares: ((req: Request, res: Response, next: NextFunction) => Promise<void>)[],
+  ): ((req: Request, res: Response, next: NextFunction) => Promise<void>)[] {
+    return middlewares.map(
+      (f: (req: Request, res: Response, next: NextFunction) => Promise<void>) => (
+        rq: Request,
+        rs: Response,
+        nxt: NextFunction,
+      ) =>
+        Promise.resolve(
+          f(rq, rs, nxt)
+            .then((rz) => rz)
+            .catch(nxt), // wraps every middleware function with a .catch so that error handler middleware is called
+        ),
+    );
+  }
+
+  static signinMiddleware = Validation.exportList([
     Validation.usernameDefined,
     Validation.passwordDefined,
     Validation.usernameValid,
@@ -384,9 +823,9 @@ export class Validation {
     Validation.usernameExists,
     Validation.passwordValid,
     Validation.passwordCorrect,
-  ];
+  ]);
 
-  static createAccountMiddleware = [
+  static createAccountMiddleware = Validation.exportList([
     Validation.usernameDefined,
     Validation.passwordDefined,
     Validation.emailDefined,
@@ -395,70 +834,150 @@ export class Validation {
     Validation.passwordValid,
     Validation.usernameNotTaken,
     Validation.emailNotTaken,
-  ];
+  ]);
 
-  static getInquiriesMiddleware = [
+  static getInquiriesMiddleware = Validation.exportList([
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.businessIdExists,
-  ];
+  ]);
 
-  static postInquiryMiddleware = [
+  static postInquiryMiddleware = Validation.exportList([
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.questionDefined,
     Validation.questionValid,
     Validation.businessIdExists,
-  ];
+  ]);
 
-  static postAnswerMiddleware = [
+  static postAnswerMiddleware = Validation.exportList([
     Validation.inquiryIdDefined,
     Validation.inquiryIdValid,
     Validation.answerDefined,
     Validation.answerValid,
     Validation.inquiryIdExists,
     Validation.ownsBusinessInquiry,
-  ];
+  ]);
 
-  static publicityToggleMiddleware = [
+  static publicityToggleMiddleware = Validation.exportList([
     Validation.inquiryIdDefined,
     Validation.inquiryIdValid,
     Validation.inquiryIdExists,
     Validation.ownsBusinessInquiry,
-  ];
+  ]);
 
-  static claimBusinessMiddleware = [
+  // business route validations below!
+
+  // this will get executed by MasterRouter on any route that starts with /business/:businessId
+  // so any subroutes of business don't need to re-use these middleware
+  static businessRouteMiddleware = Validation.exportList([
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.businessIdExists,
-    Validation.businessIdUnclaimed,
-    Validation.claimCodeValid,
-  ];
+  ]);
 
-  static unclaimBusinessMiddleware = [
+  static updateNameMiddleware = Validation.exportList([
+    Validation.nameDefined,
+    Validation.nameValid,
+    // Validation.nameNotTaken maybe? or can we have 2 businesses with the same name?
+  ]);
+
+  static updateDescriptionMiddleware = Validation.exportList([
+    Validation.descriptionDefined,
+    Validation.descriptionValid,
+  ]);
+
+  static updateURLMiddleware = Validation.exportList([Validation.urlDefined, Validation.urlValid]);
+
+  static updatePhoneMiddleware = Validation.exportList([Validation.phoneDefined, Validation.phoneValid]);
+
+  static updateHoursMiddleware = Validation.exportList([
+    Validation.dayDefined,
+    Validation.openTimeDefined,
+    Validation.closeTimeDefined,
+    Validation.dayValid,
+    Validation.openTimeValid,
+    Validation.closeTimeValid,
+    Validation.dayExists, // enum check
+  ]);
+
+  static updatePositionMiddleware = Validation.exportList([
+    Validation.addressDefined,
+    Validation.latDefined,
+    Validation.lngDefined,
+    Validation.addressValid,
+    Validation.latValid,
+    Validation.lngValid,
+  ]);
+
+  static updateSocialsMiddleware = Validation.exportList([
+    // this middleware means you don't have to specify ALL socials when you PUT, but you do need to specify at least one
+    Validation.anySocialDefined,
+
+    // uncommenting these would require you to have all
+    // Validation.twitterDefined,
+    // Validation.facebookDefined,
+    // Validation.instagramDefined,
+
+    Validation.twitterValid,
+    Validation.facebookValid,
+    Validation.instagramValid,
+  ]);
+
+  static updateRatingsMiddleware = Validation.exportList([
+    // this middleware means you don't have to specify BOTH ratings when you PUT, but you do need to specify at least one
+    Validation.anyRatingDefined,
+
+    // uncommenting these would require you to have both
+    //Validation.safetyRatingDefined,
+    //Validation.serviceRatingDefined,
+    Validation.safetyRatingValid,
+    Validation.serviceRatingValid,
+  ]);
+
+  static addTagMiddleware = Validation.exportList([
+    Validation.tagIdDefined,
+    Validation.tagIdValid,
+    Validation.tagExists, // enum check
+    // repository ignores repetitive tags so no need to check for that
+  ]);
+
+  static deleteTagMiddleware = Validation.exportList([
+    Validation.tagIdDefined,
+    Validation.tagIdValid,
+    Validation.tagExists, // enum check
+    // repository doesn't care if the taglist doesnt have this tag
+  ]);
+
+  static addFollowerMiddleware = Validation.exportList([Validation.notFollowingBusiness]);
+
+  static unfollowMiddleware = Validation.exportList([Validation.followingBusiness]);
+
+  static claimBusinessMiddleware = Validation.exportList([Validation.businessIdUnclaimed]);
+
+  static unclaimBusinessMiddleware = Validation.exportList([Validation.ownsBusiness]);
+
+  static getReviewsMiddleware = Validation.exportList([
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.businessIdExists,
-    Validation.ownsBusiness,
-  ];
+  ]);
 
-  static getReviewsMiddleware = [Validation.businessIdDefined, Validation.businessIdValid, Validation.businessIdExists];
-
-  static postReviewMiddleware = [
+  static postReviewMiddleware = Validation.exportList([
     Validation.businessIdDefined,
     Validation.businessIdValid,
     Validation.reviewDefined,
     Validation.reviewValid,
     Validation.businessIdExists,
     Validation.singleReviewPerPersonPerBusiness,
-  ];
+  ]);
 
-  static postResponseMiddleware = [
+  static postResponseMiddleware = Validation.exportList([
     Validation.reviewIdDefined,
     Validation.reviewIdValid,
     Validation.responseDefined,
     Validation.responseValid,
     Validation.reviewIdExists,
     Validation.ownsBusinessReview,
-  ];
+  ]);
 }

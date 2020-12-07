@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
 
+import { Auth } from '../../../middleware/Auth';
+import { Validation } from '../../../middleware/Validation';
+
 class FollowersRouter {
   private _router = Router({ mergeParams: true });
 
@@ -53,36 +56,46 @@ class FollowersRouter {
     /***************
     REMOVE FOLLOWER ROUTE
     ****************/
-    this._router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { userId } = req.session;
-        const result = await this._controller.unfollow(businessId, userId);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.delete(
+      '/',
+      Auth.enforceSignedIn,
+      Validation.unfollowMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { userId } = req.session;
+          const result = await this._controller.unfollow(businessId, userId);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
 
     /***************
     ADD FOLLOWER ROUTE
     ****************/
-    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { userId } = req.session;
-        const result = await this._controller.follow(businessId, userId);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.put(
+      '/',
+      Auth.enforceSignedIn,
+      Validation.addFollowerMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { userID } = req.session;
+          const result = await this._controller.follow(businessId, userID);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
   }
 }
 

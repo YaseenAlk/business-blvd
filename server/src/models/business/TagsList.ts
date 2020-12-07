@@ -13,6 +13,10 @@ export enum BusinessTags {
   PLEXIGLASS_SHIELDS,
 }
 
+export function parseTag(tagAsString: string): BusinessTags {
+  return BusinessTags[tagAsString.toUpperCase() as keyof typeof BusinessTags];
+}
+
 @Entity()
 export default class TagsList extends BaseEntity {
   @PrimaryColumn('uuid')

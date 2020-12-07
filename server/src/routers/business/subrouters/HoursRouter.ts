@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import BusinessController from '../../../controllers/business/BusinessController';
+import { Auth } from '../../../middleware/Auth';
+import { Validation } from '../../../middleware/Validation';
 
 class HoursRouter {
   private _router = Router({ mergeParams: true });
@@ -21,7 +23,6 @@ class HoursRouter {
     /***************
     GET HOURS ROUTE
     ****************/
-    // todo: add validation middleware
     this._router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { businessId } = req.params;
@@ -38,20 +39,24 @@ class HoursRouter {
     /***************
     SET HOURS ROUTE
     ****************/
-    // todo: add validation middleware
-    this._router.put('/', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { businessId } = req.params;
-        const { day, openTime, closeTime } = req.body;
-        const result = await this._controller.setHours(businessId, day, openTime, closeTime);
-        res
-          .status(result.status)
-          .json(result.message || result.data)
-          .end();
-      } catch (error) {
-        next(error);
-      }
-    });
+    this._router.put(
+      '/',
+      Auth.enforceSignedIn,
+      Validation.updateHoursMiddleware,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const { businessId } = req.params;
+          const { day, openTime, closeTime } = req.body;
+          const result = await this._controller.setHours(businessId, day, openTime, closeTime);
+          res
+            .status(result.status)
+            .json(result.message || result.data)
+            .end();
+        } catch (error) {
+          next(error);
+        }
+      },
+    );
   }
 }
 
