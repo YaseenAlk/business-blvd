@@ -242,6 +242,15 @@ export class Validation {
     next();
   }
 
+  static async contentDefined(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const content = req.params.content || req.body.content;
+    if (content === undefined) {
+      res.status(400).json({ message: 'Must specify content' }).end();
+      return;
+    }
+    next();
+  }
+
   static async usernameValid(req: Request, res: Response, next: NextFunction): Promise<void> {
     const username = req.params.username || req.body.username;
     // for now, shouldn't be empty. can be expanded to have specific length and stuff later
@@ -531,6 +540,16 @@ export class Validation {
 
     if (tagId !== undefined && tagId.length === 0) {
       res.status(400).json({ message: 'Must specify a valid tag as a string' }).end();
+      return;
+    }
+    next();
+  }
+
+  static async contentValid(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const content = req.params.content || req.body.content;
+
+    if (content !== undefined && content.length === 0) {
+      res.status(400).json({ message: 'Must specify valid content as a string' }).end();
       return;
     }
     next();
@@ -979,5 +998,16 @@ export class Validation {
     Validation.responseValid,
     Validation.reviewIdExists,
     Validation.ownsBusinessReview,
+  ]);
+
+  static postUpdateMiddleware = Validation.exportList([
+    Validation.businessIdDefined,
+    Validation.businessIdValid,
+
+    Validation.contentDefined,
+    Validation.contentValid,
+
+    Validation.businessIdExists,
+    Validation.ownsBusiness,
   ]);
 }
