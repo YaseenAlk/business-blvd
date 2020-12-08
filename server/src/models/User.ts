@@ -18,8 +18,8 @@ export class User extends BaseEntity {
   @Column('text', { name: 'owned', array: true })
   _owned: string[];
 
-  // TODO: make this a column (one-to-many? many-to-many?) once business class has entity definition
-  private _following: Set<string>;
+  @Column('text', { name: 'following', array: true })
+  private _following: string[];
 
   constructor(
     email: string,
@@ -33,7 +33,7 @@ export class User extends BaseEntity {
     this._email = email;
     this._username = username;
     this._password = password;
-    this._following = new Set(following);
+    this._following = Array.from(following || []);
     this._owned = Array.from(owned || []);
   }
 
@@ -61,12 +61,12 @@ export class User extends BaseEntity {
     this._password = password;
   }
 
-  get following(): Set<string> {
-    return new Set(this._following);
+  get following(): string[] {
+    return Array.from(this._following);
   }
 
   get owned(): string[] {
-    return this._owned;
+    return Array.from(this._owned);
   }
 
   claimBusiness(businessId: string): void {
@@ -79,10 +79,10 @@ export class User extends BaseEntity {
   }
 
   followBusiness(business: string): void {
-    this._following.add(business);
+    if (!this._following.includes(business)) this._following.push(business);
   }
 
-  unfollowBusiness(business: string): boolean {
-    return this._following.delete(business);
+  unfollowBusiness(business: string): void {
+    this._following = this._following.filter((businessFollowed) => businessFollowed !== business);
   }
 }

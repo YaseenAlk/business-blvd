@@ -7,12 +7,14 @@ import UserRouter from './users/UserRouter';
 
 import { Validation } from '../middleware/Validation';
 import BusinessController from '../controllers/business/BusinessController';
+import UpdatesRouter from './updates/UpdatesRouter';
 
 class MasterRouter {
   private _router = Router();
 
   private _subrouterInquiries = InquiryRouter;
   private _subrouterReviews = ReviewRouter;
+  private _subrouterUpdates = UpdatesRouter;
 
   private _subrouterBusiness = BusinessRouter;
   private _subrouterUsers = UserRouter;
@@ -63,6 +65,7 @@ class MasterRouter {
     this._router.use('/users', this._subrouterUsers);
     this._router.use('/inquiries', this._subrouterInquiries);
     this._router.use('/reviews', this._subrouterReviews);
+    this._router.use('/updates', this._subrouterUpdates);
   }
 }
 
