@@ -1,49 +1,45 @@
 <template>
-    <div v-bind:class="classObject">
-        <div v-bind:show="showBoth">
-            <MapInformationDetails class="info-page"/>
-        </div>
-        <MapContainer />
-    </div>
+  <div>
+    <MglMap :accessToken="accessToken" :mapStyle="mapStyle">
+      <MapBoxMarker :business="b" v-for="b in businesses" v-bind:key="b.businessId" />
+    </MglMap>
+    <MapSidebar />
+  </div>
 </template>
 
 <script>
-import MapContainer from '@/components/map/MapContainer.vue';
-import MapInformationDetails from '@/components/map/MapInformationDetails.vue';
-import { eventBus } from '../main';
+import Mapbox from "mapbox-gl";
+import { MglMap } from "vue-mapbox";
+import { MAP_STYLE } from "../map/style.js";
+import axios from 'axios';
+import MapBoxMarker from '../components/map/MapBoxMarker.vue';
+import MapSidebar from '../components/map/MapSidebar.vue';
 
 export default {
-    name: 'Map',
-    created(){
-        eventBus.$on('click-marker', () => {
-            this.classObject = 'map-page-both';
-        });
-    },
-    components: {
-        MapContainer,
-        MapInformationDetails,
-    },
-    data(){
-        return {
-            showBoth: false,
-            classObject: 'map-page-one'
-        }
-    }
+  name: 'Map',
+  created(){
+    this.mapbox = Mapbox;
+    axios.get('/api/business/all').then((res) => {
+        this.businesses = res.data;
+    }).catch((err) => {
+      console.log('err', err);
+    });
+
+  },
+  data() {
+
+    const ACCESS_TOKEN = process.env.VUE_APP_MAPBOX_ACCESS_KEY;
+
+    return {
+      accessToken: ACCESS_TOKEN,
+      mapStyle: MAP_STYLE,
+      businesses: [],
+    };
+  },
+  components: {
+    MglMap,
+    MapBoxMarker,
+    MapSidebar
+  },
 }
 </script>
-
-<style>
-.info-page {
-    padding: 1em;
-}
-
-.map-page-both {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.map-page-one {
-    display: grid;
-    grid-template-columns: 0px 1fr;
-}
-</style>

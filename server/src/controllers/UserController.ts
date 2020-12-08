@@ -1,3 +1,4 @@
+import { User } from '../models/User';
 import UserRepository from '../repositories/UserRepository';
 import { ReturnObj } from './Common';
 
@@ -51,6 +52,26 @@ class UserController {
     return UserRepository.getOwnedBusinesses(userId).then((businesses) => {
       return { status: 200, data: businesses };
     });
+  }
+
+  updateAccount(
+    userId: string,
+    newUsername?: string,
+    newEmail?: string,
+    newPassword?: string,
+  ): Promise<ReturnObj & { userId?: string; username?: string }> {
+    return UserRepository.updateAccount(userId, newUsername, newEmail, newPassword).then(
+      (result: [User, string] | undefined) => {
+        return result
+          ? {
+              status: 200,
+              message: `Successfully updated your (${result[1]}), ${result[0].username}`,
+              userId: result[0].id,
+              username: result[0].username,
+            }
+          : { status: 404, message: 'Your account does not exist in our records' };
+      },
+    );
   }
 }
 

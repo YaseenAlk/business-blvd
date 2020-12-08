@@ -10,14 +10,13 @@ module.exports = {
         },
     },
     chainWebpack: config => {
-      config.resolve.alias.set(
-        'vue$',
-        path.resolve(__dirname, 'node_modules/vue/dist/vue.runtime.esm.js')
-      ),
-      config.resolve.alias.set(
-        '@',
-        path.resolve('src')
-      )
+        config.resolve.alias.set(
+                'vue$',
+                path.resolve(__dirname, 'node_modules/vue/dist/vue.runtime.esm.js')
+            ),
+            config.resolve.alias.set(
+                '@',
+                path.resolve('src')
+            )
     },
-    transpileDependencies: ['x5-gmaps'],
 };

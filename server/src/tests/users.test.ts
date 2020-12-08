@@ -33,6 +33,23 @@ describe('The user should be able to', () => {
     done();
   });
 
+  test('edit their username', async (done) => {
+    const resp = await testSession.post('/api/users').send(testUser);
+    expect(resp.status).toBe(200);
+    expect(resp.body.message).toBeDefined();
+    const newUsername = 'pog' + uuidv4();
+    const body = { username: newUsername };
+    const afterPut = await testSession.put('/api/users').send(body);
+    expect(afterPut.status).toBe(200);
+    expect(afterPut.body.message).toBeDefined();
+    const loginState = await testSession.get('/api/users/loginStatus');
+    expect(loginState.body.message).toContain(newUsername);
+    // Clean up so the next session doesn't have any session.
+    const cleanup = await testSession.delete('/api/users');
+    expect(cleanup.status).toBe(200);
+    done();
+  });
+
   test('delete an account', async (done) => {
     const resp = await testSession.post('/api/users').send(testUser);
     expect(resp.status).toBe(200);
