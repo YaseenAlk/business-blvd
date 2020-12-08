@@ -18,6 +18,10 @@ class UserRepository {
     return User.findOne({ id }).then((user) => user !== undefined);
   }
 
+  getFollowing(id: string): Promise<string[] | undefined> {
+    return User.findOne({ id }).then((user) => user?.following);
+  }
+
   // updaters
   addOne(email: string, username: string, password: string): Promise<User> {
     const newUser: User = new User(email, username, password);
