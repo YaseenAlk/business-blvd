@@ -44,7 +44,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .popup-card {
   padding: 8px 16px;
   font-size: 1em;
@@ -55,5 +55,9 @@ export default {
 
 .popup-description {
   font-size: 0.9rem;
+}
+
+.mapboxgl-marker:hover{
+  cursor: pointer;
 }
 </style>
