@@ -18,7 +18,7 @@ export class User extends BaseEntity {
   @Column('text', { name: 'owned', array: true })
   _owned: string[];
 
-  @Column('text', { array: true })
+  @Column('text', { name: 'following', array: true })
   private _following: string[];
 
   constructor(
