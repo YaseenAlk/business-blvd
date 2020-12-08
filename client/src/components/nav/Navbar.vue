@@ -1,7 +1,7 @@
 <template>
     <div class="flex-row justify-space-between align-items-center navbar">
         <router-link to="/" class="title-link">
-            <h1 class="navbar-title">Business Blvd.</h1>
+            <Hero/>
         </router-link>
         <b-nav class="flex-row align-items-center">
             <router-link to="/map" class="nav-link">Map</router-link>
@@ -19,12 +19,15 @@
 
 <script>
 import { eventBus } from '@/main.js';
+import Hero from './Hero.vue';
 
 import axios from 'axios';
 
 export default {
     name: 'Navbar',
-
+    components: {
+      Hero,
+    },
     beforeCreate(){
         axios.get('/api/users/loginStatus').then((res) => {
             if(res.data.userId !== undefined){
