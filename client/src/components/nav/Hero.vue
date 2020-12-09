@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="block-effect" style="--td: 2.5s; margin: 0">
+    <h1 class="block-effect" style="--td: 1.25s; margin: 0">
       <div class="block-reveal" style="--bc: #4040bf; --d: .1s"><strong class="nav-text">Business Blvd.</strong></div>
     </h1>
   </div>

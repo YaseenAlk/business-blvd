@@ -58,7 +58,8 @@ export default class Business extends BaseEntity {
     this.followers.push(id);
   }
   public removeFollower(id: string): void {
-    this.followers = this.followers.filter((follower) => follower !== id);
+    const i = this.followers.findIndex((follower) => follower === id);
+    this.followers.splice(i, 1);
   }
   public getFollowers(): string[] {
     return Array.from(this.followers);

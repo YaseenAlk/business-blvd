@@ -15,7 +15,9 @@
           View All Questions <b-badge variant="light">{{ inquiries.length }}</b-badge>
         </b-button>
       </div>
-      <Ask class="mt-2" :business="business"/>
+      <b-card bg-variant="default"  :title="`Have a question for ${business.name}?`">      
+          <Ask class="mt-2" :business="business"/>
+      </b-card>
       <div>
         <b-modal id="bv-modal-example" hide-footer>
           <template #modal-title>
@@ -73,6 +75,8 @@ export default {
 }
 </script>
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+
 .card {
 	background-color: #fff;
 	border-radius: 10px;
