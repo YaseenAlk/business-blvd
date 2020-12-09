@@ -1,11 +1,16 @@
 <template>
   <div>
     <h1 class="block-effect" style="--td: 2.5s; margin: 0">
-      <div class="block-reveal" style="--bc: #4040bf; --d: .1s"><strong>Business Blvd.</strong></div>
+      <div class="block-reveal" style="--bc: #4040bf; --d: .1s"><strong class="nav-text">Business Blvd.</strong></div>
     </h1>
   </div>
 </template>
-<style>
+<style scoped>
+
+.nav-text{
+  color: #1B5299;
+}
+
 /* reset */
 *,
 *::before,

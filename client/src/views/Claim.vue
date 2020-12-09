@@ -19,9 +19,9 @@
         <b-form-group label="Claim Code:" label-for="claimCode" label-align="left" label-cols-sm="4">
           <b-form-input required id="claimCode" type="password" v-model="claimForm.claimCode" />
         </b-form-group>
-        <b-button variant="success" type="submit">
+        <b-button style="background-color: #1B5299" type="submit">
             <span class="d-flex align-items-center">
-            <div v-if="!claimForm.loading">Claim Business</div>
+            <div v-if="!claimForm.loading"><strong>Claim Business</strong></div>
             <b-spinner v-else small></b-spinner>
             </span>
         </b-button>

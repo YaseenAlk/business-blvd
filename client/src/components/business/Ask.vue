@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button @click="$bvModal.show('question')" variant="primary">
+    <b-button @click="$bvModal.show('question')"  style="background-color: #1B5299">
       Ask {{ this.business.name }} a question
     </b-button> 
     <b-modal id="question" title="Submit a question" hide-backdrop content-class="shadow" hide-footer>

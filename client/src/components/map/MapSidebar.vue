@@ -13,7 +13,7 @@
     </div>
     <template #footer>
       <div class="footer-container" style="margin-bottom: 66px">
-        <b-button class="footer-button" variant="info" :to="business.internalURL"><b>See More</b></b-button>
+        <b-button class="footer-button" style="background-color: #1B5299; color: white;" :to="business.internalURL"><b>See More</b></b-button>
       </div>
     </template>
   </b-sidebar>

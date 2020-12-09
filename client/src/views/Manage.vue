@@ -5,7 +5,7 @@
     </div>
     <div class="manage-page" v-else-if="business">
       <b-row class="justify-content-between align-items-center" style="margin: 12px 0">
-        <h1 style="text-align: left; margin: 0">Manage {{ business.name }}</h1>
+        <h1 style="text-align: left; margin: 0; padding-right: 12px; padding-bottom: 8px;">Manage {{ business.name }}</h1>
         <b-row>
           <b-button v-on:click="unclaim" style="margin-left: 12px; height: fit-content" variant="danger" class="d-flex">
             <div v-if="!isUnclaiming">Remove Me as Business Owner</div>
@@ -14,7 +14,7 @@
           <b-button :to="'../' + business.internalURL" style="margin-left: 12px; height: fit-content" variant="success" class="d-flex">Visit Public Page</b-button>
         </b-row>
       </b-row>
-      <h5 style="text-align: left;">You are listed as the business manager, and have access to edit the business profile. If you would like to respond to communication questions, <b-link to="/inbox">you can answer them in the inbox.</b-link></h5>
+      <h5 style="text-align: left; color: black!important">You are listed as the business manager, and have access to edit the business profile. If you would like to respond to communication questions, <b-link to="/inbox">you can answer them in the inbox.</b-link></h5>
       <hr />
       <b-form class="form-container" @submit.prevent="handleSubmit">
         <manage-business-name :business="business" />
@@ -24,7 +24,7 @@
         <manage-business-phone :business="business" />
         <manage-business-social-media :business="business" />
         <manage-business-tags :business="business" />
-        <b-button :disabled="isGeocoding" type="submit" variant="success"><b>Update Business Profile</b></b-button>
+        <b-button :disabled="isGeocoding" type="submit" style="background-color: #1B5299"><b>Update Business Profile</b></b-button>
       </b-form>
     </div>
     <div v-else style="padding-top: 24px">

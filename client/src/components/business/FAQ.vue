@@ -11,7 +11,7 @@
             </div>
           </div>
         </div>
-        <b-button variant="primary" @click="$bvModal.show('bv-modal-example')">
+        <b-button style="background-color: #1B5299" @click="$bvModal.show('bv-modal-example')">
           View All Questions <b-badge variant="light">{{ inquiries.length }}</b-badge>
         </b-button>
       </div>

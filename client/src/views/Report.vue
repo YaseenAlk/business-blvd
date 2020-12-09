@@ -24,7 +24,7 @@
         <b-form-group label="Service Rating:" label-align="left" label-cols-sm="3">
           <b-form-rating v-model="form.serviceRating" variant="primary"></b-form-rating>
         </b-form-group>
-        <b-button type="submit" variant="success" style="margin-bottom: 12px">
+        <b-button type="submit" style="background-color: #1B5299; margin-bottom: 12px">
           <div class="d-flex align-items-center">
             <span v-if="!loading">Submit Review</span>
             <b-spinner v-else small />

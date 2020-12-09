@@ -1,6 +1,6 @@
 <template>
-    <b-jumbotron bg-variant="primary" text-variant="white" border-variant="light" class="header">
-      <template #header>{{name}}</template>
+    <b-jumbotron style="background-color: #1B5299" text-variant="white" border-variant="light" class="header">
+      <template #header><div style="color: white">{{name}}</div></template>
       <template #lead>
         {{address}} 
         <br/>

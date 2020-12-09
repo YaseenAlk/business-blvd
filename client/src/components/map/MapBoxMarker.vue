@@ -1,5 +1,5 @@
 <template>
-    <MglMarker :coordinates="coordinates" color="red" v-on:click="triggerSidebar" />
+    <MglMarker :coordinates="coordinates" color="#1B5299" v-on:click="triggerSidebar" />
 </template>
 
 <script>
@@ -31,9 +31,6 @@ export default {
   data(){
     return {
       coordinates: [0, 0],
-      options: {
-        color: '#A95241',
-      }
     }
   },
   methods: {

@@ -2,9 +2,9 @@
   <div>
     <div class="cards-container">
       <div class="card">
-        <div class="card-preview">
-          <h6>{{ this.business.name }}</h6>
-          <h2> About </h2>
+        <div class="card-preview"  style="background-color: #1B5299">
+          <h6 class="white-text">{{ this.business.name }}</h6>
+          <h2 class="white-text"> About </h2>
         </div>
         <div class="card-info">
           <h4>{{ this.business.description }} </h4>
@@ -22,6 +22,10 @@ export default {
 }
 </script>
 <style scoped>
+
+.white-text{
+	color: white !important;
+}
 
 .card {
 	background-color: #fff;

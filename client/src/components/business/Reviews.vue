@@ -36,14 +36,14 @@
             </div>
             <b-button variant="danger" class="mt-3" block @click="$bvModal.hide('bv-modal-reviews')">Close</b-button>
           </b-modal>
-          <b-button variant="primary" @click="$bvModal.show('bv-modal-reviews')">
+          <b-button style="background-color: #1B5299" @click="$bvModal.show('bv-modal-reviews')">
             View All Reviews <b-badge variant="light">{{ reviews.length }}</b-badge>
           </b-button>
         </div>
       </div>
       <div v-else>
         <b-card bg-variant="default"  :title="'There are no reviews for ' + this.business.name">
-          <b-button href="#/rate" variant="primary">
+          <b-button href="#/rate"  style="background-color: #1B5299">
             Write the first review.
           </b-button>
         </b-card>

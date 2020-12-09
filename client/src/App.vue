@@ -65,6 +65,10 @@ export default {
 
 <style>
 
+h1, h2, h3, h4, h5, h6, nav > a {
+  color: #1B5299 !important;
+}
+
 :root {
   --background-color: #B1C5D3;
 }
@@ -84,6 +88,10 @@ export default {
   overflow: scroll;
   min-width: 100vw;
   margin: 0;
+}
+
+.btn-blvd {
+  background-color: #1B5299;
 }
 
 

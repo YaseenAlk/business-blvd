@@ -14,14 +14,14 @@
                   <SubscriptionList :onClear="clearUpdates" :updateData="updateData" />
                 </b-popover>
               </div>
-              <b-nav-item-dropdown right v-bind:text="dropdownText">
-                  <b-dropdown-item v-if="loggedIn" to="/account">Account Settings</b-dropdown-item>
-                  <b-dropdown-item v-if="loggedIn" to="/manage">Manage Businesses</b-dropdown-item>
-                  <b-dropdown-item v-if="loggedIn" to="/inbox">Inbox</b-dropdown-item>
+              <b-nav-item-dropdown right v-bind:text="dropdownText" class="nav-text">
+                  <b-dropdown-item class="nav-text" v-if="loggedIn" to="/account">Account Settings</b-dropdown-item>
+                  <b-dropdown-item class="nav-text" v-if="loggedIn" to="/manage">Manage Businesses</b-dropdown-item>
+                  <b-dropdown-item class="nav-text" v-if="loggedIn" to="/inbox">Inbox</b-dropdown-item>
                   <b-dropdown-divider v-if="loggedIn" />
-                  <b-dropdown-item v-if="!loggedIn" to="/signup">Sign Up</b-dropdown-item>
-                  <b-dropdown-item v-if="!loggedIn" to="/login">Log In</b-dropdown-item>
-                  <b-dropdown-item v-if="loggedIn" v-on:click="handleLogOut">Log Out</b-dropdown-item>
+                  <b-dropdown-item class="nav-text" v-if="!loggedIn" to="/signup">Sign Up</b-dropdown-item>
+                  <b-dropdown-item class="nav-text" v-if="!loggedIn" to="/login">Log In</b-dropdown-item>
+                  <b-dropdown-item class="nav-text" v-if="loggedIn" v-on:click="handleLogOut">Log Out</b-dropdown-item>
               </b-nav-item-dropdown>
           </b-nav>
         </div>
@@ -103,6 +103,10 @@ export default {
 </script>
 
 <style>
+
+.nav-text {
+    color: #1B5299;
+}
 
 .title-link, .title-link:hover, .navbar-title:hover {
     text-decoration: none;

@@ -10,8 +10,8 @@
         <b-form-group label="Email:" label-for="email" label-align="left" label-cols-sm="4">
             <b-form-input required id="email" type="email" v-model="form.newEmail" />
         </b-form-group>
-        <b-button class="form-button" type="submit" variant="success">
-          <b-spinner sm v-if="isLoadingEmail"/>
+        <b-button class="form-button" type="submit" style="background-color: #1B5299">
+          <b-spinner small v-if="isLoadingEmail"/>
           <div v-else>Update Email</div>
         </b-button>
     </b-form>
@@ -20,8 +20,8 @@
         <b-form-group label="Username:" label-for="username" label-align="left" label-cols-sm="4">
             <b-form-input required id="username" type="text" v-model="form.newUsername" />
         </b-form-group>
-        <b-button class="form-button" type="submit" variant="success">
-          <b-spinner v-if="isLoadingUsername"/>
+        <b-button class="form-button" type="submit" style="background-color: #1B5299">
+          <b-spinner small v-if="isLoadingUsername"/>
           <div v-else>Update Username</div>
         </b-button>
     </b-form>
@@ -36,8 +36,8 @@
         <b-form-group label="Confirm New Password:" label-for="confirmPassword" label-align="left" label-cols-sm="4">
             <b-form-input required id="confirmPassword" type="password" v-model="form.newPassword2"  />
         </b-form-group>
-        <b-button class="form-button" type="submit" variant="success">
-          <b-spinner v-if="isLoadingPassword"/>
+        <b-button class="form-button" type="submit" style="background-color: #1B5299">
+          <b-spinner small v-if="isLoadingPassword"/>
           <div v-else>Update Password</div>
         </b-button>
     </b-form>

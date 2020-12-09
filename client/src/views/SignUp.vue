@@ -14,7 +14,7 @@
                 <b-form-input id="password" type="password" v-model="form.password" size="sm" required/>
             </b-form-group>
             <b-alert variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
-            <b-button type="submit" variant="success">
+            <b-button type="submit" style="background-color: #1B5299">
                 <div v-if="!loading">Sign Up</div>
                 <b-spinner small v-else></b-spinner>
             </b-button>

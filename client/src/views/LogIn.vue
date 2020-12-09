@@ -12,7 +12,7 @@
             </b-form-group>
             {{fields}}
             <b-alert variant="danger" v-bind:show="error !== undefined">{{error}}</b-alert>
-            <b-button type="submit" variant="success">
+            <b-button type="submit" style="background-color: #1B5299">
                 <span class="d-flex align-items-center">
                     <div v-if="!loading">Log In</div>
                     <b-spinner small v-else></b-spinner>
