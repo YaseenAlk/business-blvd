@@ -79,7 +79,7 @@ const router = new Router({
     ]
 });
 
-const authRoutes = new Set(['Report', 'Claim', 'Account', 'Inbox'])
+const authRoutes = new Set(['Report', 'Claim', 'Account', 'Inbox', ])
 
 router.beforeEach((from, to, next) => {
 
