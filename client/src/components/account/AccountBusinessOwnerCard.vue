@@ -20,7 +20,7 @@ export default {
       this.business.position = res.data;
       this.isLoading = false;
     }).catch((err) =>{
-      console.error(err.response.data || err);
+      console.error(err.response.data || err.toString());
       this.isLoading = false;
     });
   },

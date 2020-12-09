@@ -6,10 +6,13 @@
     <div class="manage-page" v-else-if="business">
       <b-row class="justify-content-between align-items-center" style="margin: 12px 0">
         <h1 style="text-align: left; margin: 0">Manage {{ business.name }}</h1>
-        <b-button :to="'../' + business.internalURL" style="height: fit-content" variant="info" class="d-flex align-items-center">
-          <b-icon-globe />
-          <div style="margin-left: 8px"><b>Visit Public Page</b></div>
-        </b-button>
+        <b-row>
+          <b-button v-on:click="unclaim" style="margin-left: 12px; height: fit-content" variant="danger" class="d-flex">
+            <div v-if="!isUnclaiming">Remove Me as Business Owner</div>
+            <div v-else><b-spinner small /></div>
+          </b-button>
+          <b-button :to="'../' + business.internalURL" style="margin-left: 12px; height: fit-content" variant="success" class="d-flex">Visit Public Page</b-button>
+        </b-row>
       </b-row>
       <h5 style="text-align: left;">You are listed as the business manager, and have access to edit the business profile. If you would like to respond to communication questions, <b-link to="/inbox">you can answer them in the inbox.</b-link></h5>
       <hr />
@@ -58,13 +61,25 @@ export default {
 		return {
       isGeocoding: false,
       isLoading: true,
+      isUnclaiming: false,
       business: undefined,
 		};
   },
   methods:{
     handleSubmit(){
       eventBus.$emit('submit-business-changes')
-    }
+    },
+    unclaim(){
+      this.isUnclaiming = true;
+      axios.delete('/api/business/' + this.business.businessId + '/claim').then(() => {
+        eventBus.$emit('show-global-success-toast', "Successfully removed yourself as a business owner");
+        this.isUnclaiming = false;
+        this.$router.push('/');
+      }).catch((err) => { 
+        let errMessage = err.response.data.message || err.toString();
+        eventBus.$emit('show-error-toast', errMessage );
+      }).finally(() =>  this.isUnclaiming = false);
+    },
   }
 }
 </script>

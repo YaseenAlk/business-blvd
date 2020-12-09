@@ -31,7 +31,7 @@ export default {
         return [DAY[idx], item[1]];
       });
     }).catch((err) => {
-      console.log('err', err.response.data || err);
+      console.log('err', err.response.data || err.toString());
     }).finally(() => this.isLoading = false);
   },
   data(){

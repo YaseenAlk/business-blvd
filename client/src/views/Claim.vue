@@ -26,32 +26,11 @@
             </span>
         </b-button>
       </b-form>
-      <div>
-        <b-button variant="secondary" v-b-toggle.collapse v-on:click="loadAllBusinessIDs">For debugging and MVP purposes. Remove in final project</b-button>
-        <b-collapse id="collapse" class="mt-2">
-          <ul v-for="b in businessIDs" v-bind:key="b.id">
-            <div style="text-align:center"><b>{{b.name}}:</b> {{b.id}}</div>
-          </ul>
-          <b-form id="unclaimForm" @submit.prevent="unclaimBusiness" class="claim-page">
-            <h5>Unclaim Business</h5>
-            <b-form-group label="Business ID:" label-for="businessID" label-align="left" label-cols-sm="4">
-              <b-form-input required id="businessID" type="text" v-model="unclaimForm.businessID" />
-            </b-form-group>
-            <b-button variant="success" type="submit">
-              <span class="d-flex align-items-center">
-                <div v-if="!unclaimForm.loading">Unclaim Business</div>
-                <b-spinner v-else small></b-spinner>
-            </span>
-            </b-button>
-          </b-form>
-        </b-collapse>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { BForm, BButton, BCollapse } from 'bootstrap-vue';
 import axios from 'axios';
 import { eventBus } from '../main.js';
 
@@ -80,11 +59,6 @@ export default {
         loading: false,
       },
       
-      unclaimForm: {
-        businessID: undefined,
-        loading: false,
-      },
-
       selected: undefined,
       selectOptions: [],
 
@@ -99,18 +73,8 @@ export default {
         eventBus.$emit('show-success-toast', res.data);
         this.claimForm.loading = false;
       }).catch((err) => {
-        eventBus.$emit('show-error-toast', (err.response.data.message || err));
+        eventBus.$emit('show-error-toast', (err.response.data.message || err.toString()));
         this.claimForm.loading = false;
-      });
-    },
-    unclaimBusiness(){
-      this.unclaimForm.loading = true;
-      axios.delete('/api/business/' + this.unclaimForm.businessID + '/claim').then((res) => {
-        eventBus.$emit('show-success-toast', res.data);
-        this.unclaimForm.loading = false;
-      }).catch((err) => { 
-        eventBus.$emit('show-error-toast', (err.response.data.message || err));
-        this.unclaimForm.loading = false;
       });
     },
     loadAllBusinessIDs(){
@@ -121,16 +85,11 @@ export default {
       })
     },
     async getBusinessInfo(id){
-      let name = await axios.get('/api/business/' + id ).then((res) => res.data.name).catch((err) => console.log(err.response.data.message || err));
+      let name = await axios.get('/api/business/' + id ).then((res) => res.data.name).catch((err) => console.log(err.response.data.message || err.toString()));
       let address = await axios.get('/api/business/' + id + '/position').then((res) => res.data.address).catch((err) => console.log('err', err));
       let selectOption = {value: id, text: name + ' (' + address + ')'};
       return selectOption;
     },
-  },
-  components: {
-    BForm,
-    BButton,
-    BCollapse
   },
 }
 </script>

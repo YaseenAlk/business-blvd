@@ -55,7 +55,7 @@ export default {
         eventBus.$emit('show-success-toast', 'Added ' + added.size + ' tags, and removed ' + deleted.size + ' tags.');
       })
       .catch((err) => {
-        eventBus.$emit('show-error-toast', err.response.data.message || err);
+        eventBus.$emit('show-error-toast', err.response.data.message || err.toString());
       }).finally(() => {
         this.business.selectedTags = Array.from(this.selectedTags);
       });

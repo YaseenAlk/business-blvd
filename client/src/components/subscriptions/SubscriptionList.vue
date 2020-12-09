@@ -52,7 +52,7 @@ export default {
         this.updates = updates;
       })
       .catch((err) => {
-        this.updateFetchError = err.response.data.message || err;
+        this.updateFetchError = err.response.data.message || err.toString();
       })
       .finally(() => {
         this.isLoading = false;

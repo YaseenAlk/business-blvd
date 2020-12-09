@@ -51,7 +51,7 @@ export default {
       return this.selectOptions.filter((option) => option.value === id)[0];
     },
     async getBusinessInfo(id){
-      let name = await axios.get('/api/business/' + id ).then((res) => res.data.name).catch((err) => console.log(err.response.data.message || err));
+      let name = await axios.get('/api/business/' + id ).then((res) => res.data.name).catch((err) => console.log(err.response.data.message || err.toString()));
       let address = await axios.get('/api/business/' + id + '/position').then((res) => res.data.address).catch((err) => console.log('err', err));
       let selectOption = {value: id, text: name + ' (' + address + ')'};
       return selectOption;

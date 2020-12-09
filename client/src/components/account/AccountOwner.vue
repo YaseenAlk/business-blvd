@@ -30,7 +30,7 @@ export default {
       this.ownedBusinesses = results.map(response => response.data);
       this.isLoading = false;
     }).catch((err) => {
-      console.log('err', err.response.data || err);
+      console.log('err', err.response.data || err.toString());
       this.isLoading = false;
     });
   },

@@ -27,7 +27,7 @@ export default {
         axios.put('/api/business/' + this.business.businessId + '/name', { name : this.name }).then((res) => {
           eventBus.$emit('show-success-toast', res.data);
         }).catch((err) => {
-          eventBus.$emit('show-error-toast', err.response.data.message || err);
+          eventBus.$emit('show-error-toast', err.response.data.message || err.toString());
         });
       }
     });

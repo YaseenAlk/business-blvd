@@ -27,14 +27,14 @@ export default {
     axios.get('/api/business/' + this.business.businessId + '/url').then((res) => {
       this.business.website = res.data;
       this.website = res.data;
-    }).catch((err) => console.log('err', err.response.data || err));
+    }).catch((err) => console.log('err', err.response.data || err.toString()));
     eventBus.$on('submit-business-changes', () => {
       if( this.business.website !== this.website ){
         axios.put('/api/business/' + this.business.businessId + '/url', { url : this.website }).then((res) => {
           eventBus.$emit('show-success-toast', res.data);
         }).catch((err) => {
           console.log('err', err.response);
-          eventBus.$emit('show-error-toast', err.response.data || err);
+          eventBus.$emit('show-error-toast', err.response.data || err.toString());
         });
       }
     });

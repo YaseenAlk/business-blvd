@@ -67,7 +67,7 @@ export default {
         axios.put('/api/business/' + this.business.businessId + '/social-media', { facebook, twitter, instagram }).then((res) => {
           eventBus.$emit('show-success-toast', res.data);
         }).catch((err) => {
-          eventBus.$emit('show-error-toast', err.response.data.message || err);
+          eventBus.$emit('show-error-toast', err.response.data.message || err.toString());
         });
       }
     });

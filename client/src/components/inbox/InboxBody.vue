@@ -63,7 +63,7 @@ export default {
       axios.get('/api/inquiries/business/' + id).then((res) => {
         this.inquiries = res.data;
       }).catch((err) => {
-        this.inquiryFetchError = err.response.data.message || err;
+        this.inquiryFetchError = err.response.data.message || err.toString();
       }).finally(() => this.isLoading = false);
     }
   }

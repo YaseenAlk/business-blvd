@@ -57,7 +57,7 @@ export default {
           this.subscribed = true;
         })
         .catch((err) => {
-          eventBus.$emit('show-error-toast', err.response.data.message || err);
+          eventBus.$emit('show-error-toast', err.response.data.message || err.toString());
         })
         .finally(() =>{
           this.loading = false;
@@ -69,7 +69,7 @@ export default {
           this.subscribed = false;
         })
         .catch((err) => {
-          eventBus.$emit('show-error-toast', err.response.data.message || err);
+          eventBus.$emit('show-error-toast', err.response.data.message || err.toString());
         })
         .finally(() =>{
           this.loading = false;

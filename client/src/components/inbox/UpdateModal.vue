@@ -42,7 +42,7 @@ export default {
           this.success = res.data.message;
           this.$bvModal.hide('update');
         }).catch((err) => {
-          this.error = err.response.data.message || err;
+          this.error = err.response.data.message || err.toString();
         })
         .finally(() => {
           this.loading = false;

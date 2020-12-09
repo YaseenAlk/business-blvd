@@ -77,20 +77,20 @@ export default {
           axios.post('/api/inquiries/' + this.inquiry.id + '/publicity').then((res) => {
             eventBus.$emit('show-success-toast', res.data);(res.data);
           }).catch((err) => {
-            eventBus.$emit('show-error-toast', err.response.data.message || err);
+            eventBus.$emit('show-error-toast', err.response.data.message || err.toString());
           })
         } else {
           // MAKE PRIVATE
           axios.delete('/api/inquiries/' + this.inquiry.id + '/publicity').then((res) => {
             eventBus.$emit('show-success-toast', res.data);(res.data);
           }).catch((err) => {
-            eventBus.$emit('show-error-toast', err.response.data.message || err);
+            eventBus.$emit('show-error-toast', err.response.data.message || err.toString());
           })
         }
       })
       .then(() => this.answerLoading = false)
       .catch((err) => {
-        this.errorMessage = err.response.data.message || err;
+        this.errorMessage = err.response.data.message || err.toString();
         this.answerLoading = false;
       });
     },

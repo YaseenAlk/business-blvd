@@ -62,7 +62,7 @@ export default {
                 this.$router.push('/map');
                 this.loading = false;
             }).catch((err) => {
-                this.error = err.response.data.message || err;
+                this.error = err.response.data.message || err.toString();
                 this.loading = false
             });
         },

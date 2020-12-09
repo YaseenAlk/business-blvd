@@ -40,7 +40,7 @@ export default {
         axios.put('/api/business/' + this.business.businessId + '/position', this.position).then((res) => {
           eventBus.$emit('show-success-toast', res.data);
         }).catch((err) => {
-          eventBus.$emit('show-error-toast', err.response.data || err);
+          eventBus.$emit('show-error-toast', err.response.data || err.toString());
         });
       }
     });
@@ -78,7 +78,7 @@ export default {
           eventBus.$emit('show-error-toast', 'Error finding valid address');
         }
       }).catch((err) => {
-        eventBus.$emit('show-error-toast', err.response.data || err);
+        eventBus.$emit('show-error-toast', err.response.data || err.toString());
       }).finally(() => {
         this.isGeocoding = false;
         eventBus.$emit('is-geocoding', false);

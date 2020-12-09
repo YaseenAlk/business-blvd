@@ -73,7 +73,7 @@ export default {
     })
     .then(() => { this.loaded = true; })
     .catch((err) => {
-      console.error(err.response.data || err);
+      console.error(err.response.data || err.toString());
     });
   },
   components: {

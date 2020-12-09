@@ -56,7 +56,7 @@ export default {
                 .then((resp) => resp.data)
                 .then((updateData) => this.updateData = updateData);
             }
-          }).catch((err) => console.error(err.response.data || err));
+          }).catch((err) => console.error(err.response.data || err.toString()));
     },
 
     created(){
@@ -91,7 +91,7 @@ export default {
                     this.$router.push('/');
                 }
             }).catch((err) => {
-                eventBus.$emit('show-global-error-toast', err.response.data.message || err)
+                eventBus.$emit('show-global-error-toast', err.response.data.message || err.toString())
             });
 
         },

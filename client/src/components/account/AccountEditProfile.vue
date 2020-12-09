@@ -82,7 +82,7 @@ export default {
           eventBus.$emit('show-success-toast', res.data.message);
           this.form.newEmail = undefined;
         })
-        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)))
+        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err.toString())))
         .finally(() => this.isLoadingEmail = false);
     },
     submitUsername: function(){
@@ -94,7 +94,7 @@ export default {
           eventBus.$emit('successful-login', user);
           this.form.newUsername = undefined;
         })
-        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)))
+        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err.toString())))
         .finally(() => this.isLoadingUsername = false);
     },
     submitPassword: function(){
@@ -111,7 +111,7 @@ export default {
           this.form.newPassword1 = undefined;
           this.form.newPassword2 = undefined;
         })
-        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err)))
+        .catch(err => eventBus.$emit('show-error-toast', (err.response.data.message || err.toString())))
         .finally(() => this.isLoadingPassword = false);
     }
   },
