@@ -83,10 +83,6 @@ class UserRouter {
         }
       },
     );
-
-    // delete account
-    // DELETE /api/users/:id
-    //this._router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {});
   }
 
   private _authentication() {
@@ -141,22 +137,6 @@ class UserRouter {
         next(error);
       }
     });
-  }
-
-  private _subscriptions() {
-    /*
-        // check following status
-        GET /api/businesses/:id/isFollowing
-
-        // follow a business (uses session)
-        POST /api/businesses/:id/follow
-
-        // unfollow a business (uses session)
-        DELETE /api/businesses/:id/follow
-
-        // get followed businesses (uses session)
-        GET /api/businesses/following
-        */
   }
 }
 
