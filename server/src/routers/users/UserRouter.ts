@@ -53,6 +53,18 @@ class UserRouter {
       },
     );
 
+    this._router.get('/name', async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        // It's ok typescript. We'll be fine.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const userId: any = req.query.userId;
+        const resp = await this._controller.getUsername(userId);
+        res.status(200).json(resp).end();
+      } catch (error) {
+        next(error);
+      }
+    });
+
     // edit username or password (probably just email/password...)
     // we chose PUT over PATCH because you can technically use this to replace the whole resource from the user perspective.
     // Also, PATCH requires giving instructions which doesn't quite match this.
@@ -71,7 +83,7 @@ class UserRouter {
       Validation.updateAccountMiddleware,
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const { email, username, oldPassword, newPassword } = req.body;
+          const { email, username, newPassword } = req.body;
           const { userID } = req.session;
           const result = await this._controller.updateAccount(userID, username, email, newPassword);
           res

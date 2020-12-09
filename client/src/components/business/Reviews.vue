@@ -7,7 +7,7 @@
           <swiper-slide v-for="review in summaryReviews" :key="review.id">
             <div class="card">
               <div class="card-preview">
-                <h2>{{ review.name }}</h2>
+                <h2> {{ review.username }} </h2>
               </div>
               <div class="card-info">
                 <h4>{{ review.review }} </h4>
@@ -18,9 +18,6 @@
           <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
         <div>
-          <b-button variant="primary" v-b-modal="bv-modal-reviews">
-            View All Reviews <b-badge variant="light">{{ reviews.length }}</b-badge>
-          </b-button>
           <b-modal size="lg" id="bv-modal-reviews" hide-footer>
             <template #modal-title>
               Reviews
@@ -29,7 +26,7 @@
               <div v-for="review in reviews" :key="review.id" class="card-container">
                 <div class="card">
                   <div class="card-preview">
-                    <h2>{{ review.name }}</h2>
+                    <h2>{{ review.username }}</h2>
                   </div>
                   <div class="card-info">
                     <h4>{{ review.review }} </h4>
@@ -39,6 +36,9 @@
             </div>
             <b-button variant="danger" class="mt-3" block @click="$bvModal.hide('bv-modal-reviews')">Close</b-button>
           </b-modal>
+          <b-button variant="primary" @click="$bvModal.show('bv-modal-reviews')">
+            View All Reviews <b-badge variant="light">{{ reviews.length }}</b-badge>
+          </b-button>
         </div>
       </div>
       <div v-else>
@@ -85,8 +85,22 @@ export default {
   created() {
     const businessId = this.business.businessId;
     axios.get(`/api/reviews/business/${businessId}`)
-      .then((resp) => {
-        this.reviews = resp.data;
+      .then((resp) => resp.data)
+      .then((reviews) => {
+        return Promise.all(reviews.map((review) => {
+          return axios.get('/api/users/name', { params: { userId: review.authorId }})
+            .then((resp) => resp.data)
+            .then((data) => {
+              return data;
+            })
+            .then(({ username }) => {
+              review.username = username;
+              return review;
+            });
+        }));
+      })
+      .then((reviews) => {
+        this.reviews = reviews;
         if (this.reviews.length > 3) {
           this.summaryReviews = this.reviews.slice(0,3);
         } else {

@@ -14,6 +14,16 @@ class UserController {
     });
   }
 
+  getUsername(userId: string): Promise<ReturnObj & { username?: string }> {
+    return UserRepository.findOneByID(userId).then((account) => {
+      return {
+        status: 200,
+        message: `Username: ${account?.username}`,
+        username: account?.username,
+      };
+    });
+  }
+
   signOut() {
     // we don't say their name on Goodbye for security reasons (e.g. if they were logged in on a public computer)
     return { message: 'Successfully logged out.' };
