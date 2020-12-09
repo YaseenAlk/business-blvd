@@ -21,3 +21,14 @@ export const TAG_AS_STRING = {
     6: "STAFF_REGULARLY_TESTED",
     7: "PLEXIGLASS_SHIELDS",
 }
+
+export const TAG_AS_ICON = {
+  0: "minecart",
+  1: "bag-dash",
+  2: "droplet",
+  3: "door-open",
+  4: "credit-card",
+  5: "tree",
+  6: "person-check",
+  7: "shield-check",
+}
