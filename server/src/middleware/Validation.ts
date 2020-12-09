@@ -1030,7 +1030,7 @@ export class Validation {
 
   static unfollowMiddleware = Validation.exportList([Validation.followingBusiness]);
 
-  static claimBusinessMiddleware = Validation.exportList([Validation.businessIdUnclaimed]);
+  static claimBusinessMiddleware = Validation.exportList([Validation.businessIdUnclaimed, Validation.claimCodeValid]);
 
   static unclaimBusinessMiddleware = Validation.exportList([Validation.ownsBusiness]);
 
