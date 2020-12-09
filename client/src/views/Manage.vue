@@ -6,7 +6,10 @@
     <div class="manage-page" v-else-if="business">
       <b-row class="justify-content-between align-items-center" style="margin: 12px 0">
         <h1 style="text-align: left; margin: 0">Manage {{ business.name }}</h1>
-        <b-button :to="'../' + business.internalURL" style="margin-left: 12px; height: fit-content" variant="success" class="d-flex">Visit Public Page</b-button>
+        <b-button :to="'../' + business.internalURL" style="height: fit-content" variant="info" class="d-flex align-items-center">
+          <b-icon-globe />
+          <div style="margin-left: 8px"><b>Visit Public Page</b></div>
+        </b-button>
       </b-row>
       <h5 style="text-align: left;">You are listed as the business manager, and have access to edit the business profile. If you would like to respond to communication questions, <b-link to="/inbox">you can answer them in the inbox.</b-link></h5>
       <hr />
@@ -18,7 +21,7 @@
         <manage-business-phone :business="business" />
         <manage-business-social-media :business="business" />
         <manage-business-tags :business="business" />
-        <b-button :disabled="isGeocoding" type="submit" variant="success">Update Business Profile</b-button>
+        <b-button :disabled="isGeocoding" type="submit" variant="success"><b>Update Business Profile</b></b-button>
       </b-form>
     </div>
     <div v-else style="padding-top: 24px">

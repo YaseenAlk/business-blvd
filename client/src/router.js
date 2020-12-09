@@ -50,7 +50,7 @@ const router = new Router({
                 import ('./views/Account.vue')
         },
         {
-            path: '/report',
+            path: '/rate',
             name: 'Report',
             component: () =>
                 import ('./views/Report.vue')

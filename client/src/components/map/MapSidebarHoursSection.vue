@@ -1,6 +1,6 @@
 <template>
   <section id="hours-section" class="sidebar-section">
-    <h4>Hours of Operation</h4>
+    <h5>Hours of Operation</h5>
     <div v-if="isLoading" class="d-flex justify-content-center">
       <b-spinner />
     </div>

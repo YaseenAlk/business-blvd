@@ -1,7 +1,14 @@
 <template>
   <div>
-    <b-form id="claimForm" @submit.prevent="claimBusiness" class="claim-page">
-      <h4>Claim a Business</h4>
+    <div class="claim-page">
+      <div class="claim-header">
+        <b-col class="text-left" style="padding: 0">
+          <h1>Claim a Business</h1>
+          <h5 style="text-align: left;">In order to edit a business page and respond to the business questions, you first need to enter your provided claim code.</h5>
+        </b-col>
+        <hr />
+      </div>
+      <b-form id="claimForm" @submit.prevent="claimBusiness" class="claim-form">
         <b-form-group label="Business:" label-for="businessID2" label-align="left" label-cols-sm="4">
           <b-form-select class="inbox-select" id="businessID2" v-model="selected" :options="selectOptions">
               <template #first>
@@ -10,34 +17,35 @@
           </b-form-select>
         </b-form-group>
         <b-form-group label="Claim Code:" label-for="claimCode" label-align="left" label-cols-sm="4">
-          <b-form-input required id="claimCode" type="text" v-model="claimForm.claimCode" />
+          <b-form-input required id="claimCode" type="password" v-model="claimForm.claimCode" />
         </b-form-group>
         <b-button variant="success" type="submit">
-           <span class="d-flex align-items-center">
+            <span class="d-flex align-items-center">
             <div v-if="!claimForm.loading">Claim Business</div>
             <b-spinner v-else small></b-spinner>
-           </span>
+            </span>
         </b-button>
-    </b-form>
-    <div>
-      <b-button variant="secondary" v-b-toggle.collapse v-on:click="loadAllBusinessIDs">For debugging and MVP purposes. Remove in final project</b-button>
-      <b-collapse id="collapse" class="mt-2">
-        <ul v-for="b in businessIDs" v-bind:key="b.id">
-          <div style="text-align:center"><b>{{b.name}}:</b> {{b.id}}</div>
-        </ul>
-        <b-form id="unclaimForm" @submit.prevent="unclaimBusiness" class="claim-page">
-          <h5>Unclaim Business</h5>
-          <b-form-group label="Business ID:" label-for="businessID" label-align="left" label-cols-sm="4">
-            <b-form-input required id="businessID" type="text" v-model="unclaimForm.businessID" />
-          </b-form-group>
-          <b-button variant="success" type="submit">
-            <span class="d-flex align-items-center">
-              <div v-if="!unclaimForm.loading">Unclaim Business</div>
-              <b-spinner v-else small></b-spinner>
-           </span>
-          </b-button>
-        </b-form>
-      </b-collapse>
+      </b-form>
+      <div>
+        <b-button variant="secondary" v-b-toggle.collapse v-on:click="loadAllBusinessIDs">For debugging and MVP purposes. Remove in final project</b-button>
+        <b-collapse id="collapse" class="mt-2">
+          <ul v-for="b in businessIDs" v-bind:key="b.id">
+            <div style="text-align:center"><b>{{b.name}}:</b> {{b.id}}</div>
+          </ul>
+          <b-form id="unclaimForm" @submit.prevent="unclaimBusiness" class="claim-page">
+            <h5>Unclaim Business</h5>
+            <b-form-group label="Business ID:" label-for="businessID" label-align="left" label-cols-sm="4">
+              <b-form-input required id="businessID" type="text" v-model="unclaimForm.businessID" />
+            </b-form-group>
+            <b-button variant="success" type="submit">
+              <span class="d-flex align-items-center">
+                <div v-if="!unclaimForm.loading">Unclaim Business</div>
+                <b-spinner v-else small></b-spinner>
+            </span>
+            </b-button>
+          </b-form>
+        </b-collapse>
+      </div>
     </div>
   </div>
 </template>
@@ -129,8 +137,17 @@ export default {
 
 <style scoped>
 .claim-page {
-  max-width: 600px;
-  margin: 0 auto;
   padding: 32px 1em 1em 1em;
+}
+
+.claim-header {
+  max-width: 750px;
+  margin: auto;
+}
+
+.claim-form {
+  max-width: 600px;
+  margin: auto;
+  padding-bottom: 1em;
 }
 </style>

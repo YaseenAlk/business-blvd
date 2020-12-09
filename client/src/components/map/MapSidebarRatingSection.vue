@@ -1,6 +1,6 @@
 <template>
   <section id="rating-section" class="sidebar-section">
-    <h4>Ratings & Reviews</h4>
+    <h5>Ratings & Reviews</h5>
     <div v-if="isLoading" class="d-flex justify-content-center">
       <b-spinner />
     </div>

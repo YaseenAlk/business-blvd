@@ -1,7 +1,7 @@
 <template>
   <b-sidebar id="sidebar-variant" bg-variant="white" text-variant="dark" shadow v-model="visible" :visible="visible">
     <template #title>
-      <h2 style="text-align: left; margin: 12px 0 0 0"><b>{{business.name}}</b></h2>
+      <h3 style="text-align: left; margin: 12px 0 0 0">{{business.name}}</h3>
     </template>
     <hr/>
     <div class="sidebar-body">
@@ -57,7 +57,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .sidebar-body {
   margin-top: 16px;
   padding: 8px 12px;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="questions">
+    <div class="questions" style="padding-top: 24px">
       <InboxHeader />
       <InboxSubheader />
       <hr />

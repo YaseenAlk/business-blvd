@@ -3,7 +3,7 @@
         <b-link to='/map' class="grid-item">
             <HomePageCard title="Business Map" variant="map" size="64" />
         </b-link>
-        <b-link to='/report' class="grid-item">
+        <b-link to='/rate' class="grid-item">
             <HomePageCard title="Rate a Business" variant="report" size="64"/>
         </b-link>
         <b-link to='/claim' class="grid-item">
