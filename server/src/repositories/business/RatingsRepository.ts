@@ -8,10 +8,10 @@ class RatingsRepository {
     const userId2 = uuidv4();
 
     // 1 - 5 inclusive
-    const randNum1_1 = Math.floor(Math.random() * 5) + 1;
-    const randNum1_2 = Math.floor(Math.random() * 5) + 1;
-    const randNum2_1 = Math.floor(Math.random() * 5) + 1;
-    const randNum2_2 = Math.floor(Math.random() * 5) + 1;
+    const randNum1_1 = Math.floor(Math.random() * 3) + 3;
+    const randNum1_2 = Math.floor(Math.random() * 3) + 3;
+    const randNum2_1 = Math.floor(Math.random() * 3) + 3;
+    const randNum2_2 = Math.floor(Math.random() * 3) + 3;
 
     const exampleSafetyRatings: [string, number][] = [
       [userId1, randNum1_1],
