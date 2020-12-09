@@ -4,8 +4,6 @@
             <h1 class="account-section">Account Settings</h1>
             <AccountHeader v-bind:user="user" class="account-section"/>
             <hr />
-            <AccountOwner v-bind:user="user" class="account-section"/>
-            <hr />
             <AccountEditProfile v-bind:user="user" class="account-section"/>
         </div>
     </div>
@@ -13,7 +11,6 @@
 
 <script>
 import AccountHeader from '../components/account/AccountHeader.vue';
-import AccountOwner from '../components/account/AccountOwner.vue';
 import AccountEditProfile from '../components/account/AccountEditProfile.vue';
 import { eventBus } from '../main.js';
 
@@ -31,7 +28,6 @@ export default {
     },
     components: {
         AccountHeader,
-        AccountOwner,
         AccountEditProfile,
     }
 }

@@ -56,6 +56,12 @@ const router = new Router({
                 import ('./views/Report.vue')
         },
         {
+            path: '/manage',
+            name: 'ManageDefault',
+            component: () =>
+                import ('./views/ManageDefault.vue')
+        },
+        {
             path: '/manage/:id',
             props: {
                 id: String,

@@ -15,7 +15,8 @@
                 </b-popover>
               </div>
               <b-nav-item-dropdown right v-bind:text="dropdownText">
-                  <b-dropdown-item v-if="loggedIn" to="/account">Account</b-dropdown-item>
+                  <b-dropdown-item v-if="loggedIn" to="/account">Account Settings</b-dropdown-item>
+                  <b-dropdown-item v-if="loggedIn" to="/manage">Manage Businesses</b-dropdown-item>
                   <b-dropdown-item v-if="loggedIn" to="/inbox">Inbox</b-dropdown-item>
                   <b-dropdown-divider v-if="loggedIn" />
                   <b-dropdown-item v-if="!loggedIn" to="/signup">Sign Up</b-dropdown-item>
