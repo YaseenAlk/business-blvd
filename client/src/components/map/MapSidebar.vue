@@ -1,16 +1,19 @@
 <template>
-  <b-sidebar id="sidebar-variant" bg-variant="dark" text-variant="light" shadow v-model="visible" :visible="visible">
+  <b-sidebar id="sidebar-variant" bg-variant="white" text-variant="dark" shadow v-model="visible" :visible="visible">
     <template #title>
-      <h2 style="text-align: left; margin: 0"><b>{{business.name}}</b></h2>
+      <h2 style="text-align: left; margin: 12px 0 0 0"><b>{{business.name}}</b></h2>
     </template>
+    <hr/>
     <div class="sidebar-body">
       <map-sidebar-info-section :key="'info-' + business.businessId" :business="business" />
+      <hr/>
       <map-sidebar-hours-section :key="'hours-' + business.businessId" :business="business" />
+      <hr/>
       <map-sidebar-rating-section :key="'rating-' + business.businessId" :business="business" />
     </div>
     <template #footer>
-      <div class="footer-container">
-        <b-button class="footer-button" variant="primary" :to="business.internalURL"><b>See More</b></b-button>
+      <div class="footer-container" style="margin-bottom: 66px">
+        <b-button class="footer-button" variant="info" :to="business.internalURL"><b>See More</b></b-button>
       </div>
     </template>
   </b-sidebar>
@@ -64,7 +67,7 @@ export default {
 }
 
 .sidebar-section {
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 .footer-container {
@@ -75,5 +78,9 @@ export default {
   width: 100%;
 }
 
+hr {
+  border-top-color: rgba(0, 0, 0, 0.3);
+  margin-top: 0;
+}
 
 </style>

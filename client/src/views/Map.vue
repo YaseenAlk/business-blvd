@@ -43,3 +43,9 @@ export default {
   },
 }
 </script>
+<style>
+.b-sidebar {
+  background: red;
+  top: 62px;
+}
+</style>
