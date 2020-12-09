@@ -39,7 +39,7 @@ export default {
 }
 
 .account-content {
-    max-width: 85%;
+    max-width: 800px;
     margin: auto;
 }
 

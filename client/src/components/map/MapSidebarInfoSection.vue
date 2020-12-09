@@ -1,6 +1,6 @@
 <template>
   <section id="info-section" class="sidebar-section sidebar-contact-details">
-    <h4>Information</h4>
+    <h5>Information</h5>
     <b-row class="d-flex align-items-center" style="margin: 0 0 8px 8px">
       <b-icon-map style="margin-right: 8px" />
       <div>{{business.coordinates.address}}</div>

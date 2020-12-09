@@ -43,7 +43,7 @@
       </div>
       <div v-else>
         <b-card bg-variant="default"  :title="'There are no reviews for ' + this.business.name">
-          <b-button href="#/report" variant="primary">
+          <b-button href="#/rate" variant="primary">
             Write the first review.
           </b-button>
         </b-card>
