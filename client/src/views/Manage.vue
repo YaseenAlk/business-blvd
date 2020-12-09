@@ -1,119 +1,66 @@
 <template>
-    <div  class="manage-page" v-if="business">
-      <h1> {{ business.name }} </h1>
-      {{business.position}}
-      <b-container v-if="show" class="manage-form">
-        <b-row>
-          <b-form class="col-md-8" @submit.prevent="onSubmit" @reset.prevent="onReset">
-            <b-form-group
-              id="name-group"
-              label="Business Name:"
-              label-for="name"
-            >
-              <b-form-input
-                type="text"
-                v-model="form.name"
-                :placeholder="business.name"
-                ></b-form-input>
-            </b-form-group>
-
-            <b-form-group
-              id="description-group"
-              label="Description:"
-              label-for="description"
-            >
-              <b-form-input
-                type="text"
-                v-model="form.description"
-                :placeholder="business.description"
-                ></b-form-input>
-            </b-form-group>
-            <b-form-group
-              id="address-group"
-              label="Address:"
-              label-for="address"
-            >
-              <b-form-input
-                type="text"
-                v-model="form.position.address"
-                ></b-form-input>
-            </b-form-group>
-            <b-form-group
-              id="website-group"
-              label="Website:"
-              label-for="website"
-            >
-              <b-form-input
-                type="url"
-                v-model="form.externalURL"
-                :placeholder="business.externalURL"
-                ></b-form-input>
-            </b-form-group>
-            <b-form-group
-              id="phone-group"
-              label="Phone:"
-              label-for="phone"
-            >
-              <b-form-input
-                type="text"
-                v-model="form.phone"
-                :placeholder="business.phone"
-                ></b-form-input>
-            </b-form-group>
-            <b-button type="submit" variant="primary">Submit</b-button>
-            <b-button type="reset" variant="danger">Reset</b-button>
-          </b-form>
-        </b-row>
-      </b-container>
-    <div v-else>
-      Loading
-    </div>  
+  <div>
+    <div v-if="isLoading" style="padding-top: 24px">
+      <b-spinner variant="primary"  />
+    </div>
+    <div class="manage-page" v-else-if="business">
+      <b-row class="justify-content-between align-items-center" style="margin: 12px 0">
+        <h1 style="text-align: left; margin: 0">Manage {{ business.name }}</h1>
+        <b-button :to="'../' + business.internalURL" style="margin-left: 12px; height: fit-content" variant="success" class="d-flex">Visit Public Page</b-button>
+      </b-row>
+      <h5 style="text-align: left;">You are listed as the business manager, and have access to edit the business profile. If you would like to respond to communication questions, <b-link to="/inbox">you can answer them in the inbox.</b-link></h5>
+      <hr />
+      <b-form class="form-container" @submit.prevent="handleSubmit">
+        <manage-business-name :business="business" />
+        <manage-business-address :business="business" />
+        <manage-business-description :business="business" />
+        <manage-business-website :business="business" />
+        <manage-business-phone :business="business" />
+        <manage-business-social-media :business="business" />
+        <manage-business-tags :business="business" />
+        <b-button :disabled="isGeocoding" type="submit" variant="success">Update Business Profile</b-button>
+      </b-form>
+    </div>
+    <div v-else style="padding-top: 24px">
+      <not-found />
+    </div>
   </div>
 </template>
 <script>
 import axios from 'axios';
+import ManageBusinessName from '../components/manage/ManageBusinessName.vue';
+import ManageBusinessAddress from '../components/manage/ManageBusinessAddress.vue';
+import ManageBusinessDescription from '../components/manage/ManageBusinessDescription.vue';
+import ManageBusinessWebsite from '../components/manage/ManageBusinessWebsite.vue';
+import ManageBusinessPhone from '../components/manage/ManageBusinessPhone.vue';
+import ManageBusinessTags from '../components/manage/ManageBusinessTags.vue';
+import ManageBusinessSocialMedia from '../components/manage/ManageBusinessSocialMedia.vue';
+import { eventBus } from '../main';
+import NotFound from './NotFound.vue';
 
 export default {
+  components: { ManageBusinessName, ManageBusinessAddress, ManageBusinessDescription, ManageBusinessWebsite, ManageBusinessPhone, ManageBusinessTags, ManageBusinessSocialMedia, NotFound },
   name: 'Manage',
   beforeCreate: function(){
     axios.get('/api/business/' + this.$route.params.id).then((res) =>{
       this.business = res.data;
     }).catch((err) => {
-      console.error(err.response.data || err);
-    });
-
-    axios.get('/api/business/' + this.$route.params.id + '/position').then((res) => {
-      this.form.position = res.data;
-    }).catch((err) =>{
-      console.error(err.response.data || err);
-    })
+      eventBus.$emit('show-error-toast', err);
+    }).finally(() => this.isLoading = false);
+  },
+  created(){
+    eventBus.$on('is-geocoding', (isGeocoding) => this.isGeocoding = isGeocoding)
   },
 	data(){
 		return {
+      isGeocoding: false,
+      isLoading: true,
       business: undefined,
-      form: {
-        name: undefined,
-        description: undefined,
-        externalURL: undefined,
-        position: {
-          address: undefined,
-        }
-      },
-      show: true,
 		};
   },
-  methods: {
-    onSubmit() {
-      console.log("Submitting!")
-      console.log(this.form)
-    },
-    onReset() {
-      this.form.name = undefined;
-      // Reset the validation state.
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true
-      })
+  methods:{
+    handleSubmit(){
+      eventBus.$emit('submit-business-changes')
     }
   }
 }
@@ -121,10 +68,9 @@ export default {
 <style scoped>
 
 .manage-page {
-  padding-top: 1em;
+  max-width: 75vw;
+  margin: auto;
+  padding: 24px 1em 32px 1em;
 }
 
-.manage {
-	width: 85%;
-}
 </style>

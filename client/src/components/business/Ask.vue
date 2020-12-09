@@ -32,9 +32,6 @@ export default {
         BFormTextarea,
         BAlert,
     },
-    mounted() {
-      this.$bvToast.show('toast');
-    },
     methods: {
         clearAlerts(){
             this.success = undefined;

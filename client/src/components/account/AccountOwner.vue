@@ -1,6 +1,5 @@
 <template>
   <div class="owner-section">
-    <h2 class="owner-title">Business Owner</h2>
     <div>
       <b-spinner v-if="isLoading" variant="primary" style="margin-top: 12px"></b-spinner>
       <p v-else-if="ownedBusinesses.length === 0" >
@@ -57,7 +56,7 @@ export default {
 
 .owner-section {
   text-align: left;
-  margin: 1em;
+  margin: 1em 0;
 }
 
 .business-row-items {

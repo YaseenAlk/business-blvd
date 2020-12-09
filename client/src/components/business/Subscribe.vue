@@ -15,6 +15,8 @@
 </template>
 <script>
 import axios from "axios";
+import { eventBus } from '../../main';
+
 const descriptionA = "Subscribing to a business allows you to be the first to know about deals, promotions, and updates!";
 const descriptionB = "Thank you for being a subcriber!";
 
@@ -53,13 +55,25 @@ export default {
         .then(() => {
           this.loading = false;
           this.subscribed = true;
+        })
+        .catch((err) => {
+          eventBus.$emit('show-error-toast', err.response.data.message || err);
+        })
+        .finally(() =>{
+          this.loading = false;
         });   
       } else {
         axios.delete(`api/business/${this.business.businessId}/followers`)
         .then(() => {
           this.loading = false;
           this.subscribed = false;
-        });
+        })
+        .catch((err) => {
+          eventBus.$emit('show-error-toast', err.response.data.message || err);
+        })
+        .finally(() =>{
+          this.loading = false;
+        });  
       }
      
     },

@@ -56,6 +56,12 @@ const router = new Router({
                 import ('./views/Report.vue')
         },
         {
+            path: '/manage',
+            name: 'ManageDefault',
+            component: () =>
+                import ('./views/ManageDefault.vue')
+        },
+        {
             path: '/manage/:id',
             props: {
                 id: String,
@@ -79,7 +85,7 @@ const router = new Router({
     ]
 });
 
-const authRoutes = new Set(['Report', 'Claim', 'Account', 'Inbox'])
+const authRoutes = new Set(['Report', 'Claim', 'Account', 'Inbox', ])
 
 router.beforeEach((from, to, next) => {
 
