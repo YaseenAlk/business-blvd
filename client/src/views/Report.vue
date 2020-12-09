@@ -76,14 +76,6 @@ export default {
     onSubmit: function(){
         this.clearAlerts();
         this.loading = true;
-        axios.put(`/api/business/${this.form.selected}/ratings/`, this.form)
-          .then(() => {
-            this.success = "Submitted rating successfully!";
-          })
-          .catch((err) => {
-            this.error = err.response.data.message || err.toString();
-          })
-          .finally(() => this.loading = false);
         Promise.all([
           axios.put(`/api/business/${this.form.selected}/ratings/`, this.form),
           axios.post(`/api/reviews/`, {...this.form, businessId: this.form.selected})
@@ -96,7 +88,7 @@ export default {
             review: undefined
           };
         }).catch((err) => {
-          eventBus.$emit('err', err.response.data.message || err);
+          eventBus.$emit('err', err.response.data.message || err.toString());
         }).finally(() => this.loading = false);
     }
   },
