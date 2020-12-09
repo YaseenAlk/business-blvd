@@ -1,11 +1,12 @@
 <template>
   <div>
-    <h3 style="margin-top: 2em;">Hours of Operation</h3>
+    <h3 style="text-align: left; margin-top: 2em;">Hours of Operation</h3>
     <b-list-group>
       <b-list-group-item v-for="day in hours" :key="day.k">  
-        <h4 class="text-center">
-          {{dayMap[day.day] + "  " +day.hours.open.hour + ":" + day.hours.open.minute }} - {{ day.hours.close.hour + ":" + day.hours.close.minute }}
-        </h4>
+        <b-row class="text-center justify-content-between" style="margin: 0">
+          <div>{{dayMap[day.day]}}</div>
+          <div>{{day.hours.open.hour + ":" + day.hours.open.minute }} - {{ day.hours.close.hour + ":" + day.hours.close.minute }}</div>
+        </b-row>
       </b-list-group-item>
     </b-list-group>
   </div>
