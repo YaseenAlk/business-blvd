@@ -16,6 +16,8 @@ export default {
         autoHideDisplay: 250,
         append: true,
         variant: 'success',
+        noHoverPause: true,
+        toastClass: 'toast-class',
       });
     });
 
@@ -54,7 +56,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

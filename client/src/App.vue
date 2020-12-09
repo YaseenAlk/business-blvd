@@ -94,5 +94,10 @@ h1, h2, h3, h4, h5, h6, nav > a {
   background-color: #1B5299;
 }
 
+.b-toaster, [id*="BV_modal_outer"] {
+  z-index: 10000!important;
+}
+
+
 
 </style>

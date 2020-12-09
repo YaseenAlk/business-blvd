@@ -7,7 +7,7 @@
           <swiper-slide v-for="review in summaryReviews" :key="review.id">
             <div class="card">
               <div class="card-preview">
-                <h2> {{ review.username }} </h2>
+                <h2 style="color: white !important">{{ review.username }}</h2>
               </div>
               <div class="card-info">
                 <h4>{{ review.review }} </h4>
@@ -26,7 +26,7 @@
               <div v-for="review in reviews" :key="review.id" class="card-container">
                 <div class="card">
                   <div class="card-preview">
-                    <h2>{{ review.username }}</h2>
+                    <h2 style="color: white !important">{{ review.username }}</h2>
                   </div>
                   <div class="card-info">
                     <h4>{{ review.review }} </h4>
@@ -81,7 +81,10 @@ export default {
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev'
-        }
+        },
+        autoplay: {
+          delay: 100,
+        },
       },
       reviews: undefined,
       summaryReviews: undefined,
@@ -141,7 +144,7 @@ export default {
 }
 
 .card-preview {
-	background-color: #007bff;
+	background-color: rgb(27, 82, 153);
 	color: #fff;
 	padding: 30px;
 }

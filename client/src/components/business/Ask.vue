@@ -3,7 +3,7 @@
     <b-button @click="$bvModal.show('question')"  style="background-color: #1B5299">
       Ask {{ this.business.name }} a question
     </b-button> 
-    <b-modal id="question" title="Submit a question" hide-backdrop content-class="shadow" hide-footer>
+    <b-modal id="question" title="Submit a question" backdrop content-class="shadow" hide-footer>
       <b-form id="question-form" @submit.prevent="onSubmit" class="form-content">
           <b-form-textarea id="question" v-model="form.question" size="sm" required rows="3" placeholder="Enter a question for this business" />
           <b-alert class="alert" variant="success" v-bind:show="success !== undefined">{{success}}</b-alert>

@@ -2,9 +2,9 @@
     <div>
         <h3 style='margin: 1em'>At a Glance</h3>
         <b-list-group>
-            <b-list-group-item class='d-flex justify-content-between align-items-center'>
-              <div>
-                <label for="safetyRating">Safety rating: </label>
+            <b-list-group-item>
+              <b-row class="d-flex flex-row justify-content-between align-items-center" style="margin: 0">
+                <label for="safetyRating">Safety Rating: </label>
                 <b-form-rating
                   v-model="business.ratings.safety.average"
                   icon-empty="heart"
@@ -18,11 +18,11 @@
                   precision="1"
                   variant="danger"
                 />
-              </div>
+              </b-row>
             </b-list-group-item>
-            <b-list-group-item class='d-flex justify-content-between align-items-center'>
-            <div>
-                <label for="serviceRating">Service rating: </label>
+            <b-list-group-item>
+              <b-row class="d-flex flex-row justify-content-between align-items-center" style="margin: 0">
+                <label for="serviceRating">Rervice rating: </label>
                 <b-form-rating
                   v-model="business.ratings.service.average"
                   icon-empty="star"
@@ -36,7 +36,7 @@
                   precision="1"
                   variant="danger"
                 />
-              </div>
+              </b-row>
             </b-list-group-item>
             <div v-if="!isLoading">
               <div v-for="tag in business.selectedTags" :key="tag">
