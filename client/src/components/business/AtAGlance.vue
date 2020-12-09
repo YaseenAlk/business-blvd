@@ -22,7 +22,7 @@
             </b-list-group-item>
             <b-list-group-item>
               <b-row class="d-flex flex-row justify-content-between align-items-center" style="margin: 0">
-                <label for="serviceRating">Rervice rating: </label>
+                <label for="serviceRating">Service rating: </label>
                 <b-form-rating
                   v-model="business.ratings.service.average"
                   icon-empty="star"

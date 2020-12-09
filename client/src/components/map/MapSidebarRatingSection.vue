@@ -1,12 +1,12 @@
 <template>
   <section id="rating-section" class="sidebar-section">
-    <h5>Ratings & Reviews</h5>
+    <h5>Ratings</h5>
     <div v-if="isLoading" class="d-flex justify-content-center">
       <b-spinner />
     </div>
     <div v-else>
       <b-row class="d-flex align-items-center" style="margin: 0 0 8px 8px">
-        <span><b-icon-file-earmark-bar-graph style="margin-right: 8px" />COVID Safety Score: {{ratings.safety.average}} / 5.0</span>
+        <span><b-icon-file-earmark-bar-graph style="margin-right: 8px" />Safety Score: {{ratings.safety.average}} / 5.0</span>
       </b-row>
       <b-row class="d-flex align-items-center" style="margin: 0 0 8px 8px">
         <span><b-icon-door-open style="margin-right: 8px" />Service Score: {{ratings.service.average}} / 5.0</span>
