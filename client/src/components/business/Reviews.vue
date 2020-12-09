@@ -39,6 +39,11 @@
           <b-button style="background-color: #1B5299" @click="$bvModal.show('bv-modal-reviews')">
             View All Reviews <b-badge variant="light">{{ reviews.length }}</b-badge>
           </b-button>
+          <b-card bg-variant="default"  :title="'Have you been to ' + this.business.name + '?'">
+            <b-button href="#/rate"  style="background-color: #1B5299">
+              Write a Review.
+            </b-button>
+          </b-card>
         </div>
       </div>
       <div v-else>
