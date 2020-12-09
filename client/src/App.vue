@@ -64,6 +64,11 @@ export default {
 </script>
 
 <style>
+
+:root {
+  --background-color: #B1C5D3;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
