@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="business && loaded">
+    <div v-if="business && loaded" style="padding-bottom: 24px">
       <b-container class="flex-col align-items-center" style="max-width: 85%">
       <Header v-bind:business="business"/>
       <div class="business-page">

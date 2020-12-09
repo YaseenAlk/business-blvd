@@ -84,7 +84,7 @@ export default {
 .navbar {
     padding: 1em;
     box-shadow: 0 0 20px -1px rgba(0, 0, 0, 0.4);
-    z-index: 1;
+    z-index: 1200;
 }
 
 .nav-link {
